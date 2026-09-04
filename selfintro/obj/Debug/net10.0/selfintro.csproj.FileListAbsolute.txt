@@ -1,0 +1,15 @@
+D:\projects\xuexi\code\game-ai-demos\selfintro\bin\Debug\net10.0\selfintro.exe
+D:\projects\xuexi\code\game-ai-demos\selfintro\bin\Debug\net10.0\selfintro.deps.json
+D:\projects\xuexi\code\game-ai-demos\selfintro\bin\Debug\net10.0\selfintro.runtimeconfig.json
+D:\projects\xuexi\code\game-ai-demos\selfintro\bin\Debug\net10.0\selfintro.dll
+D:\projects\xuexi\code\game-ai-demos\selfintro\bin\Debug\net10.0\selfintro.pdb
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\selfintro.GeneratedMSBuildEditorConfig.editorconfig
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\selfintro.AssemblyInfoInputs.cache
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\selfintro.AssemblyInfo.cs
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\selfintro.csproj.CoreCompileInputs.cache
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\selfintro.sourcelink.json
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\selfintro.dll
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\refint\selfintro.dll
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\selfintro.pdb
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\selfintro.genruntimeconfig.cache
+D:\projects\xuexi\code\game-ai-demos\selfintro\obj\Debug\net10.0\ref\selfintro.dll
