@@ -3,7 +3,7 @@
 从零开始学习 Unity 游戏开发与游戏 AI，记录所有练习 Demo 和学习笔记。
 
 ## 目录结构
-
+```
 game-ai-demos/
 ├── FristScene/      # Unity 第一个场景项目（角色移动练习）
 ├── HelloWord/       # C# 控制台 HelloWorld 入门项目
@@ -12,7 +12,7 @@ game-ai-demos/
 │   └── checkin.md   # 每日打卡表
 ├── .gitignore
 └── README.md
-
+```
 
 ## 学习进度
 
