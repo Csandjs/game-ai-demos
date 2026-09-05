@@ -10,6 +10,7 @@ game-ai-demos/
 ├── selfintro/       # 自我介绍练习
 ├── notes/           # 学习笔记与打卡记录
 │   └── checkin.md   # 每日打卡表
+│   └──StudyNotes.md # 每日学习笔记
 ├── .gitignore
 └── README.md
 ```
@@ -18,7 +19,7 @@ game-ai-demos/
 
 - ✅ D1（9/3）：环境搭建 + GitHub 仓库 + C# HelloWorld
 - ✅ D2（9/4）：Unity 安装 + 第一个场景 + 角色移动脚本
-- 🔄 D3（9/5）：简历骨架 + 打卡表 + 仓库整理
+- ✅ D3（9/5）：简历骨架 + 打卡表 + 仓库整理
 
 ## 技术栈
 
