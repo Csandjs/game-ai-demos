@@ -12,4 +12,4 @@ public class PlayerMove : MonoBehaviour
         Vector3 dir = new Vector3(h, 0, v);
         transform.Translate(dir * moveSpeed * Time.deltaTime, Space.World);
     }
-}
+}//修改说明
