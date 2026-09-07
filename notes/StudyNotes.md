@@ -523,3 +523,347 @@ git config --global user.email "邮箱"  # 配置邮箱（一次）
 
 ## 三者关系
 GameObject 是容器（演员），Component 是功能（道具和技能），Transform 是最基础的组件（管位置、旋转、缩放）。
+
+
+# 📅 D4（第四天）：C# 变量/类型/运算符 + Unity Transform 实操
+
+## ☀️ 上午：C# 基础①（3小时）
+
+### 步骤1：变量的声明、赋值与命名规则
+
+**什么是变量：** 程序里的"小盒子"，用来存数据，每个盒子有名字和类型。
+
+**声明语法：**
+```csharp
+// 类型 变量名;
+int score;          // 声明整数变量
+string playerName;  // 声明字符串变量
+```
+
+**赋值：**
+```csharp
+int score;       // 声明
+score = 100;     // 赋值
+int score = 100; // 声明+赋值合并（最常用）
+score = 85;      // 重新赋值，覆盖旧值
+```
+
+**命名规则：**
+- 只能用字母、数字、下划线
+- 不能以数字开头
+- 不能用C#关键字（int、class、void等）
+- 区分大小写（Score和score是两个变量）
+
+**命名习惯：** 局部变量用小驼峰（camelCase），第一个单词小写，后面首字母大写
+- ✅ 正确：`playerName`、`moveSpeed`、`isGameOver`
+- ❌ 不推荐：`playername`、`PlayerName`、`player_name`
+
+---
+
+### 步骤2：6种基本数据类型
+
+| 类型 | 存什么 | 例子 | 后缀 | 用途 |
+|------|--------|------|------|------|
+| int | 整数 | `int a = 5;` | 无 | 分数、等级、人数 |
+| float | 小数 | `float b = 3.14f;` | 必须加f | Unity里的位置、速度 |
+| double | 高精度小数 | `double c = 3.14159;` | 无 | 科学计算、金融 |
+| bool | 真/假 | `bool d = true;` | 无 | 开关、判断条件 |
+| string | 一串文字 | `string e = "你好";` | 双引号 | 名字、对话文本 |
+| char | 单个字符 | `char f = 'A';` | 单引号 | 性别、等级评定 |
+
+**注意：**
+- float 数字后面必须加 `f`，否则报错
+- string 用双引号，char 用单引号且只能一个字符
+- 整数除法会砍掉小数：`5 / 2 = 2`（不是2.5）
+- 想要小数结果，至少一个数是小数：`5.0 / 2 = 2.5`
+
+**类型转换：**
+- 小类型→大类型自动转：`int → float → double`
+- 大类型→小类型需强制转换：`int d = (int)3.14f;`（结果是3，小数被砍）
+
+---
+
+### 步骤3：运算符
+
+**算术运算符：**
+| 符号 | 作用 | 例子 | 结果 |
+|------|------|------|------|
+| + | 加 | `5 + 3` | 8 |
+| - | 减 | `5 - 3` | 2 |
+| * | 乘 | `5 * 3` | 15 |
+| / | 除 | `5 / 2` | 2（整数砍小数） |
+| % | 取余 | `5 % 2` | 1 |
+
+**比较运算符（结果是bool）：**
+| 符号 | 作用 | 例子 | 结果 |
+|------|------|------|------|
+| == | 等于 | `5 == 5` | true |
+| != | 不等于 | `5 != 3` | true |
+| > | 大于 | `5 > 3` | true |
+| < | 小于 | `5 < 3` | false |
+| >= | 大于等于 | `5 >= 5` | true |
+| <= | 小于等于 | `5 <= 3` | false |
+
+**⚠️ 超级重要：`=` vs `==`**
+- `=` 是赋值：`x = 5;`（把5放进x）
+- `==` 是比较：`x == 5`（判断x是不是5，结果true/false）
+
+**逻辑运算符：**
+| 符号 | 作用 | 口诀 | 例子 | 结果 |
+|------|------|------|------|------|
+| && | 与（并且） | 全真才真，一假就假 | `true && false` | false |
+| \|\| | 或（或者） | 一真就真，全假才假 | `true \|\| false` | true |
+| ! | 非（取反） | true变false，false变true | `!true` | false |
+
+---
+
+### 步骤4：综合练习 - 输入两数计算和差积商余
+
+**控制台输入：**
+```csharp
+Console.Write("请输入第一个数：");
+string input = Console.ReadLine();  // 读取用户输入的一行文字
+int num = int.Parse(input);         // 把文字转成整数
+```
+
+**完整代码：**
+```csharp
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.Write("请输入第一个数：");
+        int num1 = int.Parse(Console.ReadLine());
+        
+        Console.Write("请输入第二个数：");
+        int num2 = int.Parse(Console.ReadLine());
+        
+        Console.WriteLine("和：" + (num1 + num2));
+        Console.WriteLine("差：" + (num1 - num2));
+        Console.WriteLine("积：" + (num1 * num2));
+        Console.WriteLine("商：" + (num1 / num2));
+        Console.WriteLine("余：" + (num1 % num2));
+        
+        Console.ReadKey();
+    }
+}
+```
+
+**⚠️ 常见坑：**
+- `Console.WriteLine("和：" + num1 + num2)` 不加括号会变成字符串拼接
+- 正确写法：`Console.WriteLine("和：" + (num1 + num2))`
+
+---
+
+## 🌤️ 下午：Unity Transform 实操（3小时）
+
+### 步骤1：打开项目，复习场景搭建
+
+1. 打开 Unity Hub，点击项目打开
+2. 右键 Hierarchy → 3D Object → Cube 创建立方体
+3. 选中Cube，Inspector面板最上方是 Transform 组件
+4. Transform 三个属性：Position（位置）、Rotation（旋转）、Scale（缩放）
+5. 快捷键：W=移动工具，E=旋转工具，R=缩放工具
+
+---
+
+### 步骤2：代码设置物体位置 + 每帧匀速移动
+
+**Unity脚本基本结构：**
+```csharp
+using UnityEngine;
+
+public class MoveCube : MonoBehaviour
+{
+    public float speed = 2f;  // public变量会显示在Inspector面板
+
+    void Start()
+    {
+        // 游戏开始时执行一次
+        transform.position = new Vector3(3, 1, 0);
+    }
+
+    void Update()
+    {
+        // 每帧执行
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    }
+}
+```
+
+**关键概念：**
+- `MonoBehaviour`：Unity脚本基类，必须继承
+- `Start()`：游戏开始第一帧执行一次，用于初始化
+- `Update()`：每帧执行（约每秒60次），用于持续逻辑
+- `transform`：代表物体的Transform组件
+- `transform.position`：物体的位置（Vector3类型）
+- `transform.Translate(方向)`：让物体相对当前位置移动
+- `Vector3.forward`：正前方（Z轴正方向）
+- `Time.deltaTime`：上一帧到这一帧的时间（秒），乘了之后速度不受帧率影响
+
+**⚠️ 为什么乘Time.deltaTime：**
+- 不乘：每帧移动固定距离，帧率高跑得快，帧率低跑得慢
+- 乘了：速度×时间=距离，表示"每秒移动多少米"，所有设备速度一致
+
+---
+
+### 步骤3：物体绕Y轴旋转
+
+```csharp
+using UnityEngine;
+
+public class RotateCube : MonoBehaviour
+{
+    public float rotateSpeed = 50f;
+
+    void Update()
+    {
+        // 绕Y轴旋转，每秒转50度
+        transform.Rotate(new Vector3(0, rotateSpeed, 0) * Time.deltaTime);
+    }
+}
+```
+
+**三个轴的效果：**
+- `new Vector3(50, 0, 0)`：绕X轴转（翻跟头）
+- `new Vector3(0, 50, 0)`：绕Y轴转（转圈，最常用）
+- `new Vector3(0, 0, 50)`：绕Z轴转（钟表指针）
+
+---
+
+### 步骤4：WASD键盘控制位移
+
+```csharp
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    public float moveSpeed = 5f;
+
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            transform.Translate(Vector3.back * moveSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+        }
+    }
+}
+```
+
+**关键概念：**
+- `if (条件) { 代码 }`：条件成立时执行
+- `Input.GetKey(KeyCode.W)`：检测W键是否被按住，返回bool
+- 常用键：KeyCode.W/A/S/D
+
+**⚠️ 运行不移动的常见原因：**
+1. 脚本没挂到物体上
+2. 运行后没点击Game视图获取焦点
+3. Move Speed在Inspector里被改成0了
+4. 其他脚本冲突（比如MoveCube速度设太快）
+
+---
+
+## 🌙 晚上：2个小练习（1.5小时）
+
+### 步骤1：判断一个数是奇数还是偶数
+
+**原理：** 除以2，余数0是偶数，余数1是奇数
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.Write("请输入一个整数：");
+        int num = int.Parse(Console.ReadLine());
+        
+        if (num % 2 == 0)
+        {
+            Console.WriteLine(num + " 是偶数");
+        }
+        else
+        {
+            Console.WriteLine(num + " 是奇数");
+        }
+        
+        Console.ReadKey();
+    }
+}
+```
+
+**if...else 结构：**
+```csharp
+if (条件)
+{
+    // 条件成立执行
+}
+else
+{
+    // 条件不成立执行
+}
+```
+
+---
+
+### 步骤2：摄氏温度转华氏温度
+
+**公式：** F = C × 9/5 + 32
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.Write("请输入摄氏温度：");
+        double celsius = double.Parse(Console.ReadLine());
+        double fahrenheit = celsius * 9.0 / 5 + 32;
+        Console.WriteLine(celsius + "°C = " + fahrenheit + "°F");
+        Console.ReadKey();
+    }
+}
+```
+
+**⚠️ 注意：** `9.0 / 5` 必须有一个是小数，否则 `9 / 5 = 1`（整数除法砍小数）
+
+---
+
+### 步骤3：Git 提交 + 打卡
+
+```bash
+git add DailyPractice/
+git commit -m "D4晚上：判断奇偶+温度转换练习"
+git push
+```
+
+更新 `notes/checkin.md`，勾选D4完成，写学习总结。
+
+---
+
+## 📌 D4 核心要点总结
+
+1. **C#变量：** 声明要指定类型，赋值用=，float加f
+2. **6种类型：** int/float/double/bool/string/char，各有用途
+3. **运算符：** 算术/比较/逻辑，注意`=`和`==`的区别
+4. **Unity脚本：** Start()执行一次，Update()每帧执行
+5. **移动：** transform.Translate(方向 × 速度 × Time.deltaTime)
+6. **旋转：** transform.Rotate(旋转角度 × Time.deltaTime)
+7. **键盘控制：** if (Input.GetKey(KeyCode.W)) + Translate
+8. **if...else：** 条件判断，奇偶判断、温度转换都用到
