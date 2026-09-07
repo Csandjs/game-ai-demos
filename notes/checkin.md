@@ -25,7 +25,7 @@
 - 整理仓库结构，更新 README
 - 学习 Unity 核心概念：GameObject、Component、Transform
 
-## D4 完成（9/7 周一）
+## D4 完成（9/6 周日）
 
 - C# 基础：变量声明/赋值、6种数据类型（int/float/double/bool/string/char）
 - 运算符：算术（+ - * / %）、比较（== != > <）、逻辑（&& || !）
