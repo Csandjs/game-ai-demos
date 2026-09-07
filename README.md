@@ -5,6 +5,7 @@
 ## 目录结构
 ```
 game-ai-demos/
+├── DailyPractice/       # 每日 C# 练习
 ├── FristScene/      # Unity 第一个场景项目（角色移动练习）
 ├── HelloWord/       # C# 控制台 HelloWorld 入门项目
 ├── selfintro/       # 自我介绍练习
@@ -20,6 +21,7 @@ game-ai-demos/
 - ✅ D1（9/3）：环境搭建 + GitHub 仓库 + C# HelloWorld
 - ✅ D2（9/4）：Unity 安装 + 第一个场景 + 角色移动脚本
 - ✅ D3（9/5）：简历骨架 + 打卡表 + 仓库整理
+- ✅ D4（9/6）：C#变量/类型/运算符 + Unity Transform实操
 
 ## 技术栈
 
