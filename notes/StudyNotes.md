@@ -867,3 +867,218 @@ git push
 6. **旋转：** transform.Rotate(旋转角度 × Time.deltaTime)
 7. **键盘控制：** if (Input.GetKey(KeyCode.W)) + Translate
 8. **if...else：** 条件判断，奇偶判断、温度转换都用到
+
+## D5 学习笔记（2026-09-08）
+
+### 一、C# 条件语句
+
+#### 1. if / else if / else（多条件分支）
+- if：第一个条件；else if：中间条件，可写多个；else：全部不满足时兜底
+- 从上往下判断，命中一个就跳出，后面不再判断
+- 范围判断（>=、<）只能用if，switch做不到
+```csharp
+if (score >= 90) { Console.WriteLine("优秀"); }
+else if (score >= 60) { Console.WriteLine("及格"); }  // 走到这说明<90
+else { Console.WriteLine("不及格"); }
+```
+
+#### 2. switch（固定值匹配）
+
+- 只能判断"变量等于哪个固定值"，适合星期、菜单、状态
+- case后必须跟break；default相当于else
+
+```
+switch (day)
+{
+    case 1: Console.WriteLine("星期一"); break;
+    case 7: Console.WriteLine("星期日"); break;
+    default: Console.WriteLine("输入有误"); break;
+}
+```
+
+#### 3. 三元运算符（if-else简写，二选一赋值）
+
+- 语法：`条件 ? 成立的值 : 不成立的值`
+
+```
+string result = num % 2 == 0 ? "偶数" : "奇数";
+int max = a > b ? a : b;   // 取较大值
+```
+
+### 二、C# 循环
+
+#### 1. for（知道循环次数时用）
+
+- 结构：for(初始化; 条件; 更新){}，执行顺序：初始化1次→判断→执行→更新→再判断
+- i++ 是 i=i+1；i-- 是 i=i-1；i+=2 是每次加2
+
+```
+for (int i = 1; i <= 10; i++) { Console.Write(i + " "); }
+```
+
+- 累加器求和：int sum=0; 循环里 sum=sum+i;
+- 计数器数个数：int count=0; 满足条件时 count++;
+
+#### 2. while（不知道次数、只知道停止条件时用）
+
+- 循环变量写在外面，更新(i++)必须写在循环体里，否则死循环
+- 死循环时按 Ctrl+C 停止
+
+```
+int i = 1;
+while (i <= 10) { Console.Write(i + " "); i++; }
+```
+
+#### 3. do-while（先执行一次，再判断）
+
+- 无论条件是否成立，循环体至少执行1次；末尾while(条件)后有分号
+
+```
+do { 输入密码; } while (pwd != 888);
+```
+
+#### 4. break 和 continue
+
+- break：立刻结束整个循环（找到目标就停）
+- continue：只跳过本次，继续下一次（跳过不想要的）
+- 对比1-10遇到7：break输出123456；continue输出123456 8 9 10
+
+#### 5. 嵌套循环（外层管行，内层管列）
+
+- 外层走1步，内层走完一整圈；内层结束后换行
+
+```
+// 九九乘法表
+for (int i = 1; i <= 9; i++)
+{
+    for (int j = 1; j <= i; j++)
+        Console.Write(j + "x" + i + "=" + (j*i) + "\t");
+    Console.WriteLine();
+}
+```
+
+### 三、综合实战：密码登录（最多3次）
+
+- while循环反复输入 + 计数器记次数 + if判对错 + break跳出
+- 关键：用 bool isSuccess 标志位区分"输对退出"还是"次数用完"
+- 教训：不能用 times==0 判断结果（第3次才输对时times也是0，会误判）
+
+```
+string correct = "123456";
+int times = 0;
+bool isSuccess = false;
+do {
+    Console.Write("请输入密码：");
+    string input = Console.ReadLine();
+    times++;
+    if (input == correct) { isSuccess = true; break; }
+    else Console.WriteLine("错误，还剩" + (3-times) + "次");
+} while (times < 3);
+Console.WriteLine(isSuccess ? "欢迎" : "锁定");
+```
+
+### 四、Unity 物理系统
+
+#### 1. Rigidbody（刚体）与 Collider（碰撞体）
+
+- transform.Translate 只是改坐标，无重力无碰撞，会穿过物体
+- Rigidbody：物理身体，让物体受重力、受力、有碰撞反应（需手动Add Component添加）
+- Collider：碰撞轮廓，Cube/Plane基础物体自带，不用手动加
+- 只有Collider没Rigidbody=不动的墙（地面）；有Rigidbody才会掉、会被推动
+
+#### 2. Rigidbody 常用参数
+
+- Mass质量(kg)：自由落体快慢与质量无关
+- Use Gravity使用重力：勾上才往下掉
+- Is Kinematic运动学：勾上后物理引擎不推动它，只能用transform控制
+- Constraints约束：Freeze Rotation勾X/Z可防止角色移动时翻倒（玩家要保持直立）
+
+#### 3. velocity 物理移动（WASD）
+
+- GetComponent()：在Start里取出同物体上的刚体存进rb
+- 物理代码写 FixedUpdate（固定物理帧），不写Update
+- Input.GetKey 按住持续触发；rb.velocity设速度
+- 必须保留 rb.velocity.y，否则重力被每帧清零，掉不下去
+
+```
+public float moveSpeed = 5f;
+private Rigidbody rb;
+void Start() { rb = GetComponent<Rigidbody>(); }
+void FixedUpdate()
+{
+    float moveX = 0f, moveZ = 0f;
+    if (Input.GetKey(KeyCode.W)) moveZ = 1f;
+    if (Input.GetKey(KeyCode.S)) moveZ = -1f;
+    if (Input.GetKey(KeyCode.A)) moveX = -1f;
+    if (Input.GetKey(KeyCode.D)) moveX = 1f;
+    rb.velocity = new Vector3(moveX*moveSpeed, rb.velocity.y, moveZ*moveSpeed);
+}
+```
+
+- Vector3(x,y,z)对应红X左右、绿Y上下、蓝Z前后；正数沿箭头、负数反向
+
+#### 4. AddForce 跳跃
+
+- AddForce(方向*力, ForceMode.Impulse)：Impulse瞬间爆发，适合跳跃
+- 跳跃用 Input.GetKeyDown（按下瞬间一次），放Update里防止漏按
+
+```
+public float jumpForce = 5f;
+void Update()
+{
+    if (Input.GetKeyDown(KeyCode.Space))
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+}
+```
+
+#### 5. 落地检测（防止空中无限跳）
+
+- bool isGrounded记录是否在地面
+- OnCollisionEnter碰到的瞬间=true；OnCollisionExit离开的瞬间=false
+- 跳跃条件加 && isGrounded，只有地面能跳
+
+```
+private bool isGrounded = false;
+void Update() {
+    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+}
+void OnCollisionEnter(Collision c) { isGrounded = true; }
+void OnCollisionExit(Collision c) { isGrounded = false; }
+```
+
+#### 6. 物理地形测试结论
+
+- 斜坡：方块平底+摩擦大，缓坡会停住；球体易滚下；坡越陡下滑力越大
+- 开不上坡的原因：坡太陡/速度太小/坡脚有断面；解决：坡15-20°、速度调大、坡底插进地面
+- 冻结旋转不影响上坡，玩家本就该保持直立
+- 撞台阶被Collider挡住不穿透；冲出悬空边缘会坠落
+- 真正贴任意坡面移动要用到射线+法线投影/CharacterController，后续学
+
+### 五、晚间练习：猜数字
+
+- Random random=new Random(); int answer=random.Next(1,101);
+- Next(最小,最大+1)：上限不包含，Next(1,101)才取得到100
+- while(true)死循环+猜中break，count记次数
+
+```
+Random r = new Random();
+int answer = r.Next(1, 101), count = 0, guess = 0;
+while (true) {
+    guess = int.Parse(Console.ReadLine());
+    count++;
+    if (guess > answer) Console.WriteLine("大了");
+    else if (guess < answer) Console.WriteLine("小了");
+    else { Console.WriteLine("猜中，共"+count+"次"); break; }
+}
+```
+
+### 六、今日易错点
+
+1. while循环体里忘写i++导致死循环 → Ctrl+C
+2. switch每个case后忘break
+3. velocity的y写成0导致物体不掉
+4. 跳跃用GetKey会飞天，必须GetKeyDown
+5. 空中能二段跳 → 用isGrounded落地检测
+6. Is Kinematic勾着时velocity/AddForce都无效
+7. random.Next(1,100)最大只到99，要写101

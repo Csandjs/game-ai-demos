@@ -6,7 +6,6 @@
 [Bb]uilds/
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
-*.csproj
 *.unityproj
 *.sln
 *.suo
@@ -26,3 +25,6 @@
 [Rr]elease/
 bin/
 *.csproj.user
+# Unity自动生成的工程/解决方案文件（不提交）
+/FristScene/*.csproj
+/FristScene/*.sln

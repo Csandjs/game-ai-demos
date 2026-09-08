@@ -6,6 +6,8 @@
 | 2026-09-04 | D2 | ✅ 完成 | 无 | 简历骨架 + 打卡表 + 仓库整理 |
 | 2026-09-05 | D3 | ✅ 完成 | 无 | 启动周收尾，进入正式学习周期 |
 | 2026-09-06 | D4 | ✅ 完成 | 无 | C#流程控制 + Unity物理/碰撞入门 |
+| 2026-09-08 | D5 | ✅ 完成 | 无 | C#数组与方法 + Unity预制体/脚本通信 |
+
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -34,3 +36,18 @@
 - Unity Transform 实操：代码设置 position、Translate() 匀速移动
 - Rotate() 绕轴旋转、WASD 键盘控制物体位移
 - 新建 DailyPractice 目录管理每日练习，Git 提交推送
+
+## D5 完成（9/8 周二）
+
+- C# 条件：if/else if/else 多分支、switch 固定值匹配、三元运算符 `条件?a:b`
+- C# 循环：for（定次数）、while（看条件）、do-while（至少一次）、break/continue
+- 嵌套循环：外层管行内层管列，写出九九乘法表与星号三角形
+- 两个套路：累加器(sum=sum+i)求和、计数器(count++)数个数
+- 综合实战：密码登录（最多3次），用 bool 标志位区分"成功/次数用完"
+- Unity 物理：认识 Rigidbody 刚体与 Collider 碰撞体分工
+- 刚体参数：Mass、Use Gravity、Is Kinematic、Constraints 冻结旋转X/Z
+- velocity 物理移动：GetComponent取刚体、FixedUpdate写物理、保留rb.velocity.y
+- AddForce(ForceMode.Impulse) + GetKeyDown 实现物理跳跃
+- OnCollisionEnter/Exit + isGrounded 做落地检测，杜绝空中连跳
+- 斜坡/台阶/边缘测试：摩擦决定滑动、碰撞阻挡不穿透、悬空会坠落
+- 晚间练习：猜数字游戏（Random.Next(1,101) + while + if + 计数器）
