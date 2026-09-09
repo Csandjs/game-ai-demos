@@ -1082,3 +1082,50 @@ while (true) {
 5. 空中能二段跳 → 用isGrounded落地检测
 6. Is Kinematic勾着时velocity/AddForce都无效
 7. random.Next(1,100)最大只到99，要写101
+
+## D6（2026-09-09）数组·方法·冒泡 + Unity预制体与平滑输入
+
+### 一、C# 数组
+- 三种声明：int[] a=new int[5]; / int[] b=new int[]{80,90}; / int[] c={1,2,3};
+- 下标从0开始，最后一个=Length-1；遍历条件用 i<Length（写成<=会越界 IndexOutOfRangeException）
+- foreach(int x in 数组)：只读遍历，拿不到下标、不能改元素
+- 用户输入存数组：先 new int[n] 开空格 → for里 scores[i]=int.Parse(Console.ReadLine())
+- string.Join("分隔符", 数组)：把数组拼成一串文字方便打印
+
+### 二、C# 方法
+- 四件套：方法名+参数+返回值+逻辑；写在Main外、class内，要加 static
+- return 一执行方法立刻结束；开头先拦非法数据叫"卫语句"
+- 坑：int是值类型，传进方法的是副本，方法里交换a/b改不到外面数组（以后学ref解决）
+
+### 三、冒泡排序（第一个算法）
+- 思路：相邻两个比较，左边比右边大就交换，每轮把最大的"冒"到最右
+- 结构：外层走 Length-1 轮；内层 j<Length-1-i；用temp三行交换
+- 用到 j+1 时 j 必须小于 Length-1，否则越界
+
+### 四、Max(int[] arr) 打擂台
+- int max=arr[0];（初始用第一个，不能用0，否则全负数会错）
+- 从 i=1 遍历，arr[i]>max 就更新，最后 return max
+
+### 五、Unity 预制体 Prefab
+- 把做好的物体拖进Project窗口=存成模板（图标/名字变蓝），可无限复制
+- public GameObject xxx; → 检查器出现槽 → 把预制体拖进去（没拖会报 NullReferenceException）
+- 给"预制体文件"加组件=它生成的所有副本都带这个组件
+
+### 六、Instantiate 生成物体
+- Instantiate(物体, 位置, 旋转)；Quaternion.identity=不旋转
+- 要用变量接住生成结果才能继续控制：GameObject ball=Instantiate(...)
+- 批量生成：for循环 + 位置随 i 变化（否则全叠在一起）
+
+### 七、输入与发射器
+- Input.GetAxis("Horizontal")管左右x、("Vertical")管前后z，返回-1~1平滑值，一行替代4个if
+- GetKey=按住一直触发；GetKeyDown=按下那一帧触发一次
+- Debug.Log=打印到Unity Console（等同C#的Console.WriteLine）
+- 发射器：按空格 Instantiate球 → 取刚体 → rb.velocity=transform.forward*速度
+- transform.position=自己的位置；transform.forward=自己的正前方（会随旋转变）
+
+### 八、今日易错清单
+1. 循环用 j+1 却写 j<Length → 越界
+2. 把值类型交换封进普通方法 → 改不到原数组
+3. Max初始值写0 → 全负数组出错，要用arr[0]
+4. public槽忘拖预制体 → 空引用
+5. GetKey/GetKeyDown混用 → 按住会疯狂生成
