@@ -9,7 +9,7 @@ public class Spawner : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown((KeyCode.Space)))
+        if (Input.GetKeyDown((KeyCode.J)))
         {
             GameObject ball = Instantiate(bulletPrefab,transform.position,Quaternion.identity);
             //在发射器自身位置生成预制体billetPrefab

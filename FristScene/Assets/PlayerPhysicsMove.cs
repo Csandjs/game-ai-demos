@@ -35,11 +35,13 @@ public class PlayerPhysicsMove : MonoBehaviour
     //碰到东西认为落地了
     void OnCollisionEnter(Collision collision)
     {
+        if ( collision.gameObject.CompareTag("Ground"))
         isGrounded = true ;
     }
     //离开东西认为在空中
     void OnCollisionExit(Collision collision)
     {
+        if(collision.gameObject.CompareTag("Ground"))
         isGrounded = false;
     }
 }
