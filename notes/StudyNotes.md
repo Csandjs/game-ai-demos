@@ -493,15 +493,15 @@ git config --global user.email "邮箱"  # 配置邮箱（一次）
 
 ---
 
-第三日学习笔记
-# Unity 核心概念
+# 第三日学习笔记
+## Unity 核心概念
 
-## 1. GameObject（游戏对象）
+### 1. GameObject（游戏对象）
 - 游戏里的一切「东西」都是 GameObject：玩家、敌人、子弹、地图、摄像机、灯光、UI
 - 本身是空壳，什么都干不了，所有功能都靠挂组件
 - 代码里用 `gameObject` 表示当前脚本所在的物体
 
-## 2. Component（组件）
+### 2. Component（组件）
 - 挂在 GameObject 上的「功能模块」，给物体赋予能力
 - 一个物体可以挂多个组件，组合出各种功能
 - 常见组件：
@@ -512,7 +512,7 @@ git config --global user.email "邮箱"  # 配置邮箱（一次）
   - 自定义脚本（比如 PlayerMove.cs）：自己写的逻辑
 - 在 Inspector 里点 Add Component 添加
 
-## 3. Transform（变换组件）
+### 3. Transform（变换组件）
 - 每个 GameObject 天生自带，删不掉
 - 管三件事：
   - Position（位置）：物体在哪
@@ -521,7 +521,7 @@ git config --global user.email "邮箱"  # 配置邮箱（一次）
 - 代码里用 `transform` 直接访问
 - 移动物体：`transform.Translate(方向 * 速度 * Time.deltaTime)`
 
-## 三者关系
+### 三者关系
 GameObject 是容器（演员），Component 是功能（道具和技能），Transform 是最基础的组件（管位置、旋转、缩放）。
 
 
@@ -1129,3 +1129,41 @@ while (true) {
 3. Max初始值写0 → 全负数组出错，要用arr[0]
 4. public槽忘拖预制体 → 空引用
 5. GetKey/GetKeyDown混用 → 按住会疯狂生成
+
+## D7 学习笔记（9/10 周四 · 第1周复盘日）
+> 今日定位：不学大量新内容，把D4-D6串成体系、补漏洞、修bug、做周总结
+
+### 一、C# 查漏补缺（系统版见 notes/CSharp_Basics.md）
+今天亲手写例子时纠正的点：
+1. for循环里 i 是"下标"、arr[i] 才是"元素值"：打印 i 出序号0123，打印 arr[i] 才出数组内容
+2. Console.ReadLine()/WriteLine() 前面的 Console. 不能丢
+3. 值类型传方法是"副本"：Change(int x){x=100;} 改不到外面的 n（n 仍是1）
+4. string.Join("分隔符", 数组) 是两个参数、用逗号；误写成 " "+数组 只剩一个参数，会报 CS0121 二义性
+5. 冒泡排序能独立默写：外层 Length-1 轮、内层 Length-1-i、temp 三行交换
+6. 打擂台：擂主初始用 arr[0]，不能用0（全负数会错）
+
+### 二、Unity：整合三功能 + 修碰撞bug（今天重点）
+1. 控制整理：
+   - 玩家只保留 PlayerPhysicsMove（刚体移动+跳跃），禁用 AxisMove
+     （Translate直接改坐标 和 刚体velocity 同时开会互相打架）
+   - 发射键由空格改成 J，把空格专门留给跳跃
+2. ⭐bug：玩家被自己发射的球撞到后就不能跳了
+   - 根因：落地开关 isGrounded 没区分碰撞对象；球离开玩家时 OnCollisionExit
+     误把 isGrounded 置成 false，可脚其实还踩在地上
+   - 解决：先给地面加标签 Tag=Ground，碰撞方法里只认地面：
+     void OnCollisionEnter(Collision other){
+         if (other.gameObject.CompareTag("Ground")) isGrounded = true;
+     }
+     void OnCollisionExit(Collision other){
+         if (other.gameObject.CompareTag("Ground")) isGrounded = false;
+     }
+   - 场景里有多个碰撞体时，OnCollision里必须用Tag/名字
+     判断"撞到的到底是谁"，否则状态会互相干扰（落地/命中/吃道具都靠它）
+
+### 三、工程与产出
+- 三功能成品：WASD刚体移动 + 空格跳跃 + J发射预制体，全部能跑
+- 录屏存档（Win自带录屏调不出，最终手机拍屏）
+- 新增 notes/CSharp_Basics.md（系统笔记）、notes/week1.md（周总结）
+- 当天代码与笔记 git 提交推送
+
+
