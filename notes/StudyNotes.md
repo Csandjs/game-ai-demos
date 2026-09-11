@@ -1166,4 +1166,131 @@ while (true) {
 - 新增 notes/CSharp_Basics.md（系统笔记）、notes/week1.md（周总结）
 - 当天代码与笔记 git 提交推送
 
+## 📅 D8（2026-09-11 周五）：C# 面向对象入门 + Unity 碰撞事件与刚体
+
+---
+
+## 🌞 上午：C# 面向对象（类、对象、构造函数、this）
+
+### 步骤1：类和对象
+- **一句大白话**：类(class)是「图纸」，对象是按图纸造出来的「实物」，`new` 就是「按图纸造一个」。
+- **和 Unity 对应着记**（🔰 不用死记，用多就通）：
+
+| C# 概念 | Unity 里对应 |
+|---|---|
+| 类 class（图纸） | 预制体 Prefab |
+| 对象/实例（实物） | 场景里飞出去的一颗颗子弹 |
+| new（造对象） | Instantiate（生成预制体） |
+
+### 步骤2：字段、方法、构造函数、this
+```csharp
+class Player
+{
+    public string name;    // 字段：名字（public=公开，类外面也能用）
+    public int hp;         // 字段：血量
+    public int attack;     // 字段：攻击力
+
+    // 构造函数：和类【同名】、没有返回类型，new 的瞬间自动执行一次
+    public Player(string name, int hp, int attack)
+    {
+        this.name = name;  // this.name 是"自己的字段"，等号右边是参数
+        this.hp = hp;      // 同名时用 this 区分：左边字段、右边参数
+        this.attack = attack;
+    }
+
+    // 方法：掉血
+    public void TakeDamage(int damage)
+    {
+        hp = hp - damage;  // 血量 = 血量 - 受到的伤害
+    }
+
+    // 方法：攻击别人，把"对方对象"当参数传进来
+    public void Attack(Player target)
+    {
+        target.TakeDamage(this.attack); // 让对方掉血，伤害值用我自己的(this.attack)
+    }
+}
+```
+Main 里使用：
+```csharp
+Player p1 = new Player("小明", 100, 10); // 按图纸造对象1
+Player p2 = new Player("小红", 100, 15); // 造对象2，各自有独立的血量
+p1.Attack(p2);                           // 小明攻击小红
+```
+
+### ⚠️ 注意（上午踩的坑）
+- **类成员前面不写 public/private，默认是 private（私有）**：只有自己类内部能用，类外面(Main)访问会报 CS0122。要在外面读 `对象.字段`，字段必须加 `public`。
+- 构造函数必须**和类同名、不写返回类型（连 void 都不写）**。
+- `this` 只在「字段和参数同名」时用来区分，不会就先照着写。
+
+---
+
+## 🌤 下午：Unity 碰撞事件 + 刚体参数
+
+### 步骤1：认识 OnCollisionEnter（碰撞开始事件）
+- **大白话**：当物体「刚碰到」另一个物体的**那一帧**，Unity 自动调用一次，不用我们手动调（和 Start/Update 一样是固定名字，不能拼错）。
+- ⚠️ **现在就要记**：Enter 只在接触的那一帧执行**一次**，一直顶住不会狂刷；退开再撞才再触发一次。
+
+### 步骤2：碰撞事件能触发的 3 个条件（⚠️现在就要记）
+1. 两个物体**都要有碰撞体 Collider**
+2. **至少一方带刚体 Rigidbody**（玩家有）
+3. 两个碰撞体**都不能勾 Is Trigger**（勾了变触发器，得用 OnTriggerEnter，以后学）
+
+### 步骤3：用 Tag 标签 + CompareTag 区分撞到谁
+- Tag=给物体贴的「分类名」，比用名字判断更规范（名字可乱改、Tag 是统一分类）。
+- 操作：选中红方块 → 顶部 Tag → Add Tag 新建 `Trap` → 再把红方块 Tag 选为 Trap。
+
+### 步骤4：PlayerHealth 完整代码（碰陷阱掉血）
+```csharp
+using UnityEngine;
+
+public class PlayerHealth : MonoBehaviour
+{
+    public int hp = 100;       // 生命值，public 才能在检查器里看到、调整
+    public int damage = 10;    // 每次撞机关掉的血
+
+    // 碰撞开始那一帧自动执行；other=被我们撞到的那个物体
+    private void OnCollisionEnter(Collision other)
+    {
+        // 只有对方标签是 Trap（机关）才进来掉血
+        if (other.gameObject.CompareTag("Trap"))
+        {
+            hp = hp - damage;                        // 掉血
+            Debug.Log("碰到机关，剩余血量：" + hp);   // 打印剩余血量
+        }
+        // 撞到地面标签不是 Trap，if 不成立，什么都不发生
+    }
+}
+```
+### ⚠️ 注意
+- `CompareTag("Trap")` 引号里的词必须和 Tag **大小写完全一致**，写成 "trap" 永远匹配不上。
+- 一个物体可挂多个脚本：PlayerPhysicsMove 管移动、PlayerHealth 管掉血，各管各的。
+
+### 步骤5：刚体 Mass（质量）/ Drag（阻力）手感
+| 移动方式 | 受 Mass/Drag 影响吗 | 特点 / 用途 |
+|---|---|---|
+| `rb.velocity = ...` | **基本不受影响** | 直接命令速度，手感稳定 → 角色移动常用 |
+| `rb.AddForce(...)` | **受影响** | 施加力，越重越难推、Drag 越大越被拖慢 → 跳跃/爆炸/撞飞 |
+
+- 实验结论：Mass 从 1 改成 10，WASD（velocity）照样跑，但**跳跃（AddForce 冲量）几乎跳不起来**——因为「速度变化=力÷质量」，重10倍就要10倍的力。
+- 体验完还原：Mass=1、Drag=0。
+
+---
+
+## 🌙 晚上：独立写 Enemy 类 + 回合制对打
+
+### 实现思路（拆步骤，治"没思路"）
+1. 写 Enemy 类：字段 name/hp/attack（都 public）+ 构造函数(this) + TakeDamage
+2. `Attack(对方)` 把对方对象当参数，调对方的 TakeDamage
+3. Main 里 new 一个玩家、一个敌人
+4. `while` 循环轮流对打，**先手打完立刻判对方死没死，死了立刻 break，不让尸体反击**
+
+### ⚠️ 注意（今晚的逻辑重点）
+- 正确顺序：玩家打 → **立刻判敌人死没死(死就break)** → 敌人才反击 → 再判玩家死没死。
+- 反例（错误）：两个人都打完再统一判断 → 会出现"敌人都死了还反击一下"，甚至同归於尽时胜负判反。
+
+### 🛠 排错经验：Unity 进 Safe Mode 报 Internal build system error
+- 现象：进安全模式、报 `BuildProgram exited with code -532462766`，且**没有 CS 开头的脚本错误**。
+- 结论：不是代码错，是 Unity 编译缓存/构建进程崩了。
+- 解决顺序：① 完全关 Unity 和 Hub → ② 删项目里的 `Library、Temp、obj` 缓存（**Assets 绝不能删**）→ ③ 重启电脑让它重新导入。空项目也崩=环境问题，不是某个项目的问题。
 
