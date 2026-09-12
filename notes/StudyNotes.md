@@ -1294,3 +1294,277 @@ public class PlayerHealth : MonoBehaviour
 - 结论：不是代码错，是 Unity 编译缓存/构建进程崩了。
 - 解决顺序：① 完全关 Unity 和 Hub → ② 删项目里的 `Library、Temp、obj` 缓存（**Assets 绝不能删**）→ ③ 重启电脑让它重新导入。空项目也崩=环境问题，不是某个项目的问题。
 
+# 📅 D9 学习笔记（2026-09-12 周六）：C# 继承与多态 + Unity 射线地面检测 / 平滑移动
+
+---
+
+## 🌞 上午：C# 继承（面向对象核心）
+
+> 大白话：继承 = 子类白捡父类的字段和方法，解决"多个类有重复代码"的问题。父类也叫基类，子类也叫派生类。
+
+### 步骤1：继承的基本语法 `class 子类 : 父类`
+- 写法：`class Player : Character`，Player（玩家）就自动拥有 Character（角色）里的字段和方法。
+- ⚠️ 现在就要记：**构造函数不会被继承**，子类要自己写构造（用 base 转交，见步骤2）。
+- 父类一旦自己写了带参数的构造，编译器就不再送"无参构造"，所以空的子类可能报错，需要用 base。
+
+### 步骤2：base —— 子类构造把参数上交父类
+```csharp
+// 子类构造后面加 : base(参数)，把参数转交给父类构造去初始化
+public Player(string name, int hp, int attack) : base(name, hp, attack)
+{
+    // 方法体可以是空的，因为初始化都交给父类构造做了
+}
+```
+- `base(...)` 用在构造函数后 = 调父类构造；
+- `base.Move()` 用在重写方法内部 = 调父类那个被重写的原版方法。
+
+### 步骤3：virtual / override —— 子类改写父类方法
+- 父类方法加 **`virtual`**（虚方法）= 允许被子类重写，给一个默认版本；
+- 子类写同名同参方法加 **`override`** = 用自己的版本替换。
+- ⚠️ 现在就要记：**方法签名（方法名 + 参数 + 返回类型）必须和父类完全一致**，只把 virtual 换成 override；**方法体 {} 里面随便改、随便加代码**。
+- 两种重写风格：
+
+| 风格 | 写法 | 效果 |
+|---|---|---|
+| 完全替换 | 不写 base.Move()，只写自己的代码 | 父类版本不要了，全用子类的（今天用的） |
+| 扩展增强 | 先写 base.Move(); 再追加自己的代码 | 先跑父类逻辑，再追加子类逻辑 |
+
+- 🔰 IDE 输入 override 会自动生成重写骨架（里面自带一句 base.Move();），这是语法模板不是 AI 补全，可以用；完全替换时把那句 base.Move(); 删掉即可。
+
+### 步骤4：protected —— 继承配套的访问修饰符
+
+| 修饰符 | 本类内部 | 子类内部 | 类外（Main / 对象.字段） |
+|---|---|---|---|
+| `public` 公开 | ✅ | ✅ | ✅ 谁都能访问 |
+| `protected` 受保护 | ✅ | ✅ | ❌ 访问不到 |
+| `private` 私有（不写默认它） | ✅ | ❌ | ❌ |
+
+- ⚠️ 现在就要记：**protected = 本类 + 子类可见，类外不可见**。字段一般用 protected/private 保护起来，外部只能通过 public 方法（如 TakeDamage）间接改，这叫"封装"。
+- 注意：protected 管的是"字段访问权限"，**不影响能不能 new 父类**；想禁止 new 父类要用 `abstract`（以后学）。
+
+### 上午完整代码（Character 父类 + Player/Enemy 子类）
+```csharp
+using System;
+
+class Character // 父类：抽出公共部分
+{
+    protected string name;   // protected：本类+子类能用，类外不能直接碰
+    protected int hp;
+    protected int attack;
+
+    public Character(string name, int hp, int attack) // 父类构造
+    {
+        this.name = name;   // this.name 是对象自己的字段，右边 name 是参数
+        this.hp = hp;
+        this.attack = attack;
+    }
+
+    public void TakeDamage(int damage, Character attacker)
+    {
+        hp = hp - damage;
+        Console.WriteLine(this.name + " 受到 " + attacker.name + damage + " 点伤害，剩余血量：" + hp);
+    }
+
+    public void Attack(Character target)
+    {
+        Console.WriteLine(this.name + " 攻击 " + target.name);
+        target.TakeDamage(this.attack, this); // 让挨打方扣血，把攻击者自己传进去
+    }
+
+    public virtual void Move() // virtual：允许子类重写的默认版本
+    {
+        Console.WriteLine(name + " 移动了");
+    }
+}
+
+class Player : Character // 子类继承父类
+{
+    public Player(string name, int hp, int attack) : base(name, hp, attack) { } // base 转交
+
+    public override void Move() // override：完全替换成玩家的移动
+    {
+        Console.WriteLine(name + " 玩家用 WASD 走路");
+    }
+}
+
+class Enemy : Character
+{
+    public Enemy(string name, int hp, int attack) : base(name, hp, attack) { }
+
+    public override void Move()
+    {
+        Console.WriteLine(name + " 敌人朝玩家慢慢巡逻过来");
+    }
+}
+```
+
+### 继承关系图（晚上自己能手画出来）
+```
+            Character（父类）
+   protected: name / hp / attack
+   构造 Character(...)
+   public: TakeDamage / Attack
+   virtual Move()
+              ▲ :（继承）
+        ┌─────┴─────┐
+     Player        Enemy
+   :base(...)     :base(...)
+   override Move  override Move
+   → WASD走路      → 巡逻过来
+```
+
+---
+
+## 🌤 下午：Unity 角色控制器升级（射线地面检测 + 平滑移动）
+
+### 步骤1：Physics.Raycast 射线地面检测（今天核心）
+- 大白话：从一个点朝一个方向发一条看不见的线，碰到碰撞体(Collider)就返回 true，还能知道碰到谁、多远。
+- 地面检测思路：**每帧从玩家脚下向正下方打一条短线**，碰到地面=站地上(能跳)，没碰到=在空中(禁跳)。
+- 🔰 API 写法（照抄、用多就熟）：
+```csharp
+// Physics.Raycast(起点, 方向, 长度)，返回 bool
+isGrounded = Physics.Raycast(transform.position, Vector3.down, groundDistance);
+// Debug.DrawRay(起点, 方向*长度, 颜色)：只在 Scene 视图画线，调试用，发布不显示
+Debug.DrawRay(transform.position, Vector3.down * groundDistance, Color.red);
+```
+- 参数说明：`transform.position`=玩家中心(起点)；`Vector3.down`=正下方；`groundDistance`=射线多长。
+- ⚠️ 现在就要记：射线放在 Update 里**每帧检测是正常且必须的**（实时知道在地上还是空中）；但 `Debug.Log` 不要每帧打印，否则 Console 会被刷成 999+（还会把别的日志淹没，今天扣血日志就是这样被"藏"起来的）。
+
+### 步骤2：用射线接管 isGrounded，删掉碰撞回调
+- 旧做法（D7）：OnCollisionEnter/Exit + CompareTag("Ground") 被动改 isGrounded。
+- 新做法：Update 里每帧用射线结果直接给 isGrounded 赋值，**把 OnCollisionEnter/Exit 两个方法整个删掉**（两套同时改 isGrounded 会打架）。
+- 效果：站地能跳、**空中狂按空格不会二段跳**、落地恢复能跳。
+- 调 `Ground Distance`：落地却跳不起来=射线太短(调大)；空中还能连跳=射线太长插进地里(调小)。
+
+### 步骤3：Vector3 的本质（今天的困惑点）
+- ⚠️ 现在就要记：**Vector3 不是"位置专用"，它就是装了 x/y/z 三个 float 的盒子**。位置、速度、方向、旋转、缩放、力都用它，具体含义看它存在哪个属性里：
+
+| 写法 | 这个 Vector3 表示 |
+|---|---|
+| transform.position | 位置坐标（在哪） |
+| rb.velocity | 速度（每秒在 x/y/z 各移动多少米） |
+| Vector3.up / down / forward | 方向 |
+| transform.eulerAngles | 旋转角度 |
+| AddForce 里的 Vector3 | 力 |
+
+### 步骤4：平滑移动（加速度，不再瞬间满速/瞬间停死）
+- 旧做法 `rb.velocity = 目标速度`：瞬间满速、松手瞬间停，很生硬。
+- 新做法：速度**每帧朝目标靠近一小步**，产生加速起步、滑行减速的手感。
+- 🔰 `Mathf.MoveTowards(当前值, 目标值, 每步最大变化量)`：返回朝目标靠近、但每步不超过最大变化量的值，到目标就停、不会冲过头。
+- ⚠️ 现在就要记（Unity 固定套路）：**不能直接 `rb.velocity.x = ...`，要先把速度拷进临时变量 v、改 v、再 `rb.velocity = v;` 整体写回**。
+- **只平滑水平 x、z，竖直 y 保持 `rb.velocity.y` 不动**，否则会破坏重力和跳跃。
+- `每帧最大变化量 = 加速度 × Time.fixedDeltaTime`（FixedUpdate 里用 fixedDeltaTime，保证不同帧率手感一致）。
+- 踩坑：加速度太小(如10)时，每帧加的速度被地面"静摩擦"抵消，速度攒不起来、看着像不动；**调大加速度（实测 15 能跑起来）**即可。以后做正式角色可给 Collider 配零摩擦物理材质。
+
+### 下午最终脚本 PlayerPhysicsMove.cs
+```csharp
+using UnityEngine;
+
+public class PlayerPhysicsMove : MonoBehaviour
+{
+    public float moveSpeed = 8f;         // 最大移动速度
+    public float jumpForce = 5f;         // 跳跃冲力
+    public float groundDistance = 0.55f; // 地面射线长度
+    public float moveAcceleration = 15f; // 移动加速度（越大起步越快）
+    private Rigidbody rb;                // 刚体引用
+    private bool isGrounded = false;     // 是否在地面（射线每帧刷新）
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>(); // 取同一物体上的刚体
+    }
+
+    void FixedUpdate() // 持续物理移动
+    {
+        float moveX = 0f, moveZ = 0f;
+        if (Input.GetKey(KeyCode.W)) moveZ = 1f;
+        if (Input.GetKey(KeyCode.S)) moveZ = -1f;
+        if (Input.GetKey(KeyCode.A)) moveX = -1f;
+        if (Input.GetKey(KeyCode.D)) moveX = 1f;
+
+        // 目标速度：水平由按键决定，竖直 y 保持当前物理速度
+        Vector3 targetVelocity = new Vector3(moveX * moveSpeed, rb.velocity.y, moveZ * moveSpeed);
+        float maxChange = moveAcceleration * Time.fixedDeltaTime; // 本帧速度最多变多少
+
+        Vector3 v = rb.velocity;                          // 先拷一份
+        v.x = Mathf.MoveTowards(v.x, targetVelocity.x, maxChange); // 只平滑 x
+        v.z = Mathf.MoveTowards(v.z, targetVelocity.z, maxChange); // 只平滑 z（y 不动）
+        rb.velocity = v;                                  // 写回刚体
+    }
+
+    void Update() // 跳跃(瞬间按键) + 地面检测
+    {
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundDistance);
+        Debug.DrawRay(transform.position, Vector3.down * groundDistance, Color.red);
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // 落地才跳，防空跳
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+}
+```
+
+### 最终手感参数（实测）
+| 参数 | 值 |
+|---|---|
+| Move Speed | 8 |
+| Move Acceleration | 15 |
+| Jump Force | 5 |
+| Ground Distance | 0.55 |
+
+---
+
+## 🌙 晚上：Animal 练习 + 多态雏形
+
+### 步骤1：Animal 父类 + Dog/Cat 重写（和上午同构，独立默写出来的）
+```csharp
+class Animal
+{
+    protected string name;
+    public Animal(string name) { this.name = name; }
+    public virtual void Speak() { Console.WriteLine(name + " 发出了叫声"); }
+}
+class Dog : Animal
+{
+    public Dog(string name) : base(name) { }
+    public override void Speak() { Console.WriteLine(name + " 汪汪汪地叫"); }
+}
+class Cat : Animal
+{
+    public Cat(string name) : base(name) { }
+    public override void Speak() { Console.WriteLine(name + " 喵喵喵地叫"); }
+}
+```
+
+### 步骤2：多态（今天面向对象最重要的结论）
+- ⚠️ 现在就要记：**父类类型的变量可以装子类对象**（狗是动物、猫是动物）；调用 virtual/override 方法时，**以 new 出来的"真实对象"为准**执行对应重写版本，不看变量声明类型。
+```csharp
+Animal a1 = new Dog("旺财"); // 声明是 Animal，实际是 Dog
+Animal a2 = new Cat("咪咪");
+a1.Speak(); // 汪汪汪（以真实对象 Dog 为准）
+a2.Speak(); // 喵喵喵
+
+// 父类数组装一堆不同子类，foreach 统一调用，各叫各的
+Animal[] zoo = { new Dog("旺财"), new Cat("咪咪"), new Dog("大黄") };
+foreach (Animal a in zoo) { a.Speak(); } // 不用 if 判断是狗是猫
+```
+- 好处：以后新增一种动物（如 Cow），只要写子类 + override Speak，再塞进数组，**foreach 那段一个字都不用改**（对扩展开放）。游戏里统一管理一堆敌人/怪物/子弹都靠它。
+
+### 步骤3：认识 C# 12 主构造函数简写（看懂即可，初学仍写完整版）
+- `class Dog(string name) : Animal(name) { }` 是主构造函数简写，等价于：
+```csharp
+class Dog : Animal {
+    public Dog(string name) : base(name) { }
+}
+```
+- 现阶段练习仍写完整版，把构造/base 的基础打牢，简写以后看得懂、想用再用。
+
+---
+
+## ⚠️ 今日踩坑 & 环境备忘
+1. **Unity 编译报 `Win32Exception: BeeLocalCacheTool.exe` / "应用程序控制策略已阻止此文件" / Internal build system error -532462766**：
+   根因是团结引擎装在 `C:\Program Files\Tuanjie` 下，编译小工具需要管理员权限。解决：**右键 TuanjieHub → 以管理员身份运行**；并在 属性→兼容性→勾"以管理员身份运行此程序"一劳永逸。删 Library/Temp/obj 缓存、重启只是临时缓解。
+2. **Console 被 Debug.Log 刷成 999+**：射线每帧打印导致，还会淹没扣血等日志。调试看明白后把每帧的 Log 删掉/注释，DrawRay 保留（不进 Console）。
+3. **改 rb.velocity 的分量必须先拷到临时变量 v，再整体赋回**，不能直接 rb.velocity.x = ...
+4. **平滑移动只动 x、z，y 保持 rb.velocity.y**，否则重力和跳跃会坏。

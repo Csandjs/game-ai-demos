@@ -10,7 +10,7 @@
 | 2026-09-09 | D6 | ✅ 完成 | 冒泡边界/值类型交换（已解决） | D7周复盘 + 本周知识录屏回顾 |
 | 2026-09-10 | D7 | ✅ 完成 | 被球撞到无法跳跃(用Tag区分地面解决) | D8：C#面向对象-类与对象入门 |
 | 2026-09-11 | D8 | ✅ 完成 | 下午Unity突发Safe Mode编译崩溃(Internal build system error)，靠删Library/Temp/obj缓存+重启解决，非代码问题 | D9 学继承 |
-
+| 2026-09-12 | D9 | ✅ 完成 | ①Unity编译工具BeeLocalCacheTool被系统策略拦截→右键TuanjieHub管理员身份运行解决；②平滑移动加速度=10时被地面静摩擦卡住、速度攒不起来→调到15能跑；③每帧Debug.Log把Console刷成999+、淹没扣血日志→删掉每帧打印只留DrawRay | 多态 + Unity触发器/吃金币 |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -82,3 +82,21 @@
 - 🌙 晚上：第一次脱稿独立写出 Enemy 类 + while 回合制对打，掌握"先手打完立刻判死亡再break"，不让尸体反击；踩了 private 默认访问、死亡顺序两个坑并自己改对。
 - 🛠 排错：Unity Safe Mode / Internal build system error 排查全过程(看有无CS错误→删缓存→空项目测试→重启)，确认是环境不是代码，项目没丢。
 - 📌 明日(D9)重点：学继承；早上先做 ≤10 分钟复现——脱稿写一个"字段+构造函数(this)+方法"的类，并 new 两个对象调用。
+
+## D9 完成（9/12 周六）
+- C# 继承：`class 子类:父类` 子类白捡父类字段和方法，构造函数不继承；`:base(参数)` 把参数转交父类构造，`base.方法()` 可调父类原版
+- 方法重写：父类 `virtual`、子类 `override` 成对出现，签名（方法名/参数/返回类型）必须一致、方法体自由；分清完全替换（删base）与扩展增强（留base再追加）
+- 访问修饰符：对比 `public`/`protected`/`private` 可见范围，字段用 `protected` 做封装（本类+子类可见、类外不可见），外部只能通过 public 方法间接改
+- 上午练习：Character 父类（protected字段+构造+TakeDamage/Attack+virtual Move）+ Player/Enemy 子类（base构造+各自override Move）
+- Unity 射线地面检测：`Physics.Raycast(起点,方向,长度)` 每帧从脚下向下探测，取代 OnCollisionEnter/Exit，落地才返回true、空中false，实现落地能跳、空中不连跳
+- `Debug.DrawRay(起点,方向*长度,颜色)` 在 Scene 视图画红线辅助调试、不进Console；每帧的 `Debug.Log` 会刷成999+还会淹没别的日志，看明白就删、只留画线
+- 平滑移动：先算目标速度（水平按键决定、y保持`rb.velocity.y`），再用 `Mathf.MoveTowards(当前,目标,每步最大变化)` 让 x/z 逐帧逼近目标，产生加速起步/滑行减速手感
+- Unity 固定套路：改刚体速度要先拷进临时变量 `v`、改完再 `rb.velocity=v` 整体写回，不能直接 `rb.velocity.x=...`；只平滑水平 x/z，竖直 y 不动以免破坏重力跳跃
+- 每帧最大变化量 `= 加速度 * Time.fixedDeltaTime`，保证不同帧率手感一致
+- 理解 Vector3 本质：就是装 x/y/z 三个 float 的盒子，位置、速度、方向、旋转、力都用它，含义看存在哪个属性里
+- 踩坑：加速度太小每帧增量被静摩擦抵消、看着像不动，调大到15能跑；最终手感参数 MoveSpeed=8、MoveAcceleration=15、JumpForce=5、GroundDistance=0.55
+- 晚上多态练习（独立默写）：Animal 父类 virtual Speak + Dog/Cat override Speak；父类变量能装子类对象，调虚方法以 `new` 出来的真实对象为准执行对应版本
+- 多态用法：父类数组 `Animal[]` 混装 Dog/Cat，`foreach` 里一句 `a.Speak()` 各叫各的，新增子类只要override+塞进数组、循环不用改（对扩展开放）
+- 认识 C#12 主构造函数简写 `class Dog(string name):Animal(name){}`，等价于完整版构造+base，现阶段仍写完整版打基础
+- 环境排错：团结引擎报 Win32Exception / BeeLocalCacheTool 被"应用程序控制策略"拦截（即昨天 -532462766 根因），右键 TuanjieHub 以管理员身份运行解决，并在 属性→兼容性 勾"以管理员身份运行此程序"一劳永逸
+- Git：提交推送 Day9_Practice、Day9_Animal、FristScene 脚本改动、StudyNotes 与 checkin

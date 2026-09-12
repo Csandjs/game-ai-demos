@@ -337,3 +337,4 @@ static void Main(string[] args)
 14. 打擂台：擂主初始用 arr[0]，不要用0（全负数会错）
 15. 冒泡：用到 j+1 就要保证不越界，交换用 temp 三行
 16. string.Join("分隔符", 数组) 是两个参数，中间用逗号
+
