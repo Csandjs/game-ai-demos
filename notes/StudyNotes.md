@@ -1568,3 +1568,268 @@ class Dog : Animal {
 2. **Console 被 Debug.Log 刷成 999+**：射线每帧打印导致，还会淹没扣血等日志。调试看明白后把每帧的 Log 删掉/注释，DrawRay 保留（不进 Console）。
 3. **改 rb.velocity 的分量必须先拷到临时变量 v，再整体赋回**，不能直接 rb.velocity.x = ...
 4. **平滑移动只动 x、z，y 保持 rb.velocity.y**，否则重力和跳跃会坏。
+
+
+# 📅 D10（9/13 周日）：多态深入 + Unity 触发器吃金币 + UI 分数
+
+## 🌞 上午：多态深入（Polymorphism）
+
+### 步骤1：声明类型 vs 实际类型——方法到底调谁的
+
+**大白话**：一句 `Shape s = new Circle("小圆");` 里，等号左边的类型叫"声明类型"，右边 new 出来的真实对象叫"实际类型"。
+
+**两条铁律（⚠️ 现在就要记）**
+- 能不能点出某个成员（编译阶段）→ 看**声明类型（左边）**：父类引用只能访问父类定义过的成员，子类特有点不出来。
+- 重写的虚方法执行哪个版本（运行阶段）→ 看**实际类型（new 的是谁）**：new 子类就执行子类的 override 版本。
+- 口诀：**能不能调看左边，虚方法执行谁看 new。**
+
+```csharp
+Shape s = new Circle("小圆");   // 声明类型 Shape，实际类型 Circle
+s.Show();    // ✅ Show 父类有；执行 Circle 的重写版 → "小圆 是圆形"
+// s.Roll(); // ❌ 报错：Roll 是 Circle 特有，父类 Shape 里没有，父类引用看不到
+Circle c = new Circle("小圆2"); // 用子类类型声明
+c.Roll();    // ✅ 子类声明能点出自己特有的方法
+```
+
+### 步骤2：abstract 抽象类与抽象方法
+
+**大白话**：virtual 是父类给默认做法、子类可改可不改；abstract 是父类只立规矩"子类必须会这个动作"，但不写怎么做，强制每个子类自己实现。
+
+**四条规则（⚠️ 现在就要记）**
+
+1. 抽象方法**没有方法体，以分号结尾**：`public abstract void Attack();`
+2. 类里只要有抽象方法，这个类必须加 `abstract`
+3. 抽象类**不能直接 new**（new 抽象类报错），只能被继承
+4. 子类必须用 `override` 实现所有抽象方法，少一个就报错
+
+**virtual vs abstract 对比表**
+
+|  | virtual 虚方法 | abstract 抽象方法 |
+| --- | --- | --- |
+| 父类方法体 | 有默认实现 `{}` | 没有，只有一个 `;` |
+| 子类要不要重写 | 可选 | **必须**重写 |
+| 类的修饰 | 普通类就行 | 必须 `abstract class` |
+| 能不能 new | 能 | **不能 new** |
+
+```
+abstract class Shape
+{
+    protected string name;
+    public Shape(string name) { this.name = name; }  // 构造函数照样有，给子类 base 用
+    public abstract void Show();   // 抽象方法：无方法体、分号结尾，强制子类重写
+}
+class Circle : Shape
+{
+    public Circle(string name) : base(name) { }      // 把名字转交父类构造
+    public override void Show()                      // 子类必须实现
+    {
+        Console.WriteLine(name + " 是圆形");
+    }
+}
+```
+
+> 
+> 补充：抽象类里普通字段、构造函数、普通方法照样能写；只有抽象方法那部分"只定规矩不写实现"。
+
+### 步骤3：is / as 类型判断与转换
+
+**大白话**：拿到一个父类引用，想调子类特有方法前，要先判断它到底是哪个子类、再转换。
+
+```
+if (s is Circle c)   // s 是 Circle 吗？是→转成 Circle 交给变量 c（推荐写法，一步到位）
+{
+    c.Roll();        // c 是 Circle 类型，能点子类特有方法
+}
+
+Circle c2 = s as Circle;  // as：尝试转换，失败返回 null（不崩）
+if (c2 != null) { c2.Roll(); }
+
+Circle c3 = (Circle)s;    // 直接强转：类型不符会抛异常崩溃，没把握别用
+```
+
+**三种方式对比（⚠️ 现在就要记）**
+
+| 写法 | 类型不符时 |
+| --- | --- |
+| `(Circle)s` 强转 | 直接抛异常、崩溃 |
+| `s as Circle` | 返回 null，要判空 |
+| `s is Circle c` | 返回 false，不进 if（最推荐） |
+
+**设计原则**：所有子类都有、只是做法不同的动作（Show/Attack）→ 用**多态**；只有某个子类特有的动作（只有圆会滚、只有狗会咬）→ 才用 **is/as**。
+
+### 步骤4：List 泛型集合 + Character 综合
+
+**大白话**：数组长度固定，List 长度可变，能随时 Add 加元素，游戏里刷怪、加角色都用它。
+
+**核心用法（⚠️ 现在就要记）**
+
+```
+using System.Collections.Generic;   // List 所在命名空间，必须加
+
+List<Character> list = new List<Character>();  // 建一个专门装 Character 的空集合
+list.Add(new Player("勇者", 100));  // Add 加元素，长度自动变
+list.Count;                         // 取个数（⚠️数组是 Length，List 是 Count）
+foreach (Character c in list) { c.Attack(); }  // 遍历和数组一样
+
+// 集合初始化器：一开始就知道放哪几个，可一次性写
+List<Animal> a = new List<Animal> { new Dog("旺财"), new Cat("咪咪") };
+// 取单个元素用下标，从 0 开始，范围 0 ~ Count-1，超了越界
+list[0].Attack();
+```
+
+**数组 vs List 对比**
+
+|  | 数组 `[]` | `List<T>` |
+| --- | --- | --- |
+| 长度 | 固定 | 可变（Add/Remove） |
+| 个数 | `.Length` | `.Count` |
+| 加元素 | 不能 | `.Add(元素)` |
+| 命名空间 | 不用 | 要 using Collections.Generic |
+
+**综合例子（抽象父类 + 子类重写 + List 统一多态调用）**
+
+```
+abstract class Character
+{
+    protected string name;
+    protected int hp;
+    public Character(string name, int hp) { this.name = name; this.hp = hp; }
+    public abstract void Attack();              // 抽象：攻击方式各不同，强制子类实现
+    public void TakeDamage(int damage)          // 普通方法：子类直接继承共用
+    {
+        hp -= damage;
+        Console.WriteLine(name + " 受到" + damage + "点伤害，剩余血量" + hp);
+    }
+}
+class Player : Character
+{
+    public Player(string name, int hp) : base(name, hp) { }
+    public override void Attack() { Console.WriteLine(name + " 挥剑攻击！"); }
+}
+class Enemy : Character
+{
+    public Enemy(string name, int hp) : base(name, hp) { }
+    public override void Attack() { Console.WriteLine(name + " 扑上来撕咬！"); }
+}
+// Main：
+// List<Character> list = new List<Character>();
+// list.Add(new Player("勇者",100)); list.Add(new Enemy("史莱姆",100));
+// foreach (Character c in list) { c.Attack(); c.TakeDamage(10); }
+```
+
+**抽象类动态创建（刷怪雏形，⚠️）**：抽象类不能 new 自己（`new Animal()` 报错），但子类随便 new 多少个；运行时按用户输入的"种类"用 if/switch 决定 new 谁，再用父类引用接住 Add。
+
+```
+Animal a;
+if (kind == "狗") a = new Dog(nm);
+else if (kind == "猫") a = new Cat(nm);
+else a = new Cow(nm);
+list.Add(a);
+```
+
+> 
+> 🔰 List 的 RemoveAt/Remove（删除）、AddRange（批量加）以后做刷怪/对象池时专门学，现在不用深究。
+
+## 🌤 下午：Unity 触发器 Trigger + 吃金币 + UI 分数
+
+### 步骤1：Collider（碰撞体）vs Trigger（触发器）——面试高频
+
+**大白话**：碰撞体组件上的 Is Trigger 勾不勾，决定它是"会挡人的墙"还是"只感应不挡路的区域"。
+
+|  | Collider（不勾 Is Trigger） | Trigger（勾 Is Trigger） |
+| --- | --- | --- |
+| 物理碰撞 | 有：挡住、弹开、能站上面 | 没有：物体直接穿过 |
+| 回调函数 | OnCollisionEnter/Stay/Exit | **OnTriggerEnter/Stay/Exit** |
+| 函数参数 | Collision collision | Collider other |
+| 用途 | 地面、墙、斜坡 | 吃金币、捡道具、进门、区域检测 |
+
+**Trigger 事件触发的 3 个条件（⚠️ 现在就要记，缺一不可）**
+
+1. 两个物体都要有 Collider；
+2. 其中一方（金币）勾上 Is Trigger；
+3. 双方至少有一个挂 Rigidbody（玩家有刚体即可）。
+
+### 步骤2：创建金币并设为触发器
+
+1. Hierarchy 右键 → 3D Object → Cylinder，命名 `Coin`；
+2. Transform：Scale `(1,0.2,1)` 压扁，拖到玩家前方贴地；
+3. Project 右键 → Create → Material 建金黄色材质 `CoinMaterial`，拖到金币上；
+4. 金币的 Capsule Collider **勾上 Is Trigger**，金币**不加刚体**；
+5. 让金币竖直立着转：Rotation `(90,0,0)`，Rotate 脚本里加 `Space.World` 绕世界竖直轴转。
+
+**局部轴 vs 世界轴（⚠️）**：物体被手动旋转后，局部轴会歪；`transform.Rotate(..., Space.World)` 强制绕世界轴转。纯色对称圆盘绕自己中心对称轴自转肉眼看不出，要让它竖直绕 Y 轴转才明显。
+
+### 步骤3：Coin 脚本——碰到玩家加分并销毁（挂在金币上）
+
+```
+using UnityEngine;
+
+public class Coin : MonoBehaviour
+{
+    public static int score = 0;   // static 静态：所有金币共用同一份分数（公共记分牌）
+
+    // 对方进入金币触发区时自动调用一次；other = 撞进来的物体（玩家）
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))   // 判断撞进来的标签是不是 Player
+        {
+            score = score + 1;            // 分数 +1（也可写 score++）
+            Debug.Log("吃到金币！当前分数：" + score);
+            Destroy(gameObject);          // 销毁金币自己（gameObject = 脚本挂着的物体）
+        }
+    }
+}
+```
+
+- 玩家要先在 Inspector 顶部 Tag 下拉设成 `Player`；
+- 复制金币：Hierarchy 选中金币按 `Ctrl+D`，static 分数会跨金币累计。
+
+### 步骤4：Canvas + Text 显示分数文字
+
+1. Hierarchy 右键 → UI → **旧版 → 文本（Text，Legacy，别用 TextMeshPro）**，自动生成 Canvas + EventSystem；
+2. 选中 Text，Rect Transform 锚点定到**左上角**（锚点预设里直接点左上格，再手动填 Pos X=150、Pos Y=-60、宽 300、高 80）；
+3. Text 组件：内容 `分数：0`、字号 40、颜色白/黄、水平和垂直 Overflow 都设 `Overflow`。
+
+**⚠️ 文字看不见的两个坑**：①文本框宽高必须大于字号，否则字被裁；②位置靠锚点定，左上锚点时 Pos Y 填负数才往下。
+
+### 步骤5：ScoreUI 脚本——让文字实时刷新（挂在 Text 物体上）
+
+```
+using UnityEngine;
+using UnityEngine.UI;        // ⚠️ 用 UI 的 Text 组件必须加这个命名空间
+
+public class ScoreUI : MonoBehaviour
+{
+    private Text scoreText;  // 分数文本组件
+
+    void Start()
+    {
+        scoreText = GetComponent<Text>();   // 取同一物体上的 Text 组件
+    }
+
+    void Update()            // 每帧刷新一次，分数一变文字就跟着变
+    {
+        scoreText.text = "分数：" + Coin.score;  // 改文字 = 给 Text 的 text 属性赋字符串
+    }
+}
+```
+
+**核心理解（⚠️ 现在就要记）**：组件就是一个装着"属性（数据）+方法（功能）"的对象；**Inspector 面板里每一栏 = 代码里的一个属性**，`组件.属性 = 值` 等价于运行时在面板改那一栏。改屏幕文字用 `Text组件.text = "字符串"`；访问静态变量用 `类名.变量名`（Coin.score）。
+
+## 🌙 晚上：练习 + 环境 + 规范
+
+### 动物多态脱稿练习（abstract + List + is 综合）
+
+- abstract Animal（抽象 Speak）→ Dog/Cat/Cow 各自 override；用 List 装、foreach 统一 Speak；
+- Dog/Cat 各有特有 attack()、Cow 没有 → 用 `if(a is Dog d) d.Attack();` 区分（通用靠多态、特有靠 is）。
+
+### 环境排错：智能应用控制（Smart App Control）拦截编译产物
+
+- 现象：dotnet run 报 `FileLoadException … 应用程序控制策略已阻止此文件 (0x800711C7)`，加 Defender 白名单、管理员运行都没用；
+- 原因：Win11 智能应用控制拦"无签名、无信誉的本地新编译 dll"，它不认排除项、管理员也绕不过；
+- 解决：Windows 安全中心 → 应用和浏览器控制 → 智能应用控制 → **关闭**（注意：关闭后想再开需重置系统；开发机建议关，仍有 Defender 等防护）→ 重启。
+
+### 命名规范（⚠️ 现在就要记）
+
+- 类名、方法名、属性名 → **大驼峰 PascalCase**：Attack、TakeDamage、Speak；
+- 变量名、参数名 → **小驼峰 camelCase**：playerName、moveSpeed、循环变量用 dog/cat 而非单字母。

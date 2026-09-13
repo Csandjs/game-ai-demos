@@ -15,6 +15,6 @@ public class RotateCube : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(new Vector3(rotateSpeed_x,rotateSpeed_y,rotateSpeed_z)*Time.deltaTime);
+        transform.Rotate(new Vector3(rotateSpeed_x,rotateSpeed_y,rotateSpeed_z)*Time.deltaTime,Space.World);
     }
 }

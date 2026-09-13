@@ -11,6 +11,7 @@
 | 2026-09-10 | D7 | ✅ 完成 | 被球撞到无法跳跃(用Tag区分地面解决) | D8：C#面向对象-类与对象入门 |
 | 2026-09-11 | D8 | ✅ 完成 | 下午Unity突发Safe Mode编译崩溃(Internal build system error)，靠删Library/Temp/obj缓存+重启解决，非代码问题 | D9 学继承 |
 | 2026-09-12 | D9 | ✅ 完成 | ①Unity编译工具BeeLocalCacheTool被系统策略拦截→右键TuanjieHub管理员身份运行解决；②平滑移动加速度=10时被地面静摩擦卡住、速度攒不起来→调到15能跑；③每帧Debug.Log把Console刷成999+、淹没扣血日志→删掉每帧打印只留DrawRay | 多态 + Unity触发器/吃金币 |
+| 2026-09-13 | D10 | ✅ 完成 | 智能应用控制拦截编译dll（关闭SAC解决）；UI文字曾因文本框太小/锚点不对不显示；金币绕对称轴自转看不出（改Space.World） | （填D11计划主题） |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -100,3 +101,20 @@
 - 认识 C#12 主构造函数简写 `class Dog(string name):Animal(name){}`，等价于完整版构造+base，现阶段仍写完整版打基础
 - 环境排错：团结引擎报 Win32Exception / BeeLocalCacheTool 被"应用程序控制策略"拦截（即昨天 -532462766 根因），右键 TuanjieHub 以管理员身份运行解决，并在 属性→兼容性 勾"以管理员身份运行此程序"一劳永逸
 - Git：提交推送 Day9_Practice、Day9_Animal、FristScene 脚本改动、StudyNotes 与 checkin
+
+## D10 完成（9/13 周日）
+
+- 多态调用规则：声明类型（左边）决定能不能点出成员，实际类型（new 的是谁）决定虚方法执行哪个版本，口诀"能不能调看左边，执行谁看new"
+- 抽象类：`abstract class` + 抽象方法 `public abstract void Speak();`（无方法体、分号结尾），抽象类不能 `new`，子类必须 `override` 全部抽象方法；普通字段/构造/普通方法仍可写
+- virtual 与 abstract 区别：virtual 有默认实现、子类可选重写；abstract 无实现、子类必须重写、类必须加 abstract
+- 类型判断：`if(s is Circle c)` 判断并转换一步到位（推荐），`as` 失败返回 null 要判空，直接强转失败会崩；通用行为靠多态、子类特有行为才用 is/as
+- List<T> 集合：要 `using System.Collections.Generic;`，`Add` 加元素、`Count` 取个数（数组是 Length）、`foreach` 遍历、`{ }` 集合初始化器、`list[下标]` 取单个；长度可变
+- 抽象类动态创建：不能 `new 抽象类自己`，但子类可无限 new，运行时按输入的种类用 if/switch 决定 new 哪个子类、父类引用接住再 Add（刷怪雏形）
+- Unity 触发器：Collider 勾 `Is Trigger` 变触发器，物体穿过不阻挡、只发事件；触发三条件=双方都有Collider+一方勾Is Trigger+至少一个刚体
+- Collider vs Trigger（面试高频）：碰撞体不勾、有物理碰撞、用 `OnCollisionEnter`；触发器勾上、无碰撞只触发、用 `OnTriggerEnter(Collider other)`
+- 吃金币：玩家 Tag 设 `Player`，金币挂 Coin 脚本，`OnTriggerEnter` 里 `other.CompareTag("Player")` 命中则 `static int score` 加一并 `Destroy(gameObject)` 销毁金币；static 让所有金币共用一份分数
+- UI 分数：右键 UI→旧版→文本 Text，自动建 Canvas/EventSystem；锚点定左上角、文本框宽高要大于字号、溢出设 Overflow；ScoreUI 脚本 `using UnityEngine.UI`、`GetComponent<Text>()`、每帧 `scoreText.text = "分数：" + Coin.score` 刷新
+- 组件认知：组件是装着属性和方法的对象，Inspector 每一栏对应代码里一个属性，`组件.属性=值` 等于运行时改面板；改屏幕文字用 `Text组件.text`
+- 金币旋转：物体被手动旋转后局部轴会歪，`transform.Rotate(..., Space.World)` 绕世界竖直轴转才明显，纯色圆盘绕中心对称轴自转肉眼看不出
+- 环境排错：Win11 智能应用控制（SAC）拦截无签名的本地编译 dll（0x800711C7），不认 Defender 白名单、管理员也绕不过，开发机在"应用和浏览器控制"里关闭 SAC 并重启解决
+- 命名规范：类名/方法名/属性名用大驼峰 PascalCase（Attack、Speak），变量/参数用小驼峰 camelCase（playerName、循环变量 dog 而非单字母）
