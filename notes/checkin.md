@@ -11,7 +11,8 @@
 | 2026-09-10 | D7 | ✅ 完成 | 被球撞到无法跳跃(用Tag区分地面解决) | D8：C#面向对象-类与对象入门 |
 | 2026-09-11 | D8 | ✅ 完成 | 下午Unity突发Safe Mode编译崩溃(Internal build system error)，靠删Library/Temp/obj缓存+重启解决，非代码问题 | D9 学继承 |
 | 2026-09-12 | D9 | ✅ 完成 | ①Unity编译工具BeeLocalCacheTool被系统策略拦截→右键TuanjieHub管理员身份运行解决；②平滑移动加速度=10时被地面静摩擦卡住、速度攒不起来→调到15能跑；③每帧Debug.Log把Console刷成999+、淹没扣血日志→删掉每帧打印只留DrawRay | 多态 + Unity触发器/吃金币 |
-| 2026-09-13 | D10 | ✅ 完成 | 智能应用控制拦截编译dll（关闭SAC解决）；UI文字曾因文本框太小/锚点不对不显示；金币绕对称轴自转看不出（改Space.World） | （填D11计划主题） |
+| 2026-09-13 | D10 | ✅ 完成 | 智能应用控制拦截编译dll（关闭SAC解决）；UI文字曾因文本框太小/锚点不对不显示；金币绕对称轴自转看不出（改Space.World） | C#接口Interact + Unity接口实现 |
+| 2026-09-14 | D11 | ✅ 完成 | Unity能看懂但独立写还不熟、一个Text被两个字段抢占覆盖、if误写在方法外 | 晨练脱稿复现接口多态，进入D12 |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -118,3 +119,18 @@
 - 金币旋转：物体被手动旋转后局部轴会歪，`transform.Rotate(..., Space.World)` 绕世界竖直轴转才明显，纯色圆盘绕中心对称轴自转肉眼看不出
 - 环境排错：Win11 智能应用控制（SAC）拦截无签名的本地编译 dll（0x800711C7），不认 Defender 白名单、管理员也绕不过，开发机在"应用和浏览器控制"里关闭 SAC 并重启解决
 - 命名规范：类名/方法名/属性名用大驼峰 PascalCase（Attack、Speak），变量/参数用小驼峰 camelCase（playerName、循环变量 dog 而非单字母）
+
+## D11 完成（9/14 周一）
+
+- 学会接口 `interface`：方法只有签名以分号结尾、不写 public、不能有字段和构造函数，类用冒号实现、一个类可实现多个接口
+- 理解接口多态：接口也是类型，可用 `接口[]` / `List<接口>` 装不同对象并 `foreach` 统一调用
+- 梳理接口 vs 抽象类：接口是 can-do（能做什么）、可多实现；抽象类是 is-a（是什么）、只能单继承（面试高频）
+- 控制台项目 `Day11_Interface`、`Day11_InterfaceDrill`、`Day11_Interact`：实现 `IMovable`/`IDamageable`/`IInteractable`，并学会接口方法带 `bool` 返回值、调用方用变量接住判断
+- Unity 新建 `IMovable.cs`、`IDamageable.cs`（纯接口不继承 `MonoBehaviour`、不是组件不能挂物体）
+- `PlayerPhysicsMove` 实现 `IMovable`，水平移动封进 `Move()`，`FixedUpdate` 里调用
+- `PlayerHealth` 实现 `IDamageable`，掉血封进 `TakeDamage(int)`，`hp` 用普通 public 字段不用 static
+- 新增木箱 `BoxHealth`（耐久归零 `Destroy`）和炸弹 `Bomb`
+- `Bomb` 用 `List<IDamageable>` 配合 `OnTriggerEnter/Exit` 维护范围内名单，按 K 用 `foreach` 统一 `TakeDamage`，一颗炸弹同时让玩家掉血、木箱碎裂，体会接口解耦
+- 弄清模型 `Scale`（视觉大小）与碰撞体 `Radius`（判定范围）相互独立；固定触发区域挂刚体并勾 `Is Kinematic` 才能检测无刚体对象
+- 用 `public PlayerHealth player;` 在 Inspector 拖引用做血量 UI（`HpUI`），区分 static（全局唯一总分）与拖引用（具体物体的数据）
+- 踩坑：一个物体只有一个某类型组件，两个字段都 `GetComponent<Text>()` 会指向同一文本框互相覆盖，多行 UI 要建多个 Text 物体

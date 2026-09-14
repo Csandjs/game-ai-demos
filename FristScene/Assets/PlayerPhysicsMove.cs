@@ -1,22 +1,20 @@
-using System;
 using UnityEngine;
 
-public class PlayerPhysicsMove : MonoBehaviour
+public class PlayerPhysicsMove : MonoBehaviour , IMovable
 {
-    public float moveSpeed = 5f;
+    public float moveSpeed = 8f;
     public float jumpForce = 5f;
-    public float groundDistance = 0.7f;
-    public float moveAcceleration = 10f;
+    public float groundDistance = 0.55f;
+    public float moveAcceleration = 15f;
     private Rigidbody rb;
     private bool isGrounded = false;
     void Start()
     {
         rb = GetComponent<Rigidbody>();//把挂在同一个Cube上的刚体组件取出来，存进rb
     }
-    //持续的物理移动放在FixedUpdate
-    void FixedUpdate()
+    public void Move()
     {
-        float moveX = 0f;
+                float moveX = 0f;
         float moveZ = 0f;
         if (Input.GetKey(KeyCode.W))moveZ = 1f;
         if (Input.GetKey(KeyCode.S))moveZ = -1f;
@@ -32,6 +30,11 @@ public class PlayerPhysicsMove : MonoBehaviour
         v.x = Mathf.MoveTowards(v.x ,targetVelocity.x,maxChange);
         v.z = Mathf.MoveTowards(v.z ,targetVelocity.z,maxChange);    
         rb.velocity = v;
+    }
+    //持续的物理移动放在FixedUpdate
+    void FixedUpdate()
+    {
+        Move();
     }
     //瞬间的跳跃检测放在Update
     void Update()

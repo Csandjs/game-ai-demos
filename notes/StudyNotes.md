@@ -1833,3 +1833,198 @@ public class ScoreUI : MonoBehaviour
 
 - 类名、方法名、属性名 → **大驼峰 PascalCase**：Attack、TakeDamage、Speak；
 - 变量名、参数名 → **小驼峰 camelCase**：playerName、moveSpeed、循环变量用 dog/cat 而非单字母。
+
+# 📅 D11 学习笔记：接口 interface + Unity 接口重构 + 炸弹群伤
+
+## 🌞 上午：C# 接口（interface）
+
+### 步骤1：什么是接口、怎么定义
+接口 = 一份"能力约定/合同"：规定"谁实现我，就必须有这些方法"，但**不写方法具体怎么做**。
+```csharp
+interface IMovable
+{
+    void Move();   // 只有方法签名，没有方法体 { }，以分号结尾
+}
+```
+- 接口名习惯以 **I** 开头（IMovable、IDamageable）；
+- 接口方法**不写 public、不写 abstract**；
+- 接口里**不能写字段（数据）、不能写构造函数**。
+
+### 步骤2：类实现接口
+类名后用冒号 `:接口名`，并**必须**把接口里的方法全部实现（方法要 public、签名一致）。
+```csharp
+class Player : IMovable
+{
+    public void Move()   // 少写或签名不一致会报"未实现接口成员"
+    {
+        Console.WriteLine("玩家移动");
+    }
+}
+```
+
+### 步骤3：一个类实现多个接口
+多个接口用**逗号**隔开；如果同时继承父类，**父类必须写在冒号后第一位**。
+```csharp
+class Player : IMovable, IDamageable   // 控制台类：直接逗号列接口
+{
+    public void Move() { }
+    public void TakeDamage(int dmg) { }
+}
+// Unity 脚本：父类 MonoBehaviour 必须排第一
+public class PlayerPhysicsMove : MonoBehaviour, IMovable { }
+```
+
+### 步骤4：接口多态（接口也是一种"类型"）
+接口可以当数组/List 的元素类型，把"毫无继承关系、但都实现了同一接口"的对象装在一起统一调用。
+```csharp
+IMovable[] movers = { new Player(), new Enemy(), new Car() };
+foreach (IMovable m in movers)
+{
+    m.Move();   // 不关心你具体是谁，反正都能 Move，各走各的实现
+}
+```
+
+### 步骤5：接口 vs 抽象类（⚠️ 面试高频，必背）
+| 对比项 | 抽象类 abstract class | 接口 interface |
+|---|---|---|
+| 含义 | is-a，"是什么"（狗是动物） | can-do，"能做什么"（能受伤/能移动） |
+| 方法实现 | 可有普通实现方法 + 抽象方法 | 默认只有方法签名、无实现 |
+| 字段/构造函数 | 可以有 | 不能有 |
+| 数量 | 只能继承**一个**父类 | 能实现**多个**接口（逗号隔开） |
+| 抽象方法写法 | 要加 abstract | 不写 public/abstract |
+
+**选择口诀：做法相同、想复用同一段代码 → 用父类/抽象类；做法不同、但想被统一调用 → 用接口。**
+
+---
+
+## 🌤 下午：Unity 用接口重构 + 血量 UI
+
+### 步骤6：定义两个接口并重构玩家脚本
+接口文件**不继承 MonoBehaviour、不是组件、不能往物体上挂**，一个接口一个文件。
+```csharp
+// IMovable.cs
+public interface IMovable { void Move(); }
+// IDamageable.cs
+public interface IDamageable { void TakeDamage(int damage); }
+```
+把原来写在 FixedUpdate 里的水平移动整段搬进 `Move()`，物理帧只负责调用：
+```csharp
+public class PlayerPhysicsMove : MonoBehaviour, IMovable
+{
+    public void Move() { /* WASD→速度 的整段移动逻辑放这 */ }
+    void FixedUpdate() { Move(); }
+}
+```
+受伤逻辑封进 IDamageable：
+```csharp
+public class PlayerHealth : MonoBehaviour, IDamageable
+{
+    public int hp = 100;                 // 属于角色自己的数据，不用 static
+    public void TakeDamage(int dmg)
+    {
+        hp -= dmg;
+        Debug.Log("受到伤害，掉" + dmg + "点血，剩余血量：" + hp);
+    }
+}
+```
+
+### 步骤7：用 public 组件引用做血量 UI（拖槽）
+`public 其他脚本类 变量;` = 在 Inspector 开一个可拖的"引用槽"，拖物体就是连线。
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+public class HpUI : MonoBehaviour
+{
+    private Text hpText;
+    public PlayerHealth player;   // 槽：把挂着 PlayerHealth 的玩家拖进来
+    void Start() { hpText = GetComponent<Text>(); }
+    void Update() { hpText.text = "血量：" + player.hp; }
+}
+```
+- 拖之前是 null，不拖直接用会报**空引用异常**；
+- 拖的是物体，槽类型是某脚本，Unity 自动取该物体上的对应组件。
+
+### 步骤8：static 和"拖引用"怎么选
+- **全局唯一、跨物体累计**的数据（金币总分 Coin.score、击杀数）→ 用 `static`，直接 `类名.字段` 访问，不用拖；
+- **属于某个具体物体/角色**的数据（血量 hp、速度 moveSpeed）→ 用 public 拖引用，多个角色各连各的不会串。
+
+---
+
+## 🔥 加深：炸弹群伤 List<IDamageable>
+
+### 步骤9：爆炸范围的两个关键认知
+1. **模型大小看 Scale，碰撞/触发范围看 Collider 的 Radius，两者独立**：想做"小炸弹、大判定"，Scale 保持小，把 SphereCollider 的 Radius 调大并勾 Is Trigger（Scene 视图绿色线框=范围）；
+2. **固定的触发区域要自己挂 Rigidbody 并勾 Is Kinematic**（运动学：不掉落、不移动，但拥有刚体身份，这样无刚体的木箱进范围也能被检测到）。
+
+### 步骤10：用接口名单统一群伤
+```csharp
+using UnityEngine;
+using System.Collections.Generic;
+public class Bomb : MonoBehaviour
+{
+    public int bombDamage = 30;
+    public KeyCode explodeKey = KeyCode.K;
+    List<IDamageable> targets = new List<IDamageable>();  // 范围内"能受伤"的名单
+
+    void OnTriggerEnter(Collider other)
+    {
+        IDamageable d = other.GetComponent<IDamageable>(); // 用接口类型找组件
+        if (d != null && !targets.Contains(d)) targets.Add(d);   // 判空+去重再加入
+    }
+    void OnTriggerExit(Collider other)
+    {
+        IDamageable d = other.GetComponent<IDamageable>();
+        if (d != null && targets.Contains(d)) targets.Remove(d);
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(explodeKey))
+        {
+            foreach (IDamageable d in targets)
+                if (d != null) d.TakeDamage(bombDamage); // 不认识玩家/木箱，统一喊受伤
+            targets.Clear();
+        }
+    }
+}
+```
+**解耦**：Bomb 里没有出现 PlayerHealth、BoxHealth 任何具体类名，只认 IDamageable；以后新增"敌人/油桶"，只要实现 IDamageable，Bomb 一个字不改就能炸到。
+
+---
+
+## 🌙 晚上：IInteractable + 接口方法返回 bool
+
+### 步骤11：接口方法也能带返回值
+接口签名写什么返回类型，实现方法就 return 什么；调用方用变量接住再判断。
+```csharp
+interface IInteractable { bool Interact(); }   // 返回 true=成功 false=失败
+
+class Chest : IInteractable
+{
+    private bool isOpened = false;   // 字段写在类里、方法外
+    public bool Interact()
+    {
+        if (!isOpened) { isOpened = true; Console.WriteLine("获得100金币"); return true; }
+        else { Console.WriteLine("宝箱是空的"); return false; }
+    }
+}
+// Main：List<IInteractable> 统一遍历，接住返回值
+foreach (IInteractable item in list)
+{
+    bool ok = item.Interact();
+    if (ok) Console.WriteLine("交互成功"); else Console.WriteLine("交互失败");
+}
+```
+
+---
+
+## ⚠️ D11 易错点汇总
+1. 接口方法只有签名、分号结尾、无 `{}`、不写 public/abstract；
+2. 实现接口的方法必须 public 且签名一致，漏一个就报"未实现接口"；
+3. 父类 + 接口同时写时，父类必须在冒号后第一位：`: MonoBehaviour, 接口`；
+4. 一个类只能继承一个父类，但能实现多个接口；
+5. **类的 `{}` 里只能直接放字段/方法；if、Console.WriteLine、return 等执行语句必须写在方法 `{}` 内**；
+6. List 取元素用 `变量名[下标]`，不是 `类型名[下标]`；下标从 0 开始；
+7. `GetComponent<接口>()` 合法，找不到返回 null，用前必须判空；
+8. Scale（视觉）和 Collider Radius（判定范围）独立；固定触发器挂 Rigidbody 勾 Is Kinematic；
+9. 一个物体只有一个某类型组件：两个字段都 GetComponent<Text>() 会指向同一文本框互相覆盖，要多行显示就建多个 Text 物体；
+10. public 引用槽不拖就是 null，调用会空引用报错。
