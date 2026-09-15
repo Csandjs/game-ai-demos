@@ -4,16 +4,18 @@ using UnityEngine.UI;
 public class HpUI : MonoBehaviour
 {
     // Start is called before the first frame update
-    private Text playerHpText;
-    public PlayerHealth player;
-    void Start()
+    private Text playerHpText;   
+        void Start()
     {
         playerHpText = GetComponent<Text>();
     }
-
+    public void RefreshHp(int hp)
+    {
+        playerHpText.text = "血量：" + hp;
+    }
     // Update is called once per frame
     void Update()
     {
-        playerHpText.text = "血量：" + player.hp;
+        
     }
 }

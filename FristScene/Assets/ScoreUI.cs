@@ -8,10 +8,13 @@ public class ScoreUI : MonoBehaviour
     {
         scoreText = GetComponent<Text>();
     }
-
+    public void RefreshScore(int score)
+    {
+        scoreText.text = "分数：" + score;
+    }
     // Update is called once per frame
     void Update()
     {
-        scoreText.text = "分数：" + Coin.score;
+        
     }
 }

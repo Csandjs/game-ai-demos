@@ -2028,3 +2028,245 @@ foreach (IInteractable item in list)
 8. Scale（视觉）和 Collider Radius（判定范围）独立；固定触发器挂 Rigidbody 勾 Is Kinematic；
 9. 一个物体只有一个某类型组件：两个字段都 GetComponent<Text>() 会指向同一文本框互相覆盖，要多行显示就建多个 Text 物体；
 10. public 引用槽不拖就是 null，调用会空引用报错。
+
+# 📅 D12（2026-09-15 周二）面向对象大综合：封装/继承/多态/接口 + 工厂模式 + Unity 组件化
+
+> 今日主线：把 OOP 四件套整合成一个完整角色系统；下午把 Unity 角色按"单一职责"拆成移动、血量、UI 组件，并把 UI 从每帧轮询改成"变化时才刷新"。
+
+---
+
+## 🌞 上午：C# 面向对象四件套 + 回合对战 + 工厂模式
+
+### 步骤1：封装——private 字段 + public 属性（受控访问）
+**大白话**：字段用 private 藏起来，外面不能直接改；通过 public 属性这个"窗口"读，想改只能走方法，保证数据不被改坏（如血量不为负）。
+
+```csharp
+class Character
+{
+    private int hp;            // 私有字段：只有类内部能直接碰，外面看不见
+    private string name;
+
+    public int Hp              // 公开只读属性：外面能读
+    {
+        get { return hp; }     // 只有 get、没有 set → 外面只能看、不能赋值
+    }
+    public string Name
+    {
+        get { return name; }
+    }
+
+    // 想掉血只能走这个方法（受控修改），规则写在类内部
+    public void TakeDamage(int damage)
+    {
+        hp = hp - damage;
+        if (hp < 0) hp = 0;    // 规则：血量最低为 0
+        Console.WriteLine(name + "受到" + damage + "点伤害，剩余血量：" + hp);
+    }
+}
+```
+- `get`：读；`set`：写，set 里用 `value` 代表新值；只写 get = 只读属性。
+- 对比：public 字段=裸奔谁都能改；只读属性=只能看；get+set（可加判断）=门卫受控改。
+
+### 步骤2：接口 IDamageable——"能受伤"的契约
+**大白话**：接口只规定"必须有哪个方法"，只有签名没有方法体、以分号结尾、不写 public；谁实现它谁就必须交出这个方法。
+
+```csharp
+interface IDamageable
+{
+    void TakeDamage(int damage);   // 只有签名 + 分号，不写实现、不写 public
+}
+
+class Character : IDamageable      // Character 实现接口，必须写出 TakeDamage（上面已写）
+{
+    // ...
+}
+```
+
+### 步骤3：继承 + 多态——基类与子类
+**大白话**：子类 `: 基类` 自动继承字段/属性/方法（含基类已实现的接口），`base(...)` 把参数交给父类构造；父类方法标 virtual、子类用 override 各自重写，调用时 new 的是谁就执行谁的版本。
+
+```csharp
+// 父类：攻击方法标 virtual，表示"可以被子类重写"
+public virtual void Attack(Character target)
+{
+    Console.WriteLine(name + "攻击了" + target.Name);
+    target.TakeDamage(10);        // 父类默认打 10
+}
+
+// 玩家子类
+class Player : Character
+{
+    // base：把 name、hp 交给父类构造去赋值，子类不用重复写
+    public Player(string name, int hp) : base(name, hp) { }
+
+    public override void Attack(Character target)  // override：重写父类方法
+    {
+        Console.WriteLine(Name + "挥剑攻击" + target.Name);
+        target.TakeDamage(15);    // 玩家打 15
+    }
+}
+
+class Enemy : Character
+{
+    public Enemy(string name, int hp) : base(name, hp) { }
+    public override void Attack(Character target)
+    {
+        Console.WriteLine(Name + "扑上来攻击" + target.Name);
+        target.TakeDamage(8);     // 敌人打 8
+    }
+}
+```
+- ⚠️**多态铁律**：必须"父类引用 + 子类对象"，右边 new 一定要写全新子类名：
+  `Character p = new Player("勇者",100);`（对）
+  不能写 `Character p = new("勇者",100);`，它会被补成 new 基类 Character，override 全部失效。
+- 接口实现随继承传递：Character 实现了 IDamageable，子类即使不写 :IDamageable 也自动"是"IDamageable。
+
+### 步骤4：回合制对战——while + 攻击后立刻判血
+**大白话**：玩家先攻 → 立刻判敌人是否阵亡（防止死人还手）→ 没死才轮到敌人反击 → 再判玩家，循环直到一方血量为 0 用 break 跳出。
+
+```csharp
+Character p = new Player("勇者", 100);
+Character e = new Enemy("史莱姆", 50);
+
+while (true)
+{
+    p.Attack(e);                  // 玩家先攻
+    if (e.Hp <= 0)                // 用只读属性 Hp 判断，不能直接改血
+    {
+        Console.WriteLine("勇者胜利");
+        break;                    // 敌人已死，立刻结束，不再往下让它反击
+    }
+    e.Attack(p);                  // 敌人还活着才反击
+    if (p.Hp <= 0)
+    {
+        Console.WriteLine("勇者失败");
+        break;
+    }
+}
+```
+
+### 步骤5：简单工厂 CharacterFactory——集中管理"创建对象"
+**大白话**：把"根据类型 new 谁"的逻辑集中到一个工厂类；传字符串给它，它返回对应角色。返回类型写父类 Character（多态），调用方不用关心具体造了谁。
+
+```csharp
+class CharacterFactory
+{
+    // 返回类型是父类 Character，方法内部 return 各种子类对象
+    public Character Create(string type)
+    {
+        if (type == "player") return new Player("勇者", 100);
+        else if (type == "enemy") return new Enemy("史莱姆", 50);
+        else if (type == "boss") return new Boss("魔王", 500);
+        else
+        {
+            Console.WriteLine("没有这种角色：" + type);
+            return null;          // 不认识的类型返回 null
+        }
+    }
+}
+```
+Main 里使用（⚠️ 判空要判"创建结果"，不是判字符串）：
+```csharp
+CharacterFactory factory = new CharacterFactory();  // 类是图纸，先 new 出工厂对象才能用
+string[] types = { "player", "enemy", "boss", "enemy", "player" };
+List<Character> list = new List<Character>();
+
+foreach (string type in types)
+{
+    Character role = factory.Create(type);  // 先接住造出来的对象
+    if (role != null)                       // 判断"角色"非 null（字符串 type 永远不为 null）
+    {
+        list.Add(role);                     // 合法才加入，非法的被挡在外面
+    }
+}
+
+foreach (Character role in list)            // 统一用父类类型操作
+{
+    Console.WriteLine(role.Name + " 血量：" + role.Hp);
+}
+```
+- warning CS8603"可能返回 null 引用"是警告不是错误；调用处已判空即可忽略，彻底消除要学可空类型 `Character?`（以后学）。
+
+---
+
+## 🌤 下午：Unity 角色组件化 + UI 事件触发
+
+### 步骤6：单一职责——一个脚本只干一件事
+**大白话**：把角色拆成互相独立的组件，各管各的、互不掺杂：
+| 组件 | 只负责 | 不负责 |
+|---|---|---|
+| PlayerPhysicsMove（=PlayerController） | WASD 移动、射线地面检测、空格跳跃 | 血量 |
+| PlayerHealth（=Health） | hp 数据、TakeDamage 受伤、碰 Trap | 移动 |
+| HpUI / Score | 只负责把数据显示到 Text | 算移动、改数据 |
+- ⚠️ 不要随便重命名脚本：Unity 中"文件名 = 类名"，改名会让物体上的组件引用、拖好的槽断开。结构对了名字可以以后再规范。
+
+### 步骤7：UI 从「轮询」改成「事件触发」
+**大白话**：
+- 轮询（旧）：写在 Update 里，每帧都刷一次，数据没变也刷，浪费；
+- 事件触发（新）：平时不动，数据变化的那一刻（掉血/吃金币）主动调 UI 方法刷新一次。
+
+HpUI（删掉 Update，改成带参 public 方法，不再拖玩家）：
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HpUI : MonoBehaviour
+{
+    private Text hpText;
+    void Start()
+    {
+        hpText = GetComponent<Text>();   // 取自己身上的 Text 组件
+    }
+
+    // 血量由参数传进来，谁掉血谁调用它刷新
+    public void RefreshHp(int hp)
+    {
+        hpText.text = "血量：" + hp;
+    }
+}
+```
+PlayerHealth（受伤后主动通知 UI，Start 里先刷一次显示初始值）：
+```csharp
+public class PlayerHealth : MonoBehaviour, IDamageable
+{
+    public int hp = 100;
+    public HpUI hpUI;                 // 拖引用：把挂 HpUI 的 HpText 物体拖进来
+
+    void Start()
+    {
+        hpUI.RefreshHp(hp);           // 开局先刷一次，否则没受伤前血条是空的
+    }
+
+    public void TakeDamage(int damage)
+    {
+        hp = hp - damage;
+        if (hp < 0) hp = 0;
+        hpUI.RefreshHp(hp);           // 掉血这一刻才通知 UI 刷新
+    }
+}
+```
+- 分数同理：Coin 吃金币时调 `scores.ReportScore(score)` 主动推给分数 UI（举一反三，同一个套路）。
+- 现在 Health 直接认识 UI 类有一点耦合；更解耦的标准写法是 C# event 事件（委托），以后专门学。
+
+---
+
+## 🌙 晚上：OOP 四件套对比表（C# 毕业考核心）
+
+| | 封装 | 继承 | 多态 | 接口 |
+|---|---|---|---|---|
+| 一句话 | 藏数据、受控改 | 复用父类(is-a) | 同调用、不同表现 | 定能力契约(can-do) |
+| 核心语法 | private 字段 + public 属性(get/set/value) | `: 父类`、`base()` | `virtual` / `override` | `interface`、冒号实现 |
+| 解决问题 | 数据不被改坏 | 少写重复代码 | 统一管理不同子类 | 解耦、可实现多个 |
+| 数量限制 | — | 只能继承 1 个父类 | — | 能实现多个接口 |
+
+**四件套协作流程**：Character 用封装藏 name/hp → 实现 IDamageable 承诺能受伤 → Player/Enemy/Boss 继承它并 override 出不同攻击（多态）→ Main/工厂统一用父类 Character 接收和操作，运行时各走各的版本。
+
+### ⚠️ 今日易错点清单
+1. 多态时右边必须 `new 具体子类`，写 `new(...)` 会被补成基类导致 override 失效。
+2. 接口方法只有签名、分号结尾、不写 public、不写方法体。
+3. 接口实现会随继承传递：父类实现了，子类白捡。
+4. 回合对战：攻击后要立刻判对方血量再决定是否反击，避免"死人还手"。
+5. 工厂判空判的是 `Create()` 的返回对象，不是输入字符串；先接结果再判 `!= null`。
+6. 类是图纸要先 new 出对象才能调普通方法；static 才用"类名.方法"直接调。
+7. Unity 文件名必须等于类名；using 别手滑选错（SocialPlatforms.Impl 里有官方 Score 会和自己的类撞名）。
+8. UI 事件触发别忘了在 Start 里先刷新一次初始值。

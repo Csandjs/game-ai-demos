@@ -12,7 +12,8 @@
 | 2026-09-11 | D8 | ✅ 完成 | 下午Unity突发Safe Mode编译崩溃(Internal build system error)，靠删Library/Temp/obj缓存+重启解决，非代码问题 | D9 学继承 |
 | 2026-09-12 | D9 | ✅ 完成 | ①Unity编译工具BeeLocalCacheTool被系统策略拦截→右键TuanjieHub管理员身份运行解决；②平滑移动加速度=10时被地面静摩擦卡住、速度攒不起来→调到15能跑；③每帧Debug.Log把Console刷成999+、淹没扣血日志→删掉每帧打印只留DrawRay | 多态 + Unity触发器/吃金币 |
 | 2026-09-13 | D10 | ✅ 完成 | 智能应用控制拦截编译dll（关闭SAC解决）；UI文字曾因文本框太小/锚点不对不显示；金币绕对称轴自转看不出（改Space.World） | C#接口Interact + Unity接口实现 |
-| 2026-09-14 | D11 | ✅ 完成 | Unity能看懂但独立写还不熟、一个Text被两个字段抢占覆盖、if误写在方法外 | 晨练脱稿复现接口多态，进入D12 |
+| 2026-09-14 | D11 | ✅ 完成 | Unity能看懂但独立写还不熟、一个Text被两个字段抢占覆盖、if误写在方法外 | 封装/继承/多态/接口四件套整合成角色系统 |
+| 2026-09-15 | D12 | ✅ 完成 | 无 | D13 查漏补缺、第2周收官复盘 |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -134,3 +135,13 @@
 - 弄清模型 `Scale`（视觉大小）与碰撞体 `Radius`（判定范围）相互独立；固定触发区域挂刚体并勾 `Is Kinematic` 才能检测无刚体对象
 - 用 `public PlayerHealth player;` 在 Inspector 拖引用做血量 UI（`HpUI`），区分 static（全局唯一总分）与拖引用（具体物体的数据）
 - 踩坑：一个物体只有一个某类型组件，两个字段都 `GetComponent<Text>()` 会指向同一文本框互相覆盖，多行 UI 要建多个 Text 物体
+
+## D12 完成（9/15 周二）
+- 封装：`private` 字段 + `public` 只读属性（只有 `get`），掉血只能走 `TakeDamage` 受控修改
+- 接口：`IDamageable` 只有 `TakeDamage` 签名，`Character` 实现，子类靠继承白捡
+- 继承多态：`Character` 基类 + `Player/Enemy/Boss` 子类，`virtual/override` 不同攻击力，父类引用必须 `new` 具体子类
+- 回合对战：`while(true)` 轮流攻击，攻击后立刻判 `Hp<=0` 用 `break` 结束，防止死人还手
+- 简单工厂：`CharacterFactory.Create(类型)` 返回父类 `Character`，内部按字符串 new 子类，调用处先接结果再判 `!= null`
+- Unity 单一职责：`PlayerPhysicsMove` 管移动跳跃、`PlayerHealth` 管血量、UI 管显示，组件独立协作
+- UI 改事件触发：删掉 `Update` 轮询，掉血时调 `RefreshHp(hp)`、吃金币时调 `ReportScore(score)`，`Start` 里先刷一次初始值
+- 易错点：文件名=类名；`using` 不手滑选错；工厂判空判创建结果而不是输入字符串
