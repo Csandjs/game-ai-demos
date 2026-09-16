@@ -2270,3 +2270,264 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 6. 类是图纸要先 new 出对象才能调普通方法；static 才用"类名.方法"直接调。
 7. Unity 文件名必须等于类名；using 别手滑选错（SocialPlatforms.Impl 里有官方 Score 会和自己的类撞名）。
 8. UI 事件触发别忘了在 Start 里先刷新一次初始值。
+
+好，开始今晚收尾。D13 内容多，笔记我分两块给你（上午 C#、下午 Unity），你逐块复制进 StudyNotes.md。先给上午：
+
+---
+
+```markdown
+# 📅 D13 学习笔记（C# 查漏补缺 static/属性/enum/namespace + Unity 可玩小关）
+
+## 🌞 上午：C# 查漏补缺
+
+### 步骤1：static 静态成员
+**大白话**：普通成员是"每个对象各有一份"；static 成员是"整个类只有一份、大家共享"，不用 new，直接用"类名.成员"访问。常用来做计数、全局数据。
+
+```csharp
+class Character
+{
+    public static int Count = 0;   // 静态字段：全程序就一份，记录创建了多少个角色
+
+    public Character()            // 构造方法：每 new 一个对象执行一次
+    {
+        Count++;                  // 每造一个角色，计数 +1
+    }
+}
+
+// 使用：直接 类名.静态字段，不需要对象
+Console.WriteLine(Character.Count);
+```
+
+| | 实例成员（无 static） | 静态成员（static） |
+|---|---|---|
+| 属于谁 | 对象 | 类 |
+| 份数 | 每个对象一份 | 全程序一份 |
+| 怎么访问 | 对象名.成员 | 类名.成员（不用 new） |
+| 例子 | name、hp | Console.WriteLine、Character.Count |
+
+**⚠️易错点**：静态方法里不能直接访问实例字段（静态方法没有具体对象，不知道用谁的数据）。
+
+---
+
+### 步骤2：属性深入（private set / 计算属性）
+**大白话**：属性是字段的"门卫"，控制外部能不能读、能不能改。
+
+```csharp
+// ① private set 自动属性：一行替代"私有字段+只读属性"
+//    外部只能读、不能乱改；类内部可以改
+public int Hp { get; private set; }
+
+// ② 计算属性（只读）：不存数据，每次读取时现算
+public bool IsDead
+{
+    get { return Hp <= 0; }   // 血量<=0 就是死亡
+}
+
+// 构造里给属性赋初值
+public Character(int hp)
+{
+    Hp = hp;
+}
+```
+
+| 写法 | 外部能读？ | 外部能改？ | 用途 |
+|---|---|---|---|
+| public int Hp;（裸字段） | 能 | 能，随便改 | 不安全，少用 |
+| public int Hp { get; private set; } | 能 | 不能（内部能） | 只读血量 |
+| 只写 get（计算属性） | 能 | 不能 | IsDead 这种现算的标志 |
+
+**⚠️易错点**：bool 类型属性命名用 Is/Has 开头（IsDead、HasKey）；get/set 里别漏写 return 或赋值。
+
+---
+
+### 步骤3：enum 枚举 + 游戏状态机
+**大白话**：enum 是自己定义的"只能取固定几个值"的类型，比用字符串防拼错、比用数字直观。和 switch 是绝配。
+
+```csharp
+// 枚举：和 class 平级，写在 class 大括号外面
+enum GameState
+{
+    Menu,     // 菜单（默认=0）
+    Playing,  // 游戏中
+    Paused,   // 暂停
+    Win       // 胜利
+}
+
+// 状态机：一个状态变量 + while 循环 + switch 分发
+GameState state = GameState.Menu;
+bool running = true;
+while (running)
+{
+    switch (state)
+    {
+        case GameState.Menu:
+            Console.WriteLine("按回车开始");
+            if (Console.ReadKey(true).Key == ConsoleKey.Enter)
+                state = GameState.Playing;   // 按键只负责"改状态"
+            break;                          // break 结束这个 case
+        case GameState.Win:
+            Console.WriteLine("胜利，按Q退出");
+            if (Console.ReadKey(true).Key == ConsoleKey.Q)
+                running = false;            // 想退出整个循环，改循环开关
+            break;
+        // ……其他状态同理
+    }
+}
+```
+
+**状态机运转**：state 记录当前在哪个"房间" → 每圈 switch 看 state 进对应房间 → 按键只改 state → 下一圈 switch 按新 state 切画面。
+
+**⚠️易错点（重点坑）**：
+- 每个 case 末尾必须 `break;`，否则会穿透到下一个 case；
+- **break 只结束 switch/case，跳不出外面的 while**；想结束循环要用 `bool running` 标志（running=false）或 return。
+
+---
+
+### 步骤4：namespace 命名空间（了解即可）
+**大白话**：给代码分类、防止类名撞车（自己写的 Score 和 Unity 官方的 Score 撞名就是命名空间冲突）。
+
+- `using System;` → 才能直接用 Console；
+- `using System.Collections.Generic;` → 才能用 List；
+- `using UnityEngine;` → 才能用 MonoBehaviour；
+- 不 using 就得写全名：`System.Console.WriteLine()`。
+- 现阶段不用给自己的代码包 namespace，看得懂即可。
+
+下午 Unity 部分，复制进笔记：
+
+---
+
+```markdown
+## 🌤 下午：Unity 可玩小关 + GameManager 单例
+
+### 步骤1：触发检测复习（OnTriggerEnter）
+**大白话**：物体勾了 Is Trigger 就能被穿过，穿的瞬间自动调用 OnTriggerEnter；用来做金币、终点、伤害区。
+
+```csharp
+void OnTriggerEnter(Collider other)   // other = 撞进来的对方的碰撞体
+{
+    if (other.CompareTag("Player"))   // 判断对方是不是玩家（标签 Player 大写 P）
+    {
+        Destroy(gameObject);          // 销毁挂脚本的物体自己（金币）
+    }
+}
+```
+
+| | 触发器（勾 Is Trigger，能穿过） | 实体碰撞（不勾，被挡住） |
+|---|---|---|
+| 进入时调用 | OnTriggerEnter | OnCollisionEnter |
+| 参数类型 | **Collider** | **Collision** |
+
+**⚠️易错点**：
+- 方法名和参数必须配对，OnCollisionEnter 的参数是 Collision，写错就报 "parameter has to be of type Collision"；
+- 触发三条件：两物体都有 Collider + 触发物勾 Is Trigger + 至少一方有 Rigidbody；
+- 内置标签是大写 `Player`，写小写 player 会报 "Tag is not defined"；
+- `other.CompareTag(...)` 和 `other.gameObject.CompareTag(...)` 等价（组件自带 CompareTag），但销毁整个物体必须 `Destroy(other.gameObject)`，写 Destroy(other) 只删碰撞体组件。
+
+---
+
+### 步骤2：摄像机跟随 CameraFollow
+**大白话**：每帧把镜头位置设成"玩家位置 + 固定偏移"，再让镜头看着玩家，玩家走到哪镜头跟到哪。
+
+```csharp
+public class CameraFollow : MonoBehaviour
+{
+    public Transform player;        // 拖玩家（只用位置，所以字段类型用 Transform）
+    public Vector3 offset = new Vector3(0f, 8f, -8f);  // 镜头在玩家后上方
+
+    void LateUpdate()               // 镜头跟随固定用 LateUpdate（在所有移动之后执行，不抖）
+    {
+        transform.position = player.position + offset; // 镜头位置 = 玩家位置 + 偏移
+        transform.LookAt(player);                       // 镜头始终对准玩家
+    }
+}
+```
+**要点**：脚本挂 Main Camera；offset 的 Y 管高低、Z 管远近，运行时边改边调。
+
+---
+
+### 步骤3：胜利 UI 与 SetActive
+**大白话**：物体名左边的小勾 = 是否激活；代码用 SetActive 控制显隐。
+
+```csharp
+winText.SetActive(true);    // 显示（勾上）
+winText.SetActive(false);   // 隐藏（取消勾）
+```
+胜利文字先在编辑器取消勾选（开局隐藏），通关时代码再 SetActive(true)。
+**⚠️易错点**：复制别的 UI 物体会连带复制它身上的脚本，记得 Remove Component 删掉多余脚本。
+
+---
+
+### 步骤4：GameManager 单例（今天重点）
+**大白话**：游戏里放一个"总经理"，统一管分数、状态、UI；别的脚本不自己管全局数据，有事通过门牌 `GameManager.Instance` 找它。
+
+```csharp
+public enum GameState { Playing, Win }   // 状态枚举，写在 class 外面
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance;     // ① 静态门牌：全局唯一入口
+
+    public int score = 0;                          // 全局分数
+    public GameState state = GameState.Playing;    // 当前状态，默认游戏中
+    public ScoreUI scoreUI;                        // 拖分数 UI
+    public GameObject winText;                     // 拖胜利文字
+
+    void Awake()                            // Awake 比 Start 更早，适合做注册
+    {
+        Instance = this;                    // ② 把自己登记到门牌
+        DontDestroyOnLoad(gameObject);      // ③ 切场景时不销毁（单例标配）
+    }
+
+    public void AddScore(int amount)        // 对外服务：加分
+    {
+        score = score + amount;
+        scoreUI.RefreshScore(score);
+    }
+
+    public void WinGame()                   // 对外服务：胜利
+    {
+        state = GameState.Win;
+        winText.SetActive(true);
+    }
+}
+```
+**别的脚本怎么用**：
+```csharp
+GameManager.Instance.AddScore(1);   // 金币里：加分交给总管
+GameManager.Instance.WinGame();     // 终点门里：胜利交给总管
+```
+**职责分离**：金币只负责"通知吃到了"、终点门只负责"通知到了"，分数/状态/UI 全在 GameManager 里。以后加暂停、失败、重开都往总管里加。
+
+**⚠️易错点**：
+- GameManager 脚本挂在一个空物体上（Create Empty）；
+- 静态成员用"类名.成员"访问：GameManager.Instance；
+- 分数 UI、胜利文字的引用只拖到 GameManager 上，金币/终点门不再拖 UI。
+
+---
+
+### 步骤5：胜利后锁玩家（enum 状态 + 卫语句）
+**大白话**：在移动、跳跃方法开头放个"保安"，一旦状态是 Win 就提前 return，后面操作代码不执行。
+
+```csharp
+void FixedUpdate()
+{
+    // 卫语句：胜利了就直接结束本次方法，移动代码不执行
+    if (GameManager.Instance.state == GameState.Win)
+    {
+        return;
+    }
+    // ……正常移动逻辑
+}
+// 处理跳跃的 Update 开头也加一段一样的
+```
+**原理**：return 只结束"这一次"方法调用；Unity 每帧/每物理步都会重新调用，胜利后 state 一直是 Win，每次都在开头被挡回，玩家就一直动不了。
+**⚠️易错点**：
+- 判断语句必须写在方法 `{ }` 内部，不能写在类体里（类体只能放字段/方法）；
+- return 结束整个方法，break 只跳出 switch/循环，别混。
+
+---
+
+### 今日小关完整流程
+起点（镜头跟随）→ WASD 移动、空格跳障碍 → 吃金币（AddScore + 分数 UI）→ 穿过终点门（WinGame：弹胜利文字 + 状态切 Win）→ 卫语句锁操作。
+```
+

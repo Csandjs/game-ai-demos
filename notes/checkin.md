@@ -13,7 +13,8 @@
 | 2026-09-12 | D9 | ✅ 完成 | ①Unity编译工具BeeLocalCacheTool被系统策略拦截→右键TuanjieHub管理员身份运行解决；②平滑移动加速度=10时被地面静摩擦卡住、速度攒不起来→调到15能跑；③每帧Debug.Log把Console刷成999+、淹没扣血日志→删掉每帧打印只留DrawRay | 多态 + Unity触发器/吃金币 |
 | 2026-09-13 | D10 | ✅ 完成 | 智能应用控制拦截编译dll（关闭SAC解决）；UI文字曾因文本框太小/锚点不对不显示；金币绕对称轴自转看不出（改Space.World） | C#接口Interact + Unity接口实现 |
 | 2026-09-14 | D11 | ✅ 完成 | Unity能看懂但独立写还不熟、一个Text被两个字段抢占覆盖、if误写在方法外 | 封装/继承/多态/接口四件套整合成角色系统 |
-| 2026-09-15 | D12 | ✅ 完成 | 无 | D13 查漏补缺、第2周收官复盘 |
+| 2026-09-15 | D12 | ✅ 完成 | 无 |C#查缺补漏（静态/枚举/命名空间）+Unity可玩小关 |
+| 2026-09-16 | D13 | ✅ 完成 | 单例刚开始有点绕； | D14 周复盘+闭卷自测 |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -145,3 +146,7 @@
 - Unity 单一职责：`PlayerPhysicsMove` 管移动跳跃、`PlayerHealth` 管血量、UI 管显示，组件独立协作
 - UI 改事件触发：删掉 `Update` 轮询，掉血时调 `RefreshHp(hp)`、吃金币时调 `ReportScore(score)`，`Start` 里先刷一次初始值
 - 易错点：文件名=类名；`using` 不手滑选错；工厂判空判创建结果而不是输入字符串
+
+## D13 完成（9/16 周三）
+- 上午查漏：`static` 静态成员、`private set` 自动属性、计算属性 `IsDead`、`enum` 游戏状态机、`namespace`
+- 下午：空场景脱稿重建刚体移动+触发检测；`CameraFollow` 摄像机跟随（`LateUpdate`/`LookAt`）；`GameManager` 单例（`static Instance`/`Awake`/`DontDestroyOnLoad`）；`enum GameState` + 卫语句实现胜利锁操作；整合成可玩小关并手机录屏

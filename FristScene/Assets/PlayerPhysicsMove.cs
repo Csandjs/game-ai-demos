@@ -14,7 +14,7 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
     }
     public void Move()
     {
-                float moveX = 0f;
+        float moveX = 0f;
         float moveZ = 0f;
         if (Input.GetKey(KeyCode.W))moveZ = 1f;
         if (Input.GetKey(KeyCode.S))moveZ = -1f;
@@ -34,11 +34,19 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
     //持续的物理移动放在FixedUpdate
     void FixedUpdate()
     {
+        if (GameManager.Instance.state == GameState.Win)
+        {
+            return;
+        }
         Move();
     }
     //瞬间的跳跃检测放在Update
     void Update()
     {
+        if (GameManager.Instance.state == GameState.Win)
+        {
+            return;
+        }
         isGrounded = Physics.Raycast(transform.position ,Vector3.down ,groundDistance);
         Debug.DrawRay(transform.position, Vector3.down * groundDistance, Color.red);
         //Debug.Log("射线打到地面了吗：" + HitGround);
