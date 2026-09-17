@@ -15,6 +15,7 @@
 | 2026-09-14 | D11 | ✅ 完成 | Unity能看懂但独立写还不熟、一个Text被两个字段抢占覆盖、if误写在方法外 | 封装/继承/多态/接口四件套整合成角色系统 |
 | 2026-09-15 | D12 | ✅ 完成 | 无 |C#查缺补漏（静态/枚举/命名空间）+Unity可玩小关 |
 | 2026-09-16 | D13 | ✅ 完成 | 单例刚开始有点绕； | D14 周复盘+闭卷自测 |
+| 2026-09-17 | D14 | ✅ 完成 | static 和访问修饰符混淆；单例一开始看不懂后搞懂 | D15 委托 delegate |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -150,3 +151,10 @@
 ## D13 完成（9/16 周三）
 - 上午查漏：`static` 静态成员、`private set` 自动属性、计算属性 `IsDead`、`enum` 游戏状态机、`namespace`
 - 下午：空场景脱稿重建刚体移动+触发检测；`CameraFollow` 摄像机跟随（`LateUpdate`/`LookAt`）；`GameManager` 单例（`static Instance`/`Awake`/`DontDestroyOnLoad`）；`enum GameState` + 卫语句实现胜利锁操作；整合成可玩小关并手机录屏
+
+## D14 完成（9/17 周四）
+
+- 闭卷脱稿写出 `Character`/`Player`/`Enemy`/`IDamageable` 回合制对战（Day14_Exam），一次跑通
+- 换皮练习：static 计数、enum + switch 敌人状态机、单例 `SaveSystem`/`AudioManager`（私有构造 + 静态 Instance）
+- 搞懂单例"锁门、存独苗、开窗口"，以及控制台版与 Unity `GameManager`（Awake 注册）的区别
+- MiniLevel 通关录屏存档；更新 README、写完 week2.md，W2 收官

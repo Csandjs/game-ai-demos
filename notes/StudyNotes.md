@@ -2529,5 +2529,27 @@ void FixedUpdate()
 
 ### 今日小关完整流程
 起点（镜头跟随）→ WASD 移动、空格跳障碍 → 吃金币（AddScore + 分数 UI）→ 穿过终点门（WinGame：弹胜利文字 + 状态切 Win）→ 卫语句锁操作。
-```
 
+
+## 📅 D14（9/17 周四）W2 复盘日 · 面向对象四件套对比表
+
+| 四件套 | 一句话大白话 | 关键字 / 怎么写 | 我 Day14_Exam 里的例子 |
+|---|---|---|---|
+| **封装** | 把数据和方法捆在一个类里，**对内藏好细节，对外只开允许的口子**。血条不能让别人随便改，想掉血只能走我规定的方法。"我的数据我做主" | `private` 藏字段；`public` 属性开口子；`{ get; private set; }` 外部只读、类内能写 | `public int Hp { get; private set; }`——外面能读 Hp，但改血只能调 `TakeDamage()`；`Name`、`Atk` 同理 |
+| **继承** | 子类**自动拥有**父类的字段和方法，不用重复抄代码，再扩展自己的东西。表达 is-a 关系（Player 是一种 Character） | `class 子类 : 父类`；子类构造函数后接 `base(参数)` 调父类构造；`protected` 父类子类可见、外部不可见 | `class Player : Character`；构造函数 `public Player(string name, int hp, int atk) : base(name, hp, atk) { }` |
+| **多态** | **同一个方法名，不同子类不同表现**。用父类类型装子类对象，调用时自动走子类版本。"同一指令，各有各的反应" | 父类方法标 `virtual`，子类方法标 `override`；三要素：**继承 + 重写 + 父类引用指向子类对象** | `Character p = new Player(...)`；`p.Attack(e)` 自动走 Player 的"挥砍"，`e.Attack(p)` 走 Enemy 的"扑咬" |
+| **接口** | 一份**能力契约**，只规定"必须能做什么"（方法签名），不管怎么做。实现它 = 贴上"我能受伤"的标签，调用方不用管你是谁。can-do 关系 | `interface IXxx { void Do(int x); }`（只签名、没方法体、不用写 public）；`class Character : IDamageable`；一个类可实现多个接口 | `interface IDamageable { void TakeDamage(int damage); }`，Character 实现它；D11 炸弹用 `List<IDamageable>` 把所有"能受伤的"统一炸一遍 |
+
+### 接口 vs 抽象类（面试高频）
+- **继承**回答"是什么"（is-a，血缘），**接口**回答"能做什么"（can-do，能力）；
+- 一个类只能继承**一个**类，但能实现**多个**接口；
+- 接口只给约定（方法签名），实现细节全靠类自己；抽象类可以带部分已实现的成员。
+- 【以后专门学，现在不用深究】C# 8 以后接口也能写默认实现，现阶段按"接口只有签名"记。
+
+### ⚠️ 易错点（我自己踩过的）
+1. 多态右边必须 `new 具体子类`，不能 `new Character(...)`，否则没有重写效果；
+2. 子类想 `override`，父类那个方法必须先标 `virtual`，两个关键字成对出现；
+3. `private set` 不是完全只读：**类内部**（构造函数、TakeDamage）照样能赋值，只是类外面不能；
+4. 接口名习惯 `I` 开头（IDamageable），接口里的方法不写方法体、不写访问修饰符；
+5. 子类构造函数必须用 `base(...)` 把参数传给父类，否则父类那几个字段没人初始化；
+6. 命名 PascalCase：是 `Atk` 不是 `ATk`（今天刚改的）。
