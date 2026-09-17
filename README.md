@@ -24,7 +24,7 @@ game-ai-demos/
 │   └── week2.md         # 第 2 周总结
 ├── .gitignore
 └── README.md
-​```
+```
 
 ## 阶段作品
 
