@@ -1,10 +1,10 @@
-# game-ai-demos
+# 游戏AI演示
 
 从零开始学习 Unity 游戏开发与游戏 AI，记录所有练习 Demo 和学习笔记。
 
 ## 目录结构
 
-​```
+```
 game-ai-demos/
 ├── DailyPractice/       # 每日 C# 控制台练习（Day4 ~ Day14）
 │   ├── Day14_Exam/      # D14 闭卷自测：四件套角色系统
@@ -29,6 +29,8 @@ game-ai-demos/
 ## 阶段作品
 
 - **MiniLevel（W2 里程碑）**：第一个完整可玩小关。镜头跟随 → WASD 移动 / 空格跳跃（射线地面检测防空跳）→ 吃金币加分（Trigger 触发 + 分数 UI 实时刷新）→ 到终点弹胜利文字并锁定操作；全局由 GameManager 单例统一管理分数与游戏状态（enum 状态机）。已手机录屏存档。
+- **Practice_Rebuild**：空场景脱稿训练场，不看教程独立搭出刚体移动 + 触发检测。
+- **Day14_Exam**：W2 闭卷自测，脱稿写出 Character 基类 + Player/Enemy 子类 + IDamageable 接口的回合制对战系统，一次跑通。
 
 ## 学习进度
 
