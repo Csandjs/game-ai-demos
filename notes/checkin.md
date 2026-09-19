@@ -16,6 +16,7 @@
 | 2026-09-15 | D12 | ✅ 完成 | 无 |C#查缺补漏（静态/枚举/命名空间）+Unity可玩小关 |
 | 2026-09-16 | D13 | ✅ 完成 | 单例刚开始有点绕； | D14 周复盘+闭卷自测 |
 | 2026-09-17 | D14 | ✅ 完成 | static 和访问修饰符混淆；单例一开始看不懂后搞懂 | D15 委托 delegate |
+| 2026-09-19 | D15 | ✅ 完成 | 委托/事件一开始理解困难，用"通知群"类比后打通，Unity事件订阅已能脱稿 | D16（以明天计划截图为准） |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -158,3 +159,9 @@
 - 换皮练习：static 计数、enum + switch 敌人状态机、单例 `SaveSystem`/`AudioManager`（私有构造 + 静态 Instance）
 - 搞懂单例"锁门、存独苗、开窗口"，以及控制台版与 Unity `GameManager`（Awake 注册）的区别
 - MiniLevel 通关录屏存档；更新 README、写完 week2.md，W2 收官
+
+## D15 完成（9/19 周六）
+
+- 委托与事件：`delegate`、多播 `+=/-=`、`event` 访问保护、`Action`/`Action<int>`/`Func<T,T,TResult>`、`?.Invoke()`
+- Unity 事件驱动：`GameManager` 金币事件 + `CollectCoin` 中继方法，`ScoreUI`/`CoinSound` 订阅，`OnDestroy` 退订
+- 脱稿练习：`Day15_Quit` 按 Q 退出三系统响应、`Day15_Func` 武器伤害公式插槽

@@ -2553,3 +2553,75 @@ void FixedUpdate()
 4. 接口名习惯 `I` 开头（IDamageable），接口里的方法不写方法体、不写访问修饰符；
 5. 子类构造函数必须用 `base(...)` 把参数传给父类，否则父类那几个字段没人初始化；
 6. 命名 PascalCase：是 `Atk` 不是 `ATk`（今天刚改的）。
+
+# 📅 D15（9/19 周六）委托 delegate + 事件 event + Unity 事件驱动
+
+## 🌞 上午：委托与事件（控制台）
+
+### 1. 委托 delegate 是什么
+**大白话：把"要干的一件事"写成纸条交给别人，让他在合适的时候替你执行。** 本质：方法能像数据一样存进变量、传来传去。
+解决的问题：**解耦**。写类的人不知道以后要执行哪个方法，就留一个"动作插槽"，使用方事后决定插什么方法。
+
+```csharp
+delegate void ClickAction();        // 委托型号：能装"无参、void"的方法
+class Button
+{
+    public event ClickAction OnClick;   // 动作插槽（event 后面讲）
+    public void Click()
+    {
+        if (OnClick != null) OnClick(); // 被点时执行插槽里挂的方法
+    }
+}
+// 使用方决定干嘛：b.OnClick = OpenDoor;  Button 类不认识 OpenDoor 也能执行它
+```
+
+⚠️ 方法赋值给委托时**不加括号**：`n = SayHello`（交出方法）；`SayHello()` 是立刻执行。
+⚠️ 方法和委托**型号必须匹配**（参数个数/类型、返回值一致）。
+
+### 2. 多播委托
+- `+=` 追加方法、`-=` 摘掉方法、`=` 替换（旧的全没）；
+- 一次调用，挂上的方法**按挂载顺序全部执行**；
+- 多播一般用 void 方法。
+
+### 3. 事件 event = 通知群
+- **发布者**：拥有事件，只有它能在类内部 `Invoke` 触发（群主才能拿喇叭）；
+- **订阅者**：只能 `+=` 进群、`-=` 退群，不能 `=` 覆盖、不能在外部直接调用；
+- 违规报错：CS0070（事件只能出现在 +=/-= 左边）、CS0079（事件只能在类内部调用）。
+
+### 4. 内置委托 Action / Func
+| 写法 | 含义 |
+|---|---|
+| `Action` | 无参、无返回值的方法 |
+| `Action<int>` | 带一个 int 参数、无返回值 |
+| `Func<int,int,int>` | 两个 int 进、一个 int 出；**最后一个泛型是返回值**（待学） |
+
+### 5. 事件四步套路（背下来）
+1. **建群**：`public event Action<int>? OnDamaged;`
+2. **进群**：`player.OnDamaged += ui.HpUI;`
+3. **喊话**：`OnDamaged?.Invoke(Hp);`
+4. **干活**：订阅方法里写各自要做的事。
+
+`?.Invoke()`：没人订阅时事件是 null，`?.` 保证不为 null 才调用。
+
+## 🌤 下午：Unity 吃金币重构（MiniLevel 事件驱动）
+
+旧链路（焊死）：Coin → `GameManager.Instance.AddScore(1)` → `scoreUI.RefreshScore()`，金币认识管理员、管理员拽着 UI。
+
+新链路（发布/订阅）：
+- **GameManager（群主+管账）**：声明 `event Action<int> OnCoinCollected;`；Awake 里 `OnCoinCollected += AddScore`（管数据的自己先进群）；AddScore 只剩 `score += amount`；另写中继方法 `CollectCoin(int amount){ OnCoinCollected?.Invoke(amount); }`——外人没权 Invoke，通过公开方法请群主代喊。
+- **Coin（喊话的）**：OnTriggerEnter 里只写 `GameManager.Instance.CollectCoin(1); Destroy(gameObject);`，不再出现 AddScore。
+- **ScoreUI（订阅者）**：Start 里 `GameManager.Instance.OnCoinCollected += RefreshScore;`，方法体读 `GameManager.Instance.score`（总分在管理员那，事件参数是增量 1）；OnDestroy 里 `-=`。
+- **CoinSound（订阅者）**：Start 里 += 自己的方法，`Debug.Log("【音效】：叮！")` 占位；OnDestroy 里 -=。
+
+⚠️ Unity 事件：脚本要 `using System;`；声明**不带 `?`**（Unity 没开 nullable，带了报 CS8632），但 `?.Invoke()` 照写。
+⚠️ **退订判据：谁活得短谁退。** 场景物体订阅常驻单例，切场景物体销毁、单例还在，必须 OnDestroy 里 `-=`，否则喊到已销毁对象报 MissingReferenceException；自己订阅自己的常驻单例同生共死，不用退。
+
+## 🌙 晚上：Day15_Quit（脱稿）
+Game.Run 里 `Console.ReadKey(true).Key` 读键，按 `ConsoleKey.Q` 触发 OnQuit，SaveSystem/UIManager/AudioManager 三个订阅者依次响应。
+
+## ⚠️ 今日易错清单
+1. 方法当值传，不加括号；2. 委托/订阅方法型号要匹配；3. `=` 会覆盖一串订阅，追加用 `+=`；
+4. event 外部不能 Invoke，要在发布者类内触发（或中继方法）；5. 别在触发位置写成调用自己（无限递归→栈溢出，满屏 at 方法名）；
+6. Unity 声明事件不带 `?`、`?.Invoke` 不能省；7. Unity 用 Action 记得 using System；
+8. Start 订阅、OnDestroy 退订成对；9. 事件参数是"增量"，累计数据去数据管理者那读；
+10. 自动补全 using 看清楚再回车（误选过 SocialPlatforms.Impl、VisualScripting）。

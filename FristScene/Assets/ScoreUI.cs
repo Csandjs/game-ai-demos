@@ -7,14 +7,15 @@ public class ScoreUI : MonoBehaviour
     void Start()
     {
         scoreText = GetComponent<Text>();
+        GameManager.Instance.OnCoinCollected += RefreshScore;
     }
-    public void RefreshScore(int score)
+    public void RefreshScore(int amount)
     {
-        scoreText.text = "分数：" + score;
+        scoreText.text = "分数：" + GameManager.Instance.score;
     }
-    // Update is called once per frame
-    void Update()
+
+    void OnDestroy()
     {
-        
+        GameManager.Instance.OnCoinCollected -= RefreshScore;
     }
 }
