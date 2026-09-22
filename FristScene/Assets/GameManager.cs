@@ -23,13 +23,13 @@ public class GameManager : MonoBehaviour
     {
         score += amount;
     }
+    public void CollectCoin(int amount)
+    {
+        OnCoinCollected?.Invoke(amount);
+    }
     public void WinGame()
     {
         state = GameState.Win;
         winText.SetActive(true);
-    }
-    public void CollectCoin(int amount)
-    {
-        OnCoinCollected?.Invoke(amount);
     }
 }

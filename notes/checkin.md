@@ -17,6 +17,7 @@
 | 2026-09-16 | D13 | ✅ 完成 | 单例刚开始有点绕； | D14 周复盘+闭卷自测 |
 | 2026-09-17 | D14 | ✅ 完成 | static 和访问修饰符混淆；单例一开始看不懂后搞懂 | D15 委托 delegate |
 | 2026-09-19 | D15 | ✅ 完成 | 委托/事件一开始理解困难，用"通知群"类比后打通，Unity事件订阅已能脱稿 | D16（以明天计划截图为准） |
+| 2026-09-21 | D16 | ✅ 完成（9/22补收尾） | GetComponent漏写物体前缀导致只生成1个；边遍历边删集合；List该装物体还是组件 | Dictionary字典 + Animator动画入门 |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -165,3 +166,13 @@
 - 委托与事件：`delegate`、多播 `+=/-=`、`event` 访问保护、`Action`/`Action<int>`/`Func<T,T,TResult>`、`?.Invoke()`
 - Unity 事件驱动：`GameManager` 金币事件 + `CollectCoin` 中继方法，`ScoreUI`/`CoinSound` 订阅，`OnDestroy` 退订
 - 脱稿练习：`Day15_Quit` 按 Q 退出三系统响应、`Day15_Func` 武器伤害公式插槽
+
+## D16 完成（9/21 周一，9/22 补收尾）
+
+- Lambda 四种形态（单参省括号、零参/多参带括号、多行加大括号并 return），配合 `Func`/`Action`
+- `List<T>` 动态数组：`Add`/`Remove`/`RemoveAt`/`RemoveAll`/`Contains`/`Count`/初始化器/`foreach`
+- 查找四件套：`Contains`、`Exists` 返回 bool，`Find` 返单个（找不到 null），`FindAll` 返新列表；`Sort` 升序 `a-b`、降序 `b-a`，原地排序
+- Unity 生成器模式：`Instantiate` → `obj.GetComponent<T>()` → 回填 `spawner` → 列表登记
+- `List<GameObject>` 管理 10 枚金币；`List<Enemy>` 管理 5 个敌人波次，全灭 `Count==0` 调 `WinGame()`
+- 群体技能按 K：`FindAll` 出副本再 `foreach` 调 `Die()`，避免边遍历边修改原列表
+- 踩坑：GetComponent 漏前缀在自己身上找组件返回 null、场景残留旧金币、`this`（组件）与 `gameObject`（柜子）的区别、类体里不能写执行语句

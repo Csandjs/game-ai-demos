@@ -2625,3 +2625,117 @@ Game.Run 里 `Console.ReadKey(true).Key` 读键，按 `ConsoleKey.Q` 触发 OnQu
 6. Unity 声明事件不带 `?`、`?.Invoke` 不能省；7. Unity 用 Action 记得 using System；
 8. Start 订阅、OnDestroy 退订成对；9. 事件参数是"增量"，累计数据去数据管理者那读；
 10. 自动补全 using 看清楚再回车（误选过 SocialPlatforms.Impl、VisualScripting）。
+
+# D16（9/21 周一，9/22 补收尾）：Lambda 表达式 + List 泛型集合 + Unity 批量生成管理
+
+## 🌞 上午 · C#：Lambda 与 List
+
+### 1. Lambda 是干嘛的
+大白话：**一次性的匿名小方法**，专门用来"当场写一小段逻辑塞给别人"，常配 Func/Action 和 List 的查找排序，省得为一两行代码单独起名写个方法。
+
+四种形态：
+
+```csharp
+Func<int, int> f1 = a => a + 5;              // 1个参数：可省括号
+Func<int, int, int> f2 = (a, b) => a + b;    // 多个参数：必须带括号
+Action f3 = () => Console.WriteLine("嗨");    // 无参数：空括号 () 不能省
+Func<int, int> f4 = a =>                      // 多行方法体：必须加大括号
+{
+    int b = a * 2;                            // 多行里必须手写 return
+    return b;
+};
+```
+
+口诀：**单参省括号，零参/多参带括号；单行隐式返回，多行加大括号并手写 return。**
+
+### 2. List<T> 动态数组
+大白话：**会自动伸缩的数组**，不用提前定长度，Add 就长、Remove 就短。需要 `using System.Collections.Generic;`（Unity 模板自带，控制台隐式引用）。
+
+```csharp
+List<string> bag = new List<string>{ "木剑", "红药水", "蓝药水" }; // 初始化器直接装
+bag.Add("金币");              // 末尾加一个
+bag.Remove("红药水");         // 按内容删第一个匹配，返回 bool；删不存在的不报错
+bag.RemoveAt(0);              // 按下标删
+bool a = bag.Contains("木剑");// 有没有这个东西（整体相等），返回 bool
+bag.Clear();                  // 清空
+bag.Insert(0, "火把");        // 在指定下标插入
+int n = bag.Count;            // 元素个数（List 用 Count！数组才用 Length）
+foreach (string item in bag) { Console.WriteLine(item); }  // 遍历
+```
+
+### 3. 查找四件套（重点，别混）
+
+| 方法 | 参数 | 返回 | 大白话 |
+|---|---|---|---|
+| Contains | 具体值 | bool | 有没有**这个东西**（整体相等） |
+| Exists | Lambda 条件 | bool | 有没有**符合条件的** |
+| Find | Lambda 条件 | 元素，找不到 **null**（值类型返回0） | 拿符合条件的**第一个** |
+| FindAll | Lambda 条件 | **新 List** | 把符合条件的**全拿出来** |
+
+```csharp
+string one = bag.Find(item => item.Contains("药水"));        // 第一个含"药水"的
+List<string> all = bag.FindAll(item => item.Contains("药水"));// 所有含"药水"的
+bool has = bag.Exists(item => item.Length > 2);              // 有没有字数>2的
+// 注意：List.Contains 比元素整体相等；string.Contains 才是"字符串包含子串"
+```
+
+### 4. Sort 排序与 RemoveAll
+
+```csharp
+List<int> nums = new List<int>{ 3, 1, 2 };
+nums.Sort();                  // 默认从小到大，直接改原列表（原地排序）
+nums.Sort((a, b) => a - b);   // 升序（和默认一样）
+nums.Sort((a, b) => b - a);   // 降序：口诀 a-b 升、b-a 降
+words.Sort((a, b) => a.Length - b.Length); // 字符串按字数排
+int del = nums.RemoveAll(x => x < 0);      // 按条件删一片，返回删掉的数量
+Console.WriteLine(string.Join(" ", nums)); // 把列表拼成一行字符串打印
+```
+
+## 🌤 下午 · Unity：生成器模式 + 列表批量管理
+
+### 1. 生成器四步（金币、敌人通用套路）
+1. 空物体挂 Spawner 脚本，字段拖预制体 `public GameObject xxxPrefab;`
+2. Start 里 for 循环 `Instantiate(预制体, 位置, Quaternion.identity)` 批量造
+3. `XXX s = obj.GetComponent<XXX>();` 在**新生成的 obj 身上**取脚本
+4. `s.spawner = this;` 把自己（管理者）填进生成物的联系人栏，再 Add 进列表
+
+```csharp
+for (int i = 0; i < 5; i++)
+{
+    GameObject obj = Instantiate(enemyPrefab, new Vector3(i, 1f, 0), Quaternion.identity);
+    Enemy e = obj.GetComponent<Enemy>(); // 必须 obj. 前缀！在新物体身上找
+    e.spawner = this;                    // 生成物记住"是谁造的我"
+    enemies.Add(e);                      // 登记进列表
+}
+```
+
+### 2. 列表装 GameObject 还是装组件？（柜子与抽屉）
+GameObject 是柜子，脚本组件是抽屉。**判据：以后要从列表里拿元素干什么。**
+- 只做整体操作（生成/摆放/计数/销毁）→ `List<GameObject>`（金币）
+- 要读字段调方法（hp、Die）→ `List<Enemy>`（敌人），Add 的是 GetComponent 出来的组件
+
+对应地，从列表移除时：金币传 `gameObject`（脚本内置的"我挂的柜子"），敌人传 `this`（当前组件自己）。**列表装什么类型，Add/Remove 就给什么类型。**
+
+### 3. 波次过关与群体技能
+- 敌人死亡：`Die()` 里血量减到 0 → `spawner.RemoveEnemy(this); Destroy(gameObject);`
+- 管理者的 RemoveEnemy：从列表移除 + 打印 Count，**Count == 0 调 `GameManager.Instance.WinGame()`** 过关
+- 群体技能（按 K 群灭）：**先 FindAll 出副本再 foreach**
+
+```csharp
+if (Input.GetKeyDown(KeyCode.K))
+{
+    List<Enemy> targets = enemies.FindAll(e => e.hp > 0); // 独立的新列表
+    foreach (Enemy e in targets) { e.Die(); } // 遍历副本，Die 改的是原列表，安全
+}
+```
+
+## 🌙 易错点 / 今日踩坑
+
+1. **GetComponent 漏写物体前缀**：`GetComponent<Coin>()` 等于 `this.GetComponent`，在生成器自己身上找，返回 null，下一行空引用使 Start 中断，结果只 Instantiate 出 1 个。找别人必须 `obj.GetComponent<>()`。
+2. **NullReferenceException**：用了本该装对象、实际却是 null 的引用（槽里没东西还去用它）。旧手摆金币没人填 spawner，一吃就炸。
+3. **边遍历边删集合会报错**（集合已被修改）：foreach 原列表时不能在循环里 Remove 原列表；先 FindAll 拿副本，遍历副本、修改原列表。
+4. **类体大括号内只能声明成员（字段/方法），不能写执行语句**；FindAll/foreach 必须放在方法体里，且要在触发时机（按 K）执行，不能写在 Start/Update 之间。
+5. List 用 **Count**、数组用 **Length**；Find 找不到是 **null** 不是 false，要 bool 用 Exists/Contains。
+6. 命名：first 不写 frist、RemoveEnemy 不写 RemoveEmeny；变量 camelCase、类/方法 PascalCase。
+7. 新建脚本删掉没用的垃圾 using（如 UnityEngine.SocialPlatforms.Impl）。
+8. 架构初识：Coin↔Spawner 是双向紧耦合（离开对方便空引用）；Enemy 只上报直属 Spawner、不认识 GameManager 是好的层级设计；D15 的 event 订阅才是松耦合（发布者不认识订阅者）。
