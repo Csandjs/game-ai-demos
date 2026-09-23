@@ -2,15 +2,19 @@ using UnityEngine;
 
 public class PlayerPhysicsMove : MonoBehaviour , IMovable
 {
-    public float moveSpeed = 8f;
-    public float jumpForce = 5f;
+    public float moveSpeed;
+    public float jumpForce;
     public float groundDistance = 0.55f;
     public float moveAcceleration = 15f;
     private Rigidbody rb;
+    private Animator animator;
     private bool isGrounded = false;
     void Start()
     {
         rb = GetComponent<Rigidbody>();//把挂在同一个Cube上的刚体组件取出来，存进rb
+        animator = GetComponent<Animator>();
+        moveSpeed = GameConfig.Get("moveSpeed");
+        jumpForce = GameConfig.Get("jumpForce");
     }
     public void Move()
     {
@@ -30,12 +34,15 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
         v.x = Mathf.MoveTowards(v.x ,targetVelocity.x,maxChange);
         v.z = Mathf.MoveTowards(v.z ,targetVelocity.z,maxChange);    
         rb.velocity = v;
+        animator.SetBool("isMoving",moveX != 0 || moveZ != 0);
     }
     //持续的物理移动放在FixedUpdate
     void FixedUpdate()
     {
         if (GameManager.Instance.state == GameState.Win)
         {
+            animator.SetBool("isMoving" , false);
+            animator.SetBool("isJumping" , false);
             return;
         }
         Move();
@@ -54,6 +61,7 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
         {
             rb.AddForce(Vector3.up * jumpForce ,ForceMode.Impulse);
         }
+        animator.SetBool("isJumping", !isGrounded);
     }
     //碰到东西认为落地了
     // void OnCollisionEnter(Collision collision)

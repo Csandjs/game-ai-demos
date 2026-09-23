@@ -2739,3 +2739,213 @@ if (Input.GetKeyDown(KeyCode.K))
 6. 命名：first 不写 frist、RemoveEnemy 不写 RemoveEmeny；变量 camelCase、类/方法 PascalCase。
 7. 新建脚本删掉没用的垃圾 using（如 UnityEngine.SocialPlatforms.Impl）。
 8. 架构初识：Coin↔Spawner 是双向紧耦合（离开对方便空引用）；Enemy 只上报直属 Spawner、不认识 GameManager 是好的层级设计；D15 的 event 订阅才是松耦合（发布者不认识订阅者）。
+
+
+# 📅 D17（9/23 周三）：Dictionary 字典 + Unity Animator 动画状态机 + 配置表
+
+## 🌞 上午：Dictionary<K,V> 字典
+
+### 大白话
+List 是"编号抽屉"（按下标 0、1、2 找），字典是"贴标签抽屉"：给每个值起一个**键（Key）**，以后用键直接取，不用从头遍历。
+- 查字典复杂度 O(1)（一步到位），查 List 是 O(n)（挨个翻）；
+- 字典**无序、没有下标、不能 Sort**；
+- 使用前要 `using System.Collections.Generic;`。
+
+### 常用 API 对照表
+
+| 写法 | 作用 | 键不存在时 |
+|---|---|---|
+| `dict.Add(k, v)` | 添加 | 重复键抛 ArgumentException |
+| `dict[k]` 读 | 按键取值 | **抛 KeyNotFoundException（直接崩）** |
+| `dict[k] = v` | 赋值 | 存在则覆盖，不存在则新增 |
+| `dict.ContainsKey(k)` | 判断键在不在 | 返回 bool，不崩 |
+| `dict.TryGetValue(k, out v)` | 判断+取值一步 | 返回 false，v 为默认值 |
+| `dict.Remove(k)` | 删除 | 返回 bool |
+| `dict.Count` | 键值对数量 | — |
+| `foreach(var kv in dict)` | 遍历 | 用 `kv.Key` / `kv.Value` |
+
+标准查表姿势（查得到用、查不到兜底，不崩）：
+```csharp
+if (config.TryGetValue("attack", out float attack))
+    Console.WriteLine("攻击力：" + attack);
+else
+    Console.WriteLine("没有 attack 配置，用默认值 0");
+```
+
+### 背包堆叠计数器（最常用模式）
+
+```
+Dictionary<string, int> bag = new Dictionary<string, int>();
+
+void PickUp(string itemName)
+{
+    if (bag.ContainsKey(itemName))
+        bag[itemName]++;        // 已有：数量 +1
+    else
+        bag[itemName] = 1;      // 没有：新建一堆，数量 = 1（写 ++ 会抛异常）
+}
+```
+
+### ⚠️ 值类型是"复印件"
+
+`int/float/bool/struct/enum` 传进方法或用 out 接出来，拿到的是**复印件**，改复印件不影响字典本体：
+
+```
+bag.TryGetValue("药水", out int count);
+count++;   // ❌ 只改了复印件，字典里没变，必须 bag["药水"]++ 写回去
+```
+
+引用类型（class、List、Dictionary、GameObject、MonoBehaviour）传的是"门牌号"，改的是同一份。
+
+---
+
+## 🌤 下午：Unity Animator 动画状态机
+
+### 四个概念（KTV 比喻）
+
+| 概念 | 文件 | 大白话 | 比喻 |
+| --- | --- | --- | --- |
+| Animation Clip | `.anim` | 美术录好的一段动作（关键帧+自动插值） | 一盘 MV |
+| Animator Controller | `.controller` | 状态+过渡+条件的"规则本" | 点歌流程单 |
+| Animator 组件 | 挂在物体上 | 读控制器、负责播放的播放器 | 放映机 |
+| Parameter 参数 | 控制器里建 | 代码和状态机之间的开关（Bool/Trigger/Float/Int） | 遥控器信号 |
+
+- **Clip 回答"能播哪些动作"，Transition（箭头）回答"什么信号下从 A 切到 B"**；
+- 程序员的活：拿成品片段拖进画布 → 连状态线、建参数、写条件 → 代码 `SetBool` 拨开关 → 负责复位。建模绑骨 K 帧是美术的活。
+- AI 状态机是"脑子"（决定干什么），Animator 状态机是"身体"（播对应动作），套路一样。
+
+### 录片段要点
+
+- 流程：Project 右键创建 Animation（`.anim`）→ **拖进 Animator 画布成为状态**（不拖进去动画窗口选不到）→ 选中物体、动画窗口选片段、红点录制 → Add Property → 拖播放头、改 Inspector 值自动插菱形帧；
+- 时间轴格式是 **"秒:帧"，每秒 60 帧**：0:30 = 半秒，1:00 = 1 秒；播放头在刻度行**点哪跳哪**；
+- 循环动画首尾帧要相同才无缝；待机/移动勾 **Loop Time**，跳跃不勾；
+- 动画只动 Rotation/Scale，**不动 Position**，避免和 Rigidbody 物理移动打架。
+
+### 状态机连线（4 根）
+
+| 过渡 | 条件 | 特殊设置 |
+| --- | --- | --- |
+| Idle → Move | isMoving = true | 取消 Has Exit Time |
+| Move → Idle | isMoving = false | 取消 Has Exit Time |
+| Any State → Jump | isJumping = true | 取消 Has Exit Time、**取消"可以过渡到自己"**、Duration = 0 |
+| Jump → Idle | isJumping = false | 取消 Has Exit Time |
+
+- **Has Exit Time**：勾着=必须播完才切（连招用）；移动跳跃要即时响应，**取消**；
+- 一根过渡必须有 Exit Time 或至少一个 Condition，否则黄警"will be ignored"；
+- **Any State 包含 Jump 自己**，不取消"过渡到自身"，isJumping=true 期间会反复重进 Jump，动画抽搐跳不起来；
+- Any State 的意义：起跳可能发生在待机或移动中，一根线顶替两根。
+
+### 代码联动（PlayerPhysicsMove.cs）
+
+private Animator animator;   // 注意是 Animator 不是旧版 Animation
+
+void Start()
+{
+    rb = GetComponent<Rigidbody>();
+    animator = GetComponent<Animator>();
+}
+
+public void Move()
+{
+    float moveX = 0f, moveZ = 0f;
+    if (Input.GetKey(KeyCode.W)) moveZ = 1f;
+    // ……A/S/D 略
+    // ……速度计算略
+    // 数据已汇总进 moveX/moveZ，一处判断即可，别每个键 SetBool 一遍
+    animator.SetBool("isMoving", moveX != 0f || moveZ != 0f);
+}
+
+void Update()
+{
+    isGrounded = Physics.Raycast(transform.position, Vector3.down, groundDistance);
+    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+    // 不在地面 = 在跳，一句话统管起跳和落地
+    animator.SetBool("isJumping", !isGrounded);
+}
+
+- 参数名字符串必须和画布里**一字不差**，拼错不报错但不切动画；
+- **bool 开关谁设 true 谁负责设回 false**（落地、胜利都要复位）；
+- Trigger 参数按一下自动复位（以后学），Float 配混合树（以后学）。
+
+### ⚠️ 踩坑
+
+- **Animator ≠ Animation**：Animator（新，吃 .controller 状态机，有 SetBool）；Animation（旧 Legacy，只播单个 .anim）。类型/组件/泛型三处都是 Animator；
+- 新建 .anim 后动画窗口没 Create 按钮/下拉点不动：片段没拖进画布成为状态；
+- 胜利后角色定格在 Move：FixedUpdate/Update 胜利 return 后没人拨 false，要在胜利分支里 SetBool 复位。
+
+---
+
+## 🌙 晚上：配置表（技术 C）+ 按键映射（加深）
+
+### 痛点：魔法数字
+
+`moveSpeed=8f`、金币 `1` 散落各脚本，策划改数值要翻代码。把数值集中进一张表，代码按名字查，改数值不动逻辑。
+
+### 静态类配置表 GameConfig.cs（Unity 里不用挂物体）
+
+```
+using System.Collections.Generic;
+using UnityEngine;
+
+static class GameConfig   // 静态类：不能 new、不继承 MonoBehaviour、全局一份
+{
+    private static Dictionary<string, float> config = new Dictionary<string, float>
+    {
+        {"moveSpeed", 8f}, {"jumpForce", 5f}, {"coinValue", 1f}
+    };
+
+    public static float Get(string key)
+    {
+        if (config.TryGetValue(key, out float value))
+            return value;
+        Debug.LogWarning("缺少配置：" + key);  // 查不到给默认值，不许崩
+        return 0f;
+    }
+}
+```
+
+使用：
+
+```
+// 运行时在 Start 里覆盖（不要写字段初始化器，会被 Inspector 序列化值盖掉）
+moveSpeed = GameConfig.Get("moveSpeed");
+jumpForce = GameConfig.Get("jumpForce");
+
+// float 传给 int 参数要显式强转（直接砍小数，不四舍五入）
+GameManager.Instance.CollectCoin((int)GameConfig.Get("coinValue"));
+```
+
+### 静态类 vs 单例
+
+- 纯数据/工具、不依赖引擎 → **静态类**（类名.方法，不能 new，最简）；
+- 是 Unity 组件、要用 Awake/Update/Inspector/接口多态 → **单例**（GameManager）；
+- 静态类"整个类都是静态"；单例"只有 Instance 入口是静态，数据方法还是实例成员"，调用：`GameManager.Instance.AddScore(1)`。
+
+### ⚠️ Unity 序列化坑
+
+Inspector 显示的是场景里存的序列化值，不是代码实时值。字段初始化器只在组件首次创建时跑一次；运行时以配置表为准要在 **Start() 里赋值**。
+
+### 加深：Dictionary<string, Action> 按键映射（命令模式雏形）
+
+```
+Dictionary<string, Action> keyMap = new Dictionary<string, Action>();
+keyMap["Q"] = () => Console.WriteLine("释放火球术");   // Lambda 当动作塞进字典
+keyMap["E"] = () => Console.WriteLine("火焰激光");
+keyMap["R"] = () => Console.WriteLine("火焰喷射");
+
+string input = Console.ReadLine();
+input = input.ToUpper();   // 输入归一化，小写 q 也能命中
+if (keyMap.TryGetValue(input, out Action action))
+    action();              // 查到就执行（委托多播，+= 可挂多个方法）
+else
+    Console.WriteLine("这个键没有绑定技能");
+```
+
+- 加技能只加一行表数据，"读键→查表→执行"的主循环永远不动；
+- Action 是委托，`=` 覆盖、`+=` 追加（多播）；一键通知多系统更适合用 D15 的 event。
+
+## 🔰 以后专门学
+
+Animator.StringToHash（避免参数字符串拼错）、Trigger/Float 参数、混合树、动画事件、ScriptableObject 配置表、Grid Layout 背包 UI、LeetCode 两数之和（哈希表）。

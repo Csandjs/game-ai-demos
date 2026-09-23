@@ -8,7 +8,7 @@ public class Coin : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            GameManager.Instance.CollectCoin(1);
+            GameManager.Instance.CollectCoin((int)GameConfig.Get("coinValue"));
             spawner.RemoveCoin(gameObject);
             Destroy(gameObject);
         }

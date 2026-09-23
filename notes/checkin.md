@@ -16,8 +16,9 @@
 | 2026-09-15 | D12 | ✅ 完成 | 无 |C#查缺补漏（静态/枚举/命名空间）+Unity可玩小关 |
 | 2026-09-16 | D13 | ✅ 完成 | 单例刚开始有点绕； | D14 周复盘+闭卷自测 |
 | 2026-09-17 | D14 | ✅ 完成 | static 和访问修饰符混淆；单例一开始看不懂后搞懂 | D15 委托 delegate |
-| 2026-09-19 | D15 | ✅ 完成 | 委托/事件一开始理解困难，用"通知群"类比后打通，Unity事件订阅已能脱稿 | D16（以明天计划截图为准） |
+| 2026-09-19 | D15 | ✅ 完成 | 委托/事件一开始理解困难，用"通知群"类比后打通，Unity事件订阅已能脱稿 | Lambda 表达式 + List 泛型集合 + Unity 批量生成管理 |
 | 2026-09-21 | D16 | ✅ 完成（9/22补收尾） | GetComponent漏写物体前缀导致只生成1个；边遍历边删集合；List该装物体还是组件 | Dictionary字典 + Animator动画入门 |
+| 2026-09-23 | D17 | ✅ 完成 | Animator与旧Animation组件混淆、时间轴秒:帧、float配置传int需强转 | D18（按新计划图） |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -176,3 +177,9 @@
 - `List<GameObject>` 管理 10 枚金币；`List<Enemy>` 管理 5 个敌人波次，全灭 `Count==0` 调 `WinGame()`
 - 群体技能按 K：`FindAll` 出副本再 `foreach` 调 `Die()`，避免边遍历边修改原列表
 - 踩坑：GetComponent 漏前缀在自己身上找组件返回 null、场景残留旧金币、`this`（组件）与 `gameObject`（柜子）的区别、类体里不能写执行语句
+
+# D17 完成（9/23 周三）
+- `Dictionary<K,V>` 增删查改、TryGetValue 兜底、背包堆叠计数器、值类型复印件
+- Unity Animator：Idle/Move/Jump 三片段、状态机四根过渡线、`SetBool` 随移动/跳跃切换、胜利复位
+- 静态类 `GameConfig` 配置表查表（控制台+Unity），理解序列化覆盖与静态类/单例区别
+- 加深：`Dictionary<string,Action>` 按键映射（命令模式雏形）
