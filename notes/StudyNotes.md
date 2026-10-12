@@ -2949,3 +2949,255 @@ else
 ## 🔰 以后专门学
 
 Animator.StringToHash（避免参数字符串拼错）、Trigger/Float 参数、混合树、动画事件、ScriptableObject 配置表、Grid Layout 背包 UI、LeetCode 两数之和（哈希表）。
+
+# D18 笔记：Unity UI 系统（开始菜单 / 血条 / 暂停菜单 / 场景互跳）
+
+> 工程：FristScene（团结引擎 Tuanjie 1.10.2，中文界面）
+> 场景：MenuScene（序号 0，启动菜单）、MiniLevel（序号 1，游戏关卡）
+
+---
+
+## 一、今天做了什么（重要步骤原样记录）
+
+### 1. 开始界面（Canvas / Button / Panel）
+
+**新建按钮**
+- Canvas 右键 → UI → Button - Legacy（按钮-旧版）。
+- Button 是**组合件**：父物体上挂两个组件——Image（底色，Source Image 用 UISprite，Image Type = Sliced 已切片九宫格）+ Button（点击逻辑）；文字不在按钮上，在它的**子物体 Text** 上。
+- 按钮尺寸 200×60，子 Text 字号 28。
+- Button 组件关键属性：Interactable（可交互）、Transition（过渡）、On Click()（点击时列表）。
+
+**点击逻辑 StartMenu.cs（挂在按钮物体上）**
+```csharp
+using UnityEngine;
+using UnityEngine.UI;   // Button、Text 都在这个命名空间
+
+public class StartMenu : MonoBehaviour
+{
+    void Start()
+    {
+        GetComponent<Button>().onClick.AddListener(OnStartClick);
+    }
+    void OnStartClick()
+    {
+        SceneManager.LoadScene("MiniLevel");
+    }
+}
+```
+- 订阅点击用 `onClick.AddListener(方法名)`，退订用 RemoveListener；方法名后不加括号（传方法本身）。
+- 这个方法必须是自己写的无参数方法，Unity 只负责点击时调用它。
+
+**Panel 面板（容器）**
+- Canvas 右键 → UI → Panel，命名 StartPanel，把标题 Text 和开始按钮拖进去。
+- 同级 UI 元素，层级列表里**越靠下画得越上层**，面板要拖到 Canvas 子列表最底部才能盖住血条。
+- `gameObject.SetActive(false)` = 隐藏物体；**父物体隐藏，所有子物体一起消失**。
+
+### 2. 状态机给玩家移动上锁
+
+- GameManager 里定义枚举：
+```csharp
+public enum GameState { StartGame, Playing, Paused, Win }
+public GameState state = GameState.StartGame;
+```
+- PlayerPhysicsMove 的 FixedUpdate / Update 开头判断：状态不是 Playing 直接 return（Win 分支还要复位 isMoving/isJumping）。
+- 单场景菜单时期：Awake 里强制 `state = GameState.StartGame;`，点开始进 Playing。
+- 菜单独立成场景后：MiniLevel 的 Awake 改成 `state = GameState.Playing;`（进游戏场景直接能玩）。
+
+### 3. 血条 Slider
+
+**搭建**
+- Canvas 右键 → UI → Slider（滑块），命名 HpSlider。
+- 结构：Background（背景槽）、Fill Area / Fill（填充块）、Handle Slide Area / Handle（圆形把手）。
+- 血条设置：取消勾选 **Interactable**（不让玩家拖）；Min Value = 0、Max Value = 100、Value = 100；Direction = Left To Right（从左到右）；把手 Handle 禁用或删除。
+- **拉满还空一截**：是 Fill Area 默认给把手预留了右边距。选中 Fill Area，把 Rect Transform 的 Left、Right 偏移都改成 0，填充条就铺满了。
+
+**接数据 HpUI.cs（挂在血量 Text 物体上）**
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HpUI : MonoBehaviour
+{
+    public Slider hpSlider;          // Inspector 里把 HpSlider 物体拖进槽
+    private Text playerHpText;
+
+    void Start()
+    {
+        playerHpText = GetComponent<Text>();   // Text 和脚本在同一物体
+    }
+
+    public void RefreshHp(int hp)
+    {
+        playerHpText.text = "血量：" + hp;
+        hpSlider.value = hp;                  // 滑块长度跟着血量走
+    }
+}
+```
+- 忘记拖 hpSlider 引用会报 NullReferenceException，堆栈里出现 HpUI.cs:行号 就是自己的空引用。
+
+### 4. 组件获取的三种途径（重点）
+
+判据一句话：**看点号左边/组件和脚本的距离**。
+
+| 组件在哪 | 怎么拿 | 例子 |
+|---|---|---|
+| 和脚本在**同一个物体**上 | `GetComponent<T>()` | HpUI 取同物体的 Text；按钮脚本取同物体的 Button |
+| 在场景里**别的物体**上、编辑时就存在 | public 字段，Inspector **拖引用** | HpUI 引用 HpSlider |
+| 运行时 **Instantiate 克隆**出来的物体 | Instantiate 返回 GameObject，再 GetComponent | `Enemy e = enemy.GetComponent<Enemy>();` |
+
+- `public Slider hpSlider;` 拖物体进槽时，Unity 自动取它身上的 Slider 组件，等价于 `public GameObject` + 一行 GetComponent，但少写代码。
+- 变量已经是组件类型（Slider），再对它 GetComponent 是多此一举。
+- GetComponent **只在脚本所在的那个物体身上找**，不会翻子物体、不会找别的物体。
+
+### 5. 重开按钮 + 场景重载
+
+**RestarButton.cs（挂在重开按钮上，文件名少打了个 t，沿用）**
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;   // 场景管理命名空间
+
+public class RestarButton : MonoBehaviour
+{
+    void Start()
+    {
+        GetComponent<Button>().onClick.AddListener(ReStart);
+    }
+    void ReStart()
+    {
+        Time.timeScale = 1;   // 暂停状态下重开，先把时间拨正
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+}
+```
+- `SceneManager.LoadScene(名字)`：加载场景，旧场景物体全部销毁、新场景重新生成。
+- `SceneManager.GetActiveScene().name`：自动读出"当前场景"的名字，不用手写，重载自己时通用。
+- 加载**另一个**场景才手写名字：`SceneManager.LoadScene("MiniLevel");`
+- 场景必须注册：文件（File）→ 生成设置（Build Settings）→ 添加已打开场景（Add Open Scenes），否则报场景不在构建列表。
+- GameManager 加 `public GameObject restartButton;`，WinGame() 里 `restartButton.SetActive(true);`，按钮默认隐藏。
+- **单场景重开时注释掉 `DontDestroyOnLoad(gameObject);`**，否则旧管理器不死、新管理器又生成，运行时层级会出现两个 GameManager。
+
+### 6. 拆成两个场景（菜单场景 / 游戏场景）
+
+1. Scenes 文件夹右键 → Create（创建）→ Scene（场景），命名 MenuScene，双击打开（提示保存当前场景就保存）。
+2. 新场景右键 → UI → Canvas（EventSystem 自动带出）。
+3. 回 MiniLevel 选中 StartPanel 按 Ctrl+C，到 MenuScene 选中 Canvas 按 Ctrl+V，整套菜单搬过去。
+4. MiniLevel 里删除 StartPanel；GameManager 的 Awake 状态改 Playing。
+5. StartMenu 的点击改成 `SceneManager.LoadScene("MiniLevel");`，删掉 SetActive 和 GameManager.state 相关行（菜单场景没有 GameManager，留着空引用）。
+6. Build Settings 列表：MenuScene 在第 0 行（序号 0 = 游戏启动场景），MiniLevel 第 1。
+7. 编辑器里点播放运行的是**当前打开的场景**，要测菜单启动就先双击打开 MenuScene。
+
+### 7. Esc 暂停菜单
+
+**UI**：MiniLevel 的 Canvas 下新建 PausePanel（拖到子列表最底部），放 Text"游戏暂停" + 三个按钮（继续游戏、重新开始、返回主菜单），PausePanel 默认取消勾选隐藏。
+
+**PauseMenu.cs（挂在 GameManager 物体上）**
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PauseMenu : MonoBehaviour
+{
+    public GameObject pausePanel;
+    public Button continueButton;   // 拖"继续游戏"按钮
+
+    void Start()
+    {
+        continueButton.onClick.AddListener(ContinueGame);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))   // Esc 键
+        {
+            if (GameManager.Instance.state == GameState.Playing)
+                Pause();
+            else if (GameManager.Instance.state == GameState.Paused)
+                ContinueGame();
+            // Win 状态两个都不满足，天然不会误暂停
+        }
+    }
+
+    void Pause()
+    {
+        GameManager.Instance.state = GameState.Paused;
+        Time.timeScale = 0;              // 时间停止
+        pausePanel.SetActive(true);
+    }
+
+    void ContinueGame()
+    {
+        GameManager.Instance.state = GameState.Playing;
+        Time.timeScale = 1;              // 恢复
+        pausePanel.SetActive(false);
+    }
+}
+```
+- **Time.timeScale（时间缩放）**：1 = 正常，0 = 停止物理、FixedUpdate、所有按时间走的运动；但 Update 和输入检测照常，所以 Esc 和按钮在暂停时仍能响应。
+- 同一个 ContinueGame 方法有两个入口（Esc、按钮），方法复用。
+- 暂停面板的"重新开始"按钮挂现成的 RestarButton 脚本。
+- "返回主菜单"新建 BackButton.cs，点击里先 `Time.timeScale = 1;` 再 `SceneManager.LoadScene("MenuScene");`。
+- GameManager 的 Awake 里补一行 `Time.timeScale = 1;` 作保底。
+
+---
+
+## 二、易错点（踩过的坑）
+
+1. **序列化坑（最隐蔽）**：public 字段的代码初始值只在脚本**第一次挂载**时写进组件一次，之后存在场景文件里；之后再改代码里的默认值，对已经挂好的组件**不生效**，一切以 Inspector 里显示的值为准。表现：代码写 state=Playing，Inspector 下拉其实是 StartGame。解决：在 Awake() 里强制赋值，或手动改 Inspector。
+2. **文字超出按钮高度会消失**：Text 默认 Vertical Overflow = Truncate（截断），按钮高 30 时字号 28 就被裁掉；把按钮加高到 60 正常。
+3. **Slider 拉满还空一截**：Fill Area 的 Right 边距没归零。
+4. **漏拖引用 → 空引用**：public 字段拖了物体才有效；判据看报错堆栈，里面有自己脚本名（HpUI.cs:17）才是自己的错；全是 UnityEditor/PackageManager 的是编辑器内部报错，清控制台即可。
+5. **复制按钮会连脚本和点击绑定一起复制**：复制"重新开始"做"继续游戏"后，按钮身上还挂着 RestarButton 脚本，一点继续就重载场景。复制 UI 改用途后，第一件事检查身上有没有多余脚本（⋮ → 移除组件），再看 On Click() 列表有没有残留。
+6. **Time.timeScale 是全局且"粘住"的**：切场景不会自动重置回 1。暂停状态下重开/回菜单，必须在 LoadScene 前写 Time.timeScale = 1，新场景可能以 0 速卡死。
+7. **场景不进 Build Settings 就无法 LoadScene**：两个场景都要在"生成中的场景"列表里并勾选。
+8. **DontDestroyOnLoad 与单场景重开冲突**：重开要一切归零，管理器该随场景销毁；挂着免死金牌会堆出两个 GameManager。
+9. **命名规范**：枚举成员 PascalCase（是 Paused 不是 paused）；字段 camelCase（continueButton 不是 ContinueButton）；文件名和类名必须一致。
+10. **UI 层级遮挡**：同级元素越靠下越在上层，面板要排 Canvas 子列表最底部。
+11. **Panel 父物体隐藏，子物体全部隐藏**；反过来子物体无法在父物体隐藏时显示。
+
+---
+
+## 三、刚开始没绕过来的点（弄懂后的结论）
+
+1. **AddListener 和 C# 的 event += 什么区别？**
+   Button 自带的 onClick 是 UnityEvent，Unity 点击时会自动调用它；自己 new 一个 event Action 没有人去 Invoke 它，所以点了没反应。UI 按钮固定用 AddListener（相当于 +=）。
+
+2. **代码里 state 明明不等于 StartGame，为什么菜单时玩家还能动？**
+   序列化：Inspector 里存的值才是运行时真正用的值，代码初始值对已挂载组件无效，Awake 强制赋值才说了算。
+
+3. **为什么 Text 要 GetComponent，Slider 却不用？**
+   和组件类型无关，只看距离：Text 和 HpUI 在同一个物体上，自己身上摸；Slider 在另一个物体上，拖引用。
+
+4. **hpSlider 已经是 Slider 了，再 hpSlider.GetComponent<Slider>() 行不行？**
+   多此一举——手里已经是组件，不用再取一次；GetComponent 是给"手里只有 GameObject"时用的（如 Instantiate 的返回值）。
+
+5. **DontDestroyOnLoad 是干嘛的？和单例什么关系？**
+   单例解决"怎么找到唯一管理器"（访问问题）；DontDestroyOnLoad 解决"切场景时它死不死"（生命周期问题）。它是免死金牌，让物体带着数据跨场景存活；单场景重开要归零，所以不能挂。
+
+6. **SceneManager.GetActiveScene().name 要手写场景名吗？**
+   不用，它自动读当前场景名；只有加载"另一个"场景时才手写 "MiniLevel"/"MenuScene"。
+
+7. **timeScale 都设成 0 了，为什么按 Esc、点按钮还有反应？**
+   timeScale=0 停的是物理和 FixedUpdate、deltaTime；Update 每帧照常执行，输入检测和 UI 事件系统不受影响——暂停菜单正是靠这个才能操作。
+
+8. **都返回主菜单了，为什么还要写 Time.timeScale = 1？**
+   timeScale 是全局粘性状态，不随场景切换重置；谁制造的暂停谁负责清理，再加上新场景 Awake 保底，双保险。
+
+9. **重开场景为什么能一键满血满状态？**
+   LoadScene 会把场景所有物体销毁后按场景原始状态重新生成，分数、血量、敌人生成器全部重新出生，等于游戏重启——比重置一个个变量干净。
+
+---
+
+## 四、今天新增脚本 / 场景清单
+
+| 文件 | 挂在哪 | 作用 |
+|---|---|---|
+| StartMenu.cs | MenuScene 开始按钮 | 点击加载 MiniLevel |
+| RestarButton.cs | 胜利面板、暂停面板的重开按钮 | 重载当前场景 |
+| BackButton.cs | 暂停面板"返回主菜单" | 加载 MenuScene |
+| PauseMenu.cs | GameManager 物体 | Esc 暂停/继续、timeScale、面板显隐 |
+| HpUI.cs | 血量 Text 物体 | 刷新血量文字 + Slider |
+| MenuScene.scene | Build 序号 0 | 启动菜单场景 |
+| MiniLevel.scene | Build 序号 1 | 游戏关卡场景（新增血条/暂停面板/重开） |
+
+**今日提交**：commit 8b62f3f，18 files changed，2756 insertions(+)

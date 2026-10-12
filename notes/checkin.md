@@ -19,6 +19,7 @@
 | 2026-09-19 | D15 | ✅ 完成 | 委托/事件一开始理解困难，用"通知群"类比后打通，Unity事件订阅已能脱稿 | Lambda 表达式 + List 泛型集合 + Unity 批量生成管理 |
 | 2026-09-21 | D16 | ✅ 完成（9/22补收尾） | GetComponent漏写物体前缀导致只生成1个；边遍历边删集合；List该装物体还是组件 | Dictionary字典 + Animator动画入门 |
 | 2026-09-23 | D17 | ✅ 完成 | Animator与旧Animation组件混淆、时间轴秒:帧、float配置传int需强转 | D18（按新计划图） |
+| 2026-10-12 | D18 | ✅ 完成（10/10开工，10/12收尾） | 序列化坑：改代码默认值对已挂组件不生效；复制按钮连脚本一起复制，点继续变重开；timeScale粘性，切场景不重置 | D19（按新计划图） |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -183,3 +184,16 @@
 - Unity Animator：Idle/Move/Jump 三片段、状态机四根过渡线、`SetBool` 随移动/跳跃切换、胜利复位
 - 静态类 `GameConfig` 配置表查表（控制台+Unity），理解序列化覆盖与静态类/单例区别
 - 加深：`Dictionary<string,Action>` 按键映射（命令模式雏形）
+
+# D18 完成（10/10 周六，10/12 周一补收尾）Unity UI 系统
+
+- UI 基础：`Canvas`（屏幕空间-覆盖）+`EventSystem` 点击感应；Button(Legacy)=父 Image+Button、子 Text；`Panel` 容器、`SetActive` 显隐、同级 UI 越靠下越上层
+- 按钮订阅：`GetComponent<Button>().onClick.AddListener(方法)`（using UnityEngine.UI）；自造 event 没人 Invoke，UI 固定用 AddListener
+- 血条 `Slider`：关 Interactable、Min0/Max100、禁 Handle，Fill Area 左右边距归 0 才铺满，`hpSlider.value=hp` 绑定
+- 取组件三途径：同物体 GetComponent、跨物体 public 拖引用、Instantiate 返回物体再 GetComponent
+- 场景跳转：`SceneManager.LoadScene("名")` 加载别的场景，`LoadScene(GetActiveScene().name)` 重载自己；Build Settings 必须 Add Open Scenes
+- 拆两场景：MenuScene（序号0）放菜单，MiniLevel（序号1）进游戏 Awake 直接 state=Playing
+- 暂停菜单：enum 加 `Paused`，`Input.GetKeyDown(KeyCode.Escape)`，`Time.timeScale` 0停/1恢复（Update 和 UI 点击不受影响）；三按钮 继续/重开/返回菜单
+- 📌 序列化坑：public 字段默认值只在首次挂载写入一次，之后改代码不影响已挂组件，以 Inspector 为准，Awake 里强制赋值
+- 📌 复制 UI 会连脚本和 OnClick 绑定一起复制（点继续却重开=按钮还挂着 RestarButton）；timeScale 粘性、切场景不重置，LoadScene 前先拨 1 + Awake 保底
+- 📝 D18 闭卷大考《战场结算模拟器》140 通过；
