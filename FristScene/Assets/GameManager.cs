@@ -3,21 +3,26 @@ using System;
 //单例
 public enum GameState
 {
+    StartGame,
     Playing,
+    Paused,
     Win
 }
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public int score = 0;
-    public GameState state = GameState.Playing;
+    public GameState state = GameState.StartGame;
     public GameObject winText;
+    public GameObject restarButton;
     public event Action<int> OnCoinCollected;
     void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        Time.timeScale = 1;
+        //DontDestroyOnLoad(gameObject);
         OnCoinCollected += AddScore;
+        state = GameState.Playing;
     }
     public void AddScore(int amount)
     {
@@ -31,5 +36,6 @@ public class GameManager : MonoBehaviour
     {
         state = GameState.Win;
         winText.SetActive(true);
+        restarButton.SetActive(true);
     }
 }

@@ -45,7 +45,10 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
             animator.SetBool("isJumping" , false);
             return;
         }
-        Move();
+        if (GameManager.Instance.state == GameState.Playing)
+        {
+            Move();
+        }
     }
     //瞬间的跳跃检测放在Update
     void Update()
@@ -54,14 +57,18 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
         {
             return;
         }
-        isGrounded = Physics.Raycast(transform.position ,Vector3.down ,groundDistance);
-        Debug.DrawRay(transform.position, Vector3.down * groundDistance, Color.red);
-        //Debug.Log("射线打到地面了吗：" + HitGround);
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (GameManager.Instance.state == GameState.Playing)
         {
-            rb.AddForce(Vector3.up * jumpForce ,ForceMode.Impulse);
+            isGrounded = Physics.Raycast(transform.position ,Vector3.down ,groundDistance);
+            Debug.DrawRay(transform.position, Vector3.down * groundDistance, Color.red);
+            //Debug.Log("射线打到地面了吗：" + HitGround);
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                rb.AddForce(Vector3.up * jumpForce ,ForceMode.Impulse);
+            }
+            animator.SetBool("isJumping", !isGrounded);
         }
-        animator.SetBool("isJumping", !isGrounded);
+        
     }
     //碰到东西认为落地了
     // void OnCollisionEnter(Collision collision)
