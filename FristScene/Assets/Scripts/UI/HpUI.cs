@@ -4,10 +4,13 @@ public class HpUI : MonoBehaviour
 {
     // Start is called before the first frame update
     public Slider hpSlider;
-    private Text playerHpText;   
+    private Text playerHpText;
+    public PlayerHealth playerHealth;   
         void Start()
     {
         playerHpText = GetComponent<Text>();
+        playerHealth.OnHpChanged += RefreshHp;
+        RefreshHp(playerHealth.Hp);
     }
     public void RefreshHp(int hp)
     {

@@ -3201,3 +3201,449 @@ public class PauseMenu : MonoBehaviour
 | MiniLevel.scene | Build 序号 1 | 游戏关卡场景（新增血条/暂停面板/重开） |
 
 **今日提交**：commit 8b62f3f，18 files changed，2756 insertions(+)
+
+# 📄 D19（2026-10-13 周二）游戏状态机完善 + 主菜单设置/退出 + PlayerPrefs 存档 + UI 事件解耦 + 链表
+
+> 今日主线：上午把 Lose 失败状态补齐（状态机四态成型）、主菜单加设置/退出；下午做 PlayerPrefs 音量与最高分存档、暂停内设置面板，并把血条重构成事件驱动；晚上整理 Assets 工程目录、刷 LeetCode 21（链表入门）。
+
+---
+
+## 🌞 上午：Lose 状态 + 主菜单设置/退出
+
+### 步骤1：Lose 失败状态——照 Win 套路把状态机补齐
+
+**大白话**：D18 状态机只有"赢"没有"输"，这次加一个 `Lose` 状态。玩家血量掉到 0 就失败，和碰到金币赢游戏是同一套套路：改状态 → 弹面板。
+
+**① 血量数据放 PlayerHealth.cs（挂玩家 Cube）**
+
+```csharp
+using UnityEngine;
+using System;
+
+public class PlayerHealth : MonoBehaviour
+{
+    private int hp = 100;
+    private int maxHp = 100;
+    public int damage = 10;
+
+    // 受控访问：血量只能在 0~maxHp 之间，private set 外部不能乱改
+    public int Hp
+    {
+        get { return hp; }
+        private set { hp = Mathf.Clamp(value, 0, maxHp); }
+    }
+
+    // 只读属性（表达式体写法）：血量<=0 就是死了
+    public bool IsDead => hp <= 0;
+
+    public void TakeDamage(int dmg)
+    {
+        if (IsDead) return;        // 双重防重入①：死了不再受伤
+        Hp -= dmg;
+        OnHpChanged?.Invoke(hp);   // 广播新血量（步骤7细讲）
+        Debug.Log("受到伤害，剩余血量：" + hp);
+        if (IsDead)
+        {
+            GameManager.Instance.LoseGame();
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Trap"))
+        {
+            TakeDamage(damage);
+        }
+    }
+}
+```
+
+- `Mathf.Clamp(value, 0, maxHp)`：把值钳制在区间内，小于 0 取 0、大于上限取上限，防止血量超界。
+- `public bool IsDead => hp <= 0;` 是只读属性的简写，等价于 `get { return hp <= 0; }`。
+
+**② GameManager.cs 加 Lose 状态和方法**
+
+```csharp
+public enum GameState { Playing, Paused, Win, Lose }
+
+public void LoseGame()
+{
+    if (state != GameState.Playing) return;   // 双重防重入②：一局只结算一次
+    state = GameState.Lose;
+    loseText.SetActive(true);                 // 失败面板（按钮是它的子物体，自动一起显示）
+    SaveHighScoreIfNeeded();                  // 结算时存档（步骤4）
+}
+// WinGame 同理：Win 状态 + winText.SetActive(true)，开头同样防重入
+```
+
+**③ UI 层级（面板容器 + 子按钮）**
+
+```
+LoseText（Panel，默认隐藏）
+├── Text（"游戏失败"）
+├── RestarButton（重新开始）
+└── BackButton（返回主菜单）
+```
+
+- 面板父物体 SetActive(true)，**子按钮自动显示**，所以 LoseGame 不用单独把按钮一个个点亮。
+- **双重防重入**：TakeDamage 开头挡一次（死了不再掉血）、LoseGame 开头挡一次（不是 Playing 不结算），防止掉出地图连续触发结算、或边赢边死。
+
+### 步骤2：主菜单设置按钮——Slider 滑块绑全局音量
+
+**大白话**：设置面板就是一个"另一张面板"，点设置把开始面板藏起来、把设置面板亮出来；面板里放一个滑块，拖滑块改游戏全局音量。
+
+**① Slider 滑块（Canvas 右键 → UI → Slider）**
+
+- 音量滑块设置：Min Value = 0、Max Value = 1、Value = 1、**不勾** Whole Numbers（音量要小数）、**勾** Interactable（要能拖）。
+- 血条滑块反过来：勾 Whole Numbers、**不勾** Interactable。
+
+**② onValueChanged 和 onClick 的区别（重点）**
+
+| 事件 | 所属控件 | 回调方法签名 | 通知什么 |
+|---|---|---|---|
+| `onClick` | Button | `void 方法名()` | 只通知"被点了" |
+| `onValueChanged` | Slider | `void 方法名(float value)` | 拖动时把**当前值**传进来 |
+
+- Slider 是 `UnityEvent<float>`，订阅的方法必须带一个 float 参数接收滑块值。
+
+**③ 全局音量 AudioListener.volume**
+
+```csharp
+AudioListener.volume = value;   // 0~1，全局所有声音的总开关
+```
+
+- AudioListener 是场景的"耳朵"，Main Camera 自带，全场景一个。
+- **它是 static 属性，Inspector 上看不到**（Audio Listener 组件没有可展开的 Volume 滑条），只能代码控制，用 `Debug.Log(AudioListener.volume)` 验证。
+
+**④ SettingsMenu.cs（挂 MenuScene 的 Canvas，字段拖引用）**
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SettingsMenu : MonoBehaviour
+{
+    public GameObject settingsPanel;
+    public GameObject startPanel;
+    public Slider volumeSlider;
+    public Button settingsButton;
+    public Button backButton;
+
+    void Start()
+    {
+        // 链式读档：读出来的值同时赋给音量和滑块（步骤4）
+        volumeSlider.value = AudioListener.volume =
+            PlayerPrefs.GetFloat(GameConfig.VolumeKey, 1f);
+
+        settingsButton.onClick.AddListener(OnSettingsClick);
+        backButton.onClick.AddListener(OnBackClick);
+        volumeSlider.onValueChanged.AddListener(OnVolumeSlider);
+    }
+
+    void OnSettingsClick()
+    {
+        startPanel.SetActive(false);
+        settingsPanel.SetActive(true);
+    }
+
+    void OnBackClick()
+    {
+        settingsPanel.SetActive(false);
+        startPanel.SetActive(true);
+    }
+
+    void OnVolumeSlider(float value)
+    {
+        AudioListener.volume = value;
+        PlayerPrefs.SetFloat(GameConfig.VolumeKey, value);   // 边拖边存
+    }
+}
+```
+
+- **为什么挂 Canvas 还要拖引用？** GetComponent 只在脚本所在物体上找，不翻父子；Canvas 的子物体、孙物体上的面板和滑块，必须 public 字段拖。
+
+### 步骤3：退出游戏
+
+**QuitButton.cs（挂"退出游戏"按钮）**
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class QuitButton : MonoBehaviour
+{
+    void Start()
+    {
+        GetComponent<Button>().onClick.AddListener(QuitGame);
+    }
+    void QuitGame()
+    {
+        Application.Quit();
+    }
+}
+```
+
+- `Application.Quit()` 打包后才真正退出，**编辑器里点了没反应是正常的**，不是代码错。
+
+---
+
+## 🌞 下午：PlayerPrefs 存档 + 暂停内设置 + 血条事件解耦
+
+### 步骤4：PlayerPrefs——音量/最高分存到本地
+
+**大白话**：PlayerPrefs 是 Unity 自带的"本地小账本"，按"键名（字符串）→ 值"存数据，游戏关掉重开还在。适合存音量、最高分这种小数据。
+
+**① 四组 API**
+
+```csharp
+PlayerPrefs.SetFloat("Volume", 0.5f);          // 存小数
+float v = PlayerPrefs.GetFloat("Volume", 1f);  // 读，第二参数=没存过时的默认值
+PlayerPrefs.SetInt("HighScore", 10);           // 存整数
+int high = PlayerPrefs.GetInt("HighScore", 0);
+// 还有 SetString/GetString；Unity 退出时自动落盘，不用手动保存
+```
+
+**② 坑：键名大小写敏感 + 魔法字符串**
+
+- 现象：设置面板存了音量，进游戏 Debug.Log 打印音量却是 1。
+- 原因：SettingsMenu 里写的键是 `"Volume"`，GameManager 里误写成 `"volume"`，**PlayerPrefs 键名区分大小写**，这是两个不同的账本格子。
+- 解决：把键名集中到 GameConfig 静态类里用 `const` 声明，杜绝手写魔法字符串：
+
+```csharp
+public class GameConfig
+{
+    public const string VolumeKey = "Volume";
+    public const string HighScoreKey = "HighScore";
+    // 原有的 Dictionary 数值配置（moveSpeed/jumpForce/coinValue）保持不变
+}
+```
+
+- 两处都写 `PlayerPrefs.GetFloat(GameConfig.VolumeKey, 1f)`，以后改键名只改一处。
+- 编辑器里清档：**Edit → Clear All PlayerPrefs**。
+
+**③ 最高分保存逻辑（GameManager.cs）**
+
+```csharp
+void SaveHighScoreIfNeeded()
+{
+    int highScore = PlayerPrefs.GetInt(GameConfig.HighScoreKey, 0);  // 读旧纪录
+    if (score > highScore)
+    {
+        PlayerPrefs.SetInt(GameConfig.HighScoreKey, score);          // 存新纪录
+        Debug.Log("新纪录：" + score);
+    }
+}
+// WinGame()、LoseGame() 末尾各调一次（赢或输都结算）
+```
+
+- 注意 int 是**值类型**，`highScore` 只是存档里的"快照"；SetInt 不会回改本地变量，所以日志要打印 `score`（新纪录），打印 highScore 永远是旧值。
+
+### 步骤5：最高分上屏（主菜单读档显示）
+
+**HighScoreText.cs（挂在主菜单"最高分"Text 物体上）**
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HighScoreText : MonoBehaviour
+{
+    void Start()
+    {
+        GetComponent<Text>().text = "最高分：" +
+            PlayerPrefs.GetInt(GameConfig.HighScoreKey, 0);
+    }
+}
+```
+
+- 脚本和 Text 同物体，GetComponent 直接摸，不用拖引用、不用字段。
+- 验证：初次显示 0；玩出 10 分回主菜单显示 10；停止重开依然显示（数据在本地）。
+
+### 步骤6：暂停内设置面板（场景隔离 + Esc 优先级）
+
+**大白话**：暂停面板里再加一个"设置"，想直接复用主菜单的设置面板，但发现**跨场景拿不到别的场景的物体**——这是场景隔离。
+
+**① 场景隔离（重要概念）**
+
+- `LoadScene` 后旧场景物体**全部销毁**，新场景重新 Awake/Start，新场景里没有任何代码能访问旧场景的 UI。
+- 跨场景复用 UI 的标准做法：把 UI 做成**预制体**，两个场景各放一份；共享数据走 PlayerPrefs（音量就是这么共享的）。
+- DontDestroyOnLoad 让 UI 跨场景常驻对这种小面板来说太重，不用。
+- 今天赶进度：暂停里的设置面板**复制一份**（音量逻辑重复一点，以后再抽预制体+通用脚本）。
+
+**② 层级坑：设置面板必须和暂停面板同级**
+
+```
+Canvas
+├── PausePanel（暂停）
+│   ├── PauseText / ContinueButton / RestarButton / BackButton / SettingsButton
+│   └── （❌ SettingsPanel 不能放这下面）
+└── SettingsPanel（✅ 必须是 Canvas 的子物体，和 PausePanel 同级）
+```
+
+- 设置面板如果是 PausePanel 的子物体，隐藏 PausePanel 时设置面板会跟着消失，永远打不开。
+
+**③ 两个"返回"按钮别搞混**
+
+- 暂停面板的"返回主菜单"：挂 BackButton.cs（切场景）。
+- 设置面板的"返回"：只给 PauseMenu 订阅（回到暂停面板），**不挂**任何脚本。
+
+**④ Esc 优先级：设置面板开着时先关设置**
+
+- 原始问题：设置面板开着时按 Esc，代码直接恢复游戏，设置面板残留没关。
+- 用 `gameObject.activeSelf`（读当前是否激活）判优先级：
+
+```csharp
+void Update()
+{
+    if (Input.GetKeyDown(KeyCode.Escape))
+    {
+        if (settingsPanel.activeSelf)
+            OnBackClick();          // ① 设置开着 → 先回暂停面板
+        else if (state == Playing)
+            Pause();                // ② 游戏中 → 暂停
+        else if (state == Paused)
+            ContinueGame();         // ③ 暂停中 → 恢复
+    }
+}
+```
+
+**⑤ 面试点：timeScale=0 时为什么还能拖滑块？**
+
+- UGUI（点击、滑块、按钮）用的是 **unscaled（不受缩放）时间**，timeScale=0 时照常响应。
+- timeScale=0 时：Update 照常、UI 事件照常；物理、FixedUpdate、基于 deltaTime 的动画/协程暂停。
+- 所以如果以后做 UI 动画，暂停时还想动，要用 `Time.unscaledDeltaTime` 而不是 `Time.deltaTime`。
+
+### 步骤7：血条改事件驱动——逻辑层不认识 UI
+
+**大白话**：D18 的血条是 PlayerHealth 拖一个 HpUI 引用、掉血时直接调 HpUI 的刷新方法（逻辑层认识 UI）。现在反转过来：血量脚本只管"广播我变了"，UI 自己来订阅，谁想显示血量就订阅，逻辑层一行不用改。金币早就是这个模式。
+
+**① PlayerHealth 发事件（删掉 public HpUI 字段）**
+
+```csharp
+public event Action<int> OnHpChanged;   // using System;
+// 事件名 OnXxxChanged，Action<int> 表示广播时带一个 int（新血量）
+
+// 受伤后、Start 开局时各广播一次
+OnHpChanged?.Invoke(hp);   // ?.：有订阅者才调用，没有也不报错
+```
+
+**② HpUI 订阅（引用方向反转：UI 拖玩家引用）**
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+using System;
+
+public class HpUI : MonoBehaviour
+{
+    public Slider hpSlider;
+    public PlayerHealth playerHealth;   // Inspector 把玩家 Cube 拖进来
+    private Text playerHpText;
+
+    void Start()
+    {
+        playerHpText = GetComponent<Text>();
+        playerHealth.OnHpChanged += RefreshHp;   // 订阅：血量变就刷
+        RefreshHp(playerHealth.Hp);               // 开局主动刷一次，防 Start 顺序坑
+    }
+
+    void RefreshHp(int hp)
+    {
+        playerHpText.text = "血量：" + hp;
+        hpSlider.value = hp;
+    }
+}
+```
+
+- 订阅后**必须主动刷一次初始值**：万一 UI 的 Start 比 PlayerHealth 第一次广播还晚，就会漏掉开局血量。
+- 解耦好处：以后加"低血警告红屏""队友血条"，只要新脚本再订阅一次 OnHpChanged，PlayerHealth 完全不用动。
+
+---
+
+## 🌙 晚上：工程整理 + LeetCode 21 链表
+
+### 步骤8：Assets 文件夹整理（GUID 与 .meta）
+
+**大白话**：Assets 根目录 30 多个脚本平铺太乱，按职责分文件夹；但 Unity 资源不能在资源管理器里乱挪，会丢引用。
+
+- 最终结构：`Assets/Scripts/{UI,Player,Enemy,Items,Game}` + `Materials`，Scenes/Prefabs/Animations 保持原样。
+- **铁律：只在 Unity 的 Project 窗口内移动**。每个资源有同名 `.meta` 文件，里面存 GUID（全局唯一编号），场景靠 GUID 记引用；Unity 内移动会带着 .meta 一起走，引用不断。在资源管理器/VS Code 里移动会断。
+- **Ctrl+拖 = 复制**：会生成一个新 GUID 的副本，场景仍引用原件，导致两个材质球并存。普通拖拽才是移动。
+- 查某个资源被谁引用：Project 窗口选中 → 右键 **Find References In Scene**。
+- 图标辨认：`#` = 脚本、圆球 = 材质、蓝色立方体 = 预制体；材质丢失变洋红色。
+
+### 步骤9：LeetCode 21 合并两个有序链表（链表入门）
+
+**大白话**：链表是一串节点，每个节点只拿两样东西——一个数据 `val` + 一根指向下一个节点的线 `next`，走到 null 表示没了。像寻宝线索：每个点写着数字和下一个点的位置。
+
+- 对比 List：List 像带编号的储物柜（找第 N 个直接开 N 号柜）；链表像铁链（找第 N 个必须从头顺着走 N 步）。
+
+**① 节点定义（LeetCode 现成给，控制台练习要自己写）**
+
+```csharp
+public class ListNode
+{
+    public int val;
+    public ListNode next;
+    public ListNode(int val = 0, ListNode next = null)  // 可选参数：不传用默认值
+    {
+        this.val = val;
+        this.next = next;
+    }
+}
+```
+
+- `new ListNode()` 不报错，是因为参数有默认值（`= 0`、`= null`），等价于 `new ListNode(0, null)`。
+
+**② 合并思路：两摞牌 + 哑节点 dummy**
+
+- 两摞已排好序的牌，每轮比两摞最上面的牌，拿小的放到结果链；一摞空了，另一摞剩下的整段接上。
+- **dummy 假头**：结果链一开始没有头，尾部接线不方便，先放一个不参与结果的假头占座，current 当接线员在尾部接线，最后返回 dummy.next 跳过假头。
+- `ListNode current = dummy;` 是引用类型赋值：current 和 dummy 指向**同一个假头**（两个门牌号指向同一个房间），不是复制对象。dummy 留守当头、current 移动接线。
+
+**③ 代码（一次跑通 1 1 2 3 4 4）**
+
+```csharp
+static ListNode MergeTwoLists(ListNode a, ListNode b)
+{
+    ListNode dummy = new ListNode();
+    ListNode current = dummy;
+
+    while (a != null && b != null)
+    {
+        if (a.val <= b.val)
+        {
+            current.next = a;   // 小的接到结果链尾部
+            a = a.next;         // 被接走的那摞指针后移
+        }
+        else
+        {
+            current.next = b;
+            b = b.next;
+        }
+        current = current.next; // 接线员后移（两分支公共步骤）
+    }
+
+    current.next = a ?? b;       // 一摞空了，另一摞整段接上；?? 左边为null就用右边
+    return dummy.next;           // 跳过假头
+}
+```
+
+- 面试词：**双指针**（a、b 各扫一条链）、**哑节点 dummy**、时间复杂度 **O(n)**。
+- 重构：两个分支里重复的 `current = current.next` 提出来；末尾 if/else 用 `a ?? b`（空合并运算符）一行。
+- 提交网站：leetcode.cn 搜 21，语言选 C#，**只填方法体**（ListNode 类、Main 都由网站给），方法签名按官网 `public ListNode MergeTwoLists(ListNode list1, ListNode list2)`（去掉 static）。
+
+---
+
+## ⚠️ D19 易错点汇总
+
+1. **PlayerPrefs 键名大小写敏感**："Volume" ≠ "volume"，读不到值先查两边键名是否逐字一致；用 const 集中。
+2. **AudioListener.volume 是 static，Inspector 不显示**：找不到滑条不是没找对，是它根本不在那；用 Debug.Log 验证。
+3. **跨场景会重新生成 AudioListener**：音量设置可能被覆盖，GameManager.Awake 要读档保底；Instance=this 放 Awake 第一行。
+4. **暂停面板的子设置面板会一起被隐藏**：设置面板必须和暂停面板同级（都在 Canvas 下）。
+5. **Esc 要判面板优先级**：设置面板开着时先关设置，否则面板残留；用 activeSelf 读激活态。
+6. **事件订阅要刷初始值**：Start 里订阅后主动调一次刷新，防 Start 顺序导致开局数据为空。
+7. **UI 资源只在 Project 窗口移动**（.meta 保 GUID）；Ctrl+拖是复制，不是移动。
+8. **复制 UI 会连带脚本/绑定**：两个"返回"按钮职责不同，设置面板的返回不能挂 BackButton。
+9. **Application.Quit 编辑器无效**：打包才生效，别误判成代码错误。
+10. **结算必须防重入**：数据层（IsDead）和状态层（state!=Playing）各挡一道。

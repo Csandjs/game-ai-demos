@@ -7,6 +7,8 @@ static class GameConfig
     {
         {"moveSpeed" , 8f} , {"jumpForce" , 5f} , {"coinValue" , 1f}
     };
+    public const string VolumeKey = "Volume";
+    public const string HighScoreKey = "HighScore";
     public static float Get(string key)
     {
         if (config.TryGetValue(key, out float value))

@@ -20,6 +20,7 @@
 | 2026-09-21 | D16 | ✅ 完成（9/22补收尾） | GetComponent漏写物体前缀导致只生成1个；边遍历边删集合；List该装物体还是组件 | Dictionary字典 + Animator动画入门 |
 | 2026-09-23 | D17 | ✅ 完成 | Animator与旧Animation组件混淆、时间轴秒:帧、float配置传int需强转 | D18（按新计划图） |
 | 2026-10-12 | D18 | ✅ 完成（10/10开工，10/12收尾） | 序列化坑：改代码默认值对已挂组件不生效；复制按钮连脚本一起复制，点继续变重开；timeScale粘性，切场景不重置 | D19（按新计划图） |
+| 2026-10-13 | D19 | ✅ 完成 | PlayerPrefs 键名大小写不一致（"Volume"≠"volume"）；AudioListener.volume 是 static 不在 Inspector 显示；设置面板开着按 Esc 残留，用 activeSelf 判优先级 | D20（按计划图） |
 
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
@@ -197,3 +198,15 @@
 - 📌 序列化坑：public 字段默认值只在首次挂载写入一次，之后改代码不影响已挂组件，以 Inspector 为准，Awake 里强制赋值
 - 📌 复制 UI 会连脚本和 OnClick 绑定一起复制（点继续却重开=按钮还挂着 RestarButton）；timeScale 粘性、切场景不重置，LoadScene 前先拨 1 + Awake 保底
 - 📝 D18 闭卷大考《战场结算模拟器》140 通过；
+
+# D19 完成（10/13 周二）状态机完善 + 主菜单 + 存档 + 事件解耦
+
+- Lose 状态：enum 加 `Lose`，血量归零弹失败面板（复用 Win 套路）；`if(IsDead)return` + `if(state!=Playing)return` 双重防重入
+- 主菜单完整化：开始/设置/退出三按钮；设置面板 `Slider`(0~1) 绑 `AudioListener.volume`，`onValueChanged` 是 `UnityEvent<float>`；`Application.Quit()` 编辑器无效正常
+- 暂停内设置：timeScale=0 时 UGUI 点击/拖滑块照常（unscaled 时间，面试点）；Esc 按优先级用 `activeSelf` 先关设置面板再恢复
+- PlayerPrefs：`SetFloat/GetFloat`、`SetInt/GetInt` 键值对本地持久化；音量+最高分存盘，Win/Lose 结算时比较刷新最高分，主菜单 HighScoreText 上屏
+- 📌 键名大小写敏感：`"Volume"≠"volume"`，魔法字符串集中到 GameConfig 的 `const`
+- 📌 `AudioListener.volume` 是 static 全局属性，Inspector 看不到；跨场景新 AudioListener 会覆盖，GameManager Awake 读档保底
+- 加深：血条改事件驱动 `event Action<int> OnHpChanged`，PlayerHealth 只广播不认识 UI，HpUI 订阅+开局刷初始值（金币同款模式）
+- 工程：Assets 整理为 `Scripts/{UI,Player,Enemy,Items,Game}` + Materials；移动只在 Project 窗口（.meta 存 GUID），Ctrl+拖是复制
+- LeetCode 21 合并两个有序链表：双指针 + 哑节点 dummy，一次跑通 `1 1 2 3 4 4`

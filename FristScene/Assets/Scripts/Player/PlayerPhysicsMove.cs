@@ -39,7 +39,7 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
     //持续的物理移动放在FixedUpdate
     void FixedUpdate()
     {
-        if (GameManager.Instance.state == GameState.Win)
+        if (GameManager.Instance.state == GameState.Win || GameManager.Instance.state == GameState.Lose)
         {
             animator.SetBool("isMoving" , false);
             animator.SetBool("isJumping" , false);
@@ -53,7 +53,7 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
     //瞬间的跳跃检测放在Update
     void Update()
     {
-        if (GameManager.Instance.state == GameState.Win)
+        if (GameManager.Instance.state == GameState.Win || GameManager.Instance.state == GameState.Lose)
         {
             return;
         }
