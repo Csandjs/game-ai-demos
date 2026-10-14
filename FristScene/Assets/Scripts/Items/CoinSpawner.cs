@@ -14,7 +14,9 @@ public class CoinSpawner : MonoBehaviour
     {
         for(int i = 0 ;i < 10; i++)
         {
-            GameObject coin = Instantiate(coinPrefab,new Vector3(1.5f, 1f, i * 1f),Quaternion.identity);
+            float x = Random.Range(-10f, 10f);
+            float z = Random.Range(2, 25);
+            GameObject coin = Instantiate(coinPrefab,new Vector3(x, 1f, z),Quaternion.identity);
             Coin coinScript = coin.GetComponent<Coin>();
             coinScript.spawner = this;
             coins.Add(coin);

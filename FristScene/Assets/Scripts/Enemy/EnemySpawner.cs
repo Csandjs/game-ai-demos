@@ -14,22 +14,28 @@ public class EnemySpawner : MonoBehaviour
             GameManager.Instance.WinGame();
         }
     }
+    private Transform player;
+    public float playerAttackRange = 100f;
     void Start()
     {
-        for (int i = 0; i < 5; i++)
+        player = GameObject.FindWithTag("Player").transform;
+        for (int i = 1; i < 6; i++)
         {
-            GameObject enemy = Instantiate(enemyPrefab, new Vector3(1f, 1f, i * 1f),Quaternion.identity);
+            float x = Random.Range(-10f, 10f);
+            float z = Random.Range(2f, 30f);
+            GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 1f, z), Quaternion.identity);
             Enemy e = enemy.GetComponent<Enemy>();
             e.spawner = this;
             enemies.Add(e);
         }
     }
-    // Update is called once per frame
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            List<Enemy> targets = enemies.FindAll(e => e.hp >0);
+            List<Enemy> targets = enemies.FindAll(e => e.hp > 0 && 
+            Vector3.Distance(e.transform.position, player.position) <= playerAttackRange);
             foreach(Enemy e in targets)
             {
                 e.Die();

@@ -24,6 +24,7 @@ public class PlayerHealth : MonoBehaviour , IDamageable
         {
             GameManager.Instance.LoseGame();
         }
+        AudioManager.Instance?.PlayHurt();
     }
     private void OnCollisionEnter (Collision other)
     {

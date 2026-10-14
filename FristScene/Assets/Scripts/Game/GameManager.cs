@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
         state = GameState.Win;
         winText.SetActive(true);
         SaveHighScoreIfNeeded();
+        AudioManager.Instance?.PlayWin();
     }
     public void LoseGame()
     {
@@ -58,5 +59,6 @@ public class GameManager : MonoBehaviour
         state = GameState.Lose;
         loseText.SetActive(true);
         SaveHighScoreIfNeeded();
+        AudioManager.Instance?.PlayLose();
     }
 }

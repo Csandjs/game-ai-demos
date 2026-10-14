@@ -21,7 +21,7 @@
 | 2026-09-23 | D17 | ✅ 完成 | Animator与旧Animation组件混淆、时间轴秒:帧、float配置传int需强转 | D18（按新计划图） |
 | 2026-10-12 | D18 | ✅ 完成（10/10开工，10/12收尾） | 序列化坑：改代码默认值对已挂组件不生效；复制按钮连脚本一起复制，点继续变重开；timeScale粘性，切场景不重置 | D19（按新计划图） |
 | 2026-10-13 | D19 | ✅ 完成 | PlayerPrefs 键名大小写不一致（"Volume"≠"volume"）；AudioListener.volume 是 static 不在 Inspector 显示；设置面板开着按 Esc 残留，用 activeSelf 判优先级 | D20（按计划图） |
-
+| 2026-10-14 | D20 | ✅ 完成 | 音效空引用曾中断核心玩法（已用 `?.` 修复）；互砍被先咬（调整攻击距离解决）；序列化坑 | 按 W4 计划图开始 |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -210,3 +210,16 @@
 - 加深：血条改事件驱动 `event Action<int> OnHpChanged`，PlayerHealth 只广播不认识 UI，HpUI 订阅+开局刷初始值（金币同款模式）
 - 工程：Assets 整理为 `Scripts/{UI,Player,Enemy,Items,Game}` + Materials；移动只在 Project 窗口（.meta 存 GUID），Ctrl+拖是复制
 - LeetCode 21 合并两个有序链表：双指针 + 哑节点 dummy，一次跑通 `1 1 2 3 4 4`
+
+# D20 完成（10/14 周三）
+
+- 敌人 AI 有限状态机：`enum EnemyState` + 距离判断三态互斥切换 + `switch` 分发到 Patrol/Chase/Attack
+- Patrol 用 `Vector3.MoveTowards` 在两个巡逻点间往返，Chase 换目标为玩家，Attack 贴脸站住
+- 冷却计时器套路：`attackTimer -= Time.deltaTime`，到 0 调 `TakeDamage` 并重置
+- 玩家 K 键攻击：`FindAll` 的 lambda 里对每个敌人实时算 `Vector3.Distance`，删除敌人碰撞自杀逻辑
+- 音频三件套：`AudioClip` 素材 / `AudioSource` 喇叭 / `AudioListener` 耳朵，`PlayOneShot` 播放一次性音效
+- 单例 AudioManager（`DontDestroyOnLoad` + 判重），语义化方法 `PlayCoin/PlayJump/PlayHit/PlayHurt/PlayWin/PlayLose`
+- 随机生成：`Random.Range` 在安全边界内随机敌人/金币位置
+- 判空保护：`AudioManager.Instance?.PlayXxx()`，附属功能不阻断核心玩法
+- 修复 Bug：音效空引用中断核心逻辑、public 默认值序列化坑（改代码不影响已挂组件）
+- 完成 W3 整合：完整流程闭环（主菜单→关卡→胜负结算→重开/回菜单），手机录屏 + README

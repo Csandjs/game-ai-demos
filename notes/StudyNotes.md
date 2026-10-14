@@ -3647,3 +3647,235 @@ static ListNode MergeTwoLists(ListNode a, ListNode b)
 8. **复制 UI 会连带脚本/绑定**：两个"返回"按钮职责不同，设置面板的返回不能挂 BackButton。
 9. **Application.Quit 编辑器无效**：打包才生效，别误判成代码错误。
 10. **结算必须防重入**：数据层（IsDead）和状态层（state!=Playing）各挡一道。
+
+# 📅 D20：敌人 AI 状态机（FSM）+ 音效系统 + 整合收尾
+
+今天把 W3 所学串成一个完整小游戏，核心新内容：敌人 AI 三态、玩家攻击、音效系统。
+
+---
+
+## 🌞 上午：敌人 AI 有限状态机
+
+### 步骤 1：什么是状态机（FSM）
+
+**大白话**：一个对象同一时刻只能处于一种"状态"，每种状态下做不同的事，满足条件就切到别的状态。就像保安：平时巡逻、看见人就追、贴脸就打。
+
+**状态机三要素**：
+
+1. 用 `enum` 列出所有状态；
+2. 一个字段记住"当前是哪个状态"；
+3. 每帧根据条件改状态，再用 `switch` 调用对应行为。
+
+```csharp
+private enum EnemyState { Patrol, Chase, Attack }  // 列出三种状态
+private EnemyState state = Patrol;                  // 记住当前状态，开局巡逻
+private Transform player;
+public float detectRange = 5f;    // 侦测范围
+public float attackRange = 1.5f;  // 攻击范围
+
+void Update()
+{
+    // ① 先算敌人和玩家的距离
+    float distance = Vector3.Distance(transform.position, player.position);
+
+    // ② 三选一互斥切状态（注意顺序：先判贴脸，再判侦测）
+    if (distance <= attackRange) state = EnemyState.Attack;        // 贴脸 → 攻击
+    else if (distance <= detectRange) state = EnemyState.Chase;    // 侦测内 → 追击
+    else state = EnemyState.Patrol;                                // 否则 → 巡逻
+
+    // ③ switch 按当前状态派活
+    switch (state)
+    {
+        case EnemyState.Patrol: PatrolBehavior(); break;
+        case EnemyState.Chase:  ChaseBehavior();  break;
+        case EnemyState.Attack: AttackBehavior(); break;
+    }
+}
+```
+
+**分工记忆**：
+
+- `if` 三行 = **换岗决策**（根据距离决定该是什么状态）；
+- `switch` = **按岗派活**（调用对应行为）；
+- Behavior = **只管在这个状态下做什么，不管什么时候离开**。
+
+### 步骤 2：Patrol 巡逻
+
+**大白话**：在出生点左右两个点之间来回走，走到一个点就换目标。
+
+```csharp
+public float patrolSpeed = 1.5f;
+public float patrolDistance = 3f;
+private Vector3 startPosition;   // 出生点
+private Vector3 patrolPointA;    // 左点
+private Vector3 patrolPointB;    // 右点
+private Vector3 patrolTarget;    // 当前目标点
+
+void Start()
+{
+    player = GameObject.FindWithTag("Player").transform;
+    startPosition = transform.position;
+    patrolPointA = startPosition + new Vector3(-patrolDistance, 0, 0);  // 出生点左边3米
+    patrolPointB = startPosition + new Vector3(patrolDistance, 0, 0);   // 出生点右边3米
+    patrolTarget = patrolPointB;
+}
+
+void PatrolBehavior()
+{
+    // 朝目标点移动（起点必须是当前位置 transform.position）
+    transform.position = Vector3.MoveTowards(transform.position, patrolTarget, patrolSpeed * Time.deltaTime);
+    transform.LookAt(patrolTarget);  // 面向目标
+
+    // 走到目标点（距离小于0.2）就交换目标
+    if (Vector3.Distance(transform.position, patrolTarget) < 0.2f)
+    {
+        if (patrolTarget == patrolPointB) patrolTarget = patrolPointA;
+        else patrolTarget = patrolPointB;
+    }
+}
+```
+
+### 步骤 3：Chase 追击
+
+**大白话**：照巡逻换皮，目标点从固定巡逻点换成玩家，速度更快。
+
+```csharp
+public float chaseSpeed = 3f;
+
+void ChaseBehavior()
+{
+    transform.position = Vector3.MoveTowards(transform.position, player.position, chaseSpeed * Time.deltaTime);
+    transform.LookAt(player);
+    // 不用写到达判定：贴脸/跑远由 Update 的距离判断自动切状态
+}
+```
+
+### 步骤 4：Attack 攻击 + 冷却计时器
+
+**大白话**：贴脸站住，不能每帧都打（一秒60拳），要"打一下、等冷却、再打"。
+
+**冷却计时器套路**：一个倒计时数字，每帧减 `Time.deltaTime`，减到 0 就出手并重置。
+
+```csharp
+public int attackATK = 10;          // 一次咬10血
+public float attackInterval = 1f;   // 攻击间隔1秒
+private float attackTimer = 0f;     // 倒计时，0表示开局立刻咬
+private PlayerHealth playerHealth;
+
+// Start 里：playerHealth = player.GetComponent<PlayerHealth>();
+
+void AttackBehavior()
+{
+    transform.LookAt(player);       // 站住面向玩家，不移动
+    attackTimer -= Time.deltaTime;  // 倒计时每帧减少
+    if (attackTimer <= 0)
+    {
+        playerHealth.TakeDamage(attackATK);  // 咬一口
+        attackTimer = attackInterval;        // 重置
+    }
+}
+```
+
+---
+
+## 🌤 下午：玩家攻击 + 音效系统
+
+### 步骤 5：K 键攻击身边敌人
+
+**大白话**：按 K 时，找出"还活着且在攻击范围内"的敌人，让它们死。距离必须**对每个敌人现算**，写进 `FindAll` 的 lambda 里。
+
+```csharp
+public float playerAttackRange = 2.5f;
+private Transform player;
+
+void Update()
+{
+    if (Input.GetKeyDown(KeyCode.K))
+    {
+        // FindAll 里对每个敌人 e 实时算距离
+        List<Enemy> targets = enemies.FindAll(e => e.hp > 0
+            && Vector3.Distance(e.transform.position, player.position) <= playerAttackRange);
+        foreach (Enemy e in targets)
+        {
+            e.Die();
+        }
+    }
+}
+```
+
+同时删掉敌人原来"碰到玩家就自杀"的 OnTriggerEnter，改成只能由 K 键击杀。
+
+### 步骤 6：音频三件套
+
+**大白话**：
+
+| 组件 | 大白话 |
+|------|--------|
+| AudioClip | 音频文件（素材） |
+| AudioSource | 喇叭（播放器） |
+| AudioListener | 耳朵（摄像机上，一个场景一个） |
+
+播放用 `PlayOneShot(clip)`：播放一次，多个音效不互相打断。
+
+用单例 AudioManager 统一管理（DontDestroyOnLoad 切场景不停）：
+
+```csharp
+public class AudioManager : MonoBehaviour
+{
+    public static AudioManager Instance;
+    private AudioSource audioSource;
+    public AudioClip coinClip;
+    public AudioClip jumpClip;
+    // ... hitClip hurtClip winClip loseClip
+
+    void Awake()
+    {
+        if (Instance != null) { Destroy(gameObject); return; }  // 判重
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    public void PlaySfx(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
+    }
+
+    // 语义化方法，外部只调方法不碰 clip
+    public void PlayCoin() => PlaySfx(coinClip);
+    public void PlayJump() => PlaySfx(jumpClip);
+    // ... PlayHit PlayHurt PlayWin PlayLose
+}
+```
+
+### 步骤 7：随机生成
+
+**大白话**：用 `Random.Range(min, max)` 让敌人/金币每次随机位置，别排成一条线。
+
+```csharp
+float x = Random.Range(-10f, 10f);  // 安全边界内随机
+float z = Random.Range(2f, 30f);
+GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 1f, z), Quaternion.identity);
+```
+
+地面是 Plane（基础10×10，scale 5,1,35 后实际 50×350），在安全范围内随机不会出界。
+
+---
+
+## 🌙 对比表
+
+| 对比 | 说明 |
+|------|------|
+| 状态机 vs 一堆 if | 状态互斥、行为分离，加状态只改 enum + 一个 case，不乱 |
+| 状态切换 vs 行为执行 | 切换在 if（决策），执行在 switch（派活） |
+| Play() vs PlayOneShot() | Play 会打断当前音效，PlayOneShot 适合一次性音效 |
+| 音效调用 | 用 `?.` 判空：`AudioManager.Instance?.PlayCoin()` |
+
+## ⚠️ 易错点
+
+1. **MoveTowards 起点用 `transform.position`**，不是固定的 startPosition（否则每帧从出生点重新走，永远到不了）；
+2. **状态切换在 if 不在 switch**，顺序先判贴脸再判侦测；
+3. **单例调用要判空** `?.`：AudioManager 不在时音效跳过，但核心玩法不能中断；
+4. **序列化坑**：改代码里 public 默认值不影响已挂组件，调数值去 Inspector；
+5. **距离要按每个敌人现算**，不能用预制体 enemyPrefab 全局只算一次；
+6. 冷却计时器初始 0 = 立刻出手，想要前摇就给初始值。

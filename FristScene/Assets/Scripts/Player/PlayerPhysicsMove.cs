@@ -65,6 +65,7 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             {
                 rb.AddForce(Vector3.up * jumpForce ,ForceMode.Impulse);
+                AudioManager.Instance?.PlayJump();
             }
             animator.SetBool("isJumping", !isGrounded);
         }
