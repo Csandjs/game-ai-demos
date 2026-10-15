@@ -22,6 +22,7 @@
 | 2026-10-12 | D18 | ✅ 完成（10/10开工，10/12收尾） | 序列化坑：改代码默认值对已挂组件不生效；复制按钮连脚本一起复制，点继续变重开；timeScale粘性，切场景不重置 | D19（按新计划图） |
 | 2026-10-13 | D19 | ✅ 完成 | PlayerPrefs 键名大小写不一致（"Volume"≠"volume"）；AudioListener.volume 是 static 不在 Inspector 显示；设置面板开着按 Esc 残留，用 activeSelf 判优先级 | D20（按计划图） |
 | 2026-10-14 | D20 | ✅ 完成 | 音效空引用曾中断核心玩法（已用 `?.` 修复）；互砍被先咬（调整攻击距离解决）；序列化坑 | 按 W4 计划图开始 |
+| 2026-10-14 | D21 | ✅ 完成 | 命令系统把注册语句误写在类体（已修正为构造函数） | W4 Unity 脚本进阶 |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -223,3 +224,9 @@
 - 判空保护：`AudioManager.Instance?.PlayXxx()`，附属功能不阻断核心玩法
 - 修复 Bug：音效空引用中断核心逻辑、public 默认值序列化坑（改代码不影响已挂组件）
 - 完成 W3 整合：完整流程闭环（主菜单→关卡→胜负结算→重开/回菜单），手机录屏 + README
+
+# D21 完成（10/14 周三）
+- W3 知识速查表：委托事件 / 集合 List vs Dictionary / Animator / UI，每块写"什么时候用"
+- 闭卷自测 3 题：事件系统（`event Action<int>` + 双订阅）、`Dictionary<string,Action>` 命令系统（TryGetValue）、`List<Enemy>` FindAll 存活 + Sort 升序
+- 巩固：类体里不能写执行语句（注册放构造函数）、`Sort((a,b)=>a.hp-b.hp)` 升序规则
+- 写 W3 周总结 week3.md
