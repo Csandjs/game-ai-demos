@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
         {
             List<Enemy> targets = enemies.FindAll(e => e.hp > 0 && 
             Vector3.Distance(e.transform.position, player.position) <= playerAttackRange);

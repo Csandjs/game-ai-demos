@@ -4190,3 +4190,297 @@ public class BossDirector : MonoBehaviour
 - 新：`SkillCooldown.cs`（L 键技能 CD 倒计时）、`BossDirector.cs`（倒计时 Boss 登场）
 - 练习：`LifecycleTest.cs`、`CoroutineTest.cs`
 - 场景 MiniLevel：CdText、BossText、Boss、BossDirector
+
+# 📅 D23: Input 输入系统 + 场景管理
+
+今天是 W4 地基期关键一天，核心新内容：旧版 Input 五个 API 对照与鼠标操作、新版 Input System 事件驱动体验、DontDestroyOnLoad 让 GameManager 跨场景保数据、LoadSceneAsync 异步加载 + 进度条。
+
+---
+
+## 🌞 上午：旧版 Input 输入系统
+
+### 步骤 1：三类输入时机
+
+**大白话**：输入系统就是"代码怎么知道玩家在敲什么、点什么"。三种时机：
+
+| API | 触发时机 | 例子 |
+|---|---|---|
+| `Input.GetKey(KeyCode.W)` | 按住期间**每帧都 true** | 持续移动 |
+| `Input.GetKeyDown(KeyCode.Space)` | 按下那一帧**只 true 一次** | 跳跃、普攻 |
+| `Input.GetKeyUp(KeyCode.X)` | 松开那一帧 true 一次 | 松开回城 |
+| `Input.GetMouseButtonDown(0)` | 鼠标左键点一下（0左/1右/2中） | 鼠标攻击 |
+| `Input.GetAxis("Horizontal")` | 轴值 -1~1，自带平滑 | 摇杆半推半速 |
+
+### 步骤 2：GetAxis 平滑输入重构移动
+
+**大白话**：GetAxis 是一个 -1~1 的模拟量，键盘按一下从 0 平滑加到 1、松开平滑归零，天然带"起步/减速"。
+
+把 PlayerPhysicsMove 里四个 GetKey 的 if 换成两行：
+
+```csharp
+public void Move()
+{
+    float moveZ = Input.GetAxis("Vertical");   // W/S 前后
+    float moveX = Input.GetAxis("Horizontal"); // A/D 左右
+    //目标速度
+    Vector3 targetVelocity = new Vector3(moveX * moveSpeed , rb.velocity.y, moveZ * moveSpeed);
+    //这一帧速度最多能变多少；
+    float maxChange = moveAcceleration * Time.fixedDeltaTime;
+    Vector3 v = rb.velocity;
+    //Mathf.MoveTowards(当前值v.x , 目标值 , 每步最大变化量)
+    v.x = Mathf.MoveTowards(v.x ,targetVelocity.x,maxChange);
+    v.z = Mathf.MoveTowards(v.z ,targetVelocity.z,maxChange);
+    rb.velocity = v;
+    animator.SetBool("isMoving",moveX != 0 || moveZ != 0);
+}
+```
+
+轴名在 **编辑 → 项目设置 → 输入管理器（Input Manager）** 里绑定。
+
+攻击改成 K 键或鼠标左键都触发：
+
+```csharp
+if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
+{
+    List<Enemy> targets = enemies.FindAll(e => e.hp > 0 &&
+        Vector3.Distance(e.transform.position, player.position) <= playerAttackRange);
+    foreach(Enemy e in targets)
+    {
+        e.Die();
+    }
+}
+```
+
+⚠️ 坑：`GetMouseButtonDown` 是外部类 Input 的静态方法，必须写 `Input.` 前缀；不带前缀 = 调用自己类/父类的方法（如 StartCoroutine 才不用前缀）。
+
+---
+
+## 🌤 下午：场景管理 + DontDestroyOnLoad
+
+### 步骤 3：切场景的本质与两个加载 API
+
+**大白话**：`LoadScene` 一切场景，旧场景物体**全部销毁**，新场景物体**从零创建**（照着场景文件这张"图纸"重新摆一遍）。
+
+- `SceneManager.LoadScene("MiniLevel")`：按**名字**同步加载，加载期间画面卡死
+- `SceneManager.LoadScene(0)`：按 **Build Settings 里的索引**加载
+- `SceneManager.LoadSceneAsync("MiniLevel")`：异步加载（晚上用）
+
+### 步骤 4：DontDestroyOnLoad + 持久单例三件套
+
+**大白话**：`DontDestroyOnLoad(gameObject)` 是一块"免死金牌"，物体被移进隐藏的 DontDestroyOnLoad 区域，切场景不销毁。
+
+**必须判重**：总管不死后，每个场景如果都放了一个，重复进出就会出现两个总管，各自计分、重复监听。Awake 三件套（AudioManager 范本）：
+
+```csharp
+void Awake()
+{
+    if (Instance != null)
+    {
+        Destroy(gameObject);  // ① 已有总管，自己立刻销毁
+        return;
+    }
+    Instance = this;            // ② 登记
+    DontDestroyOnLoad(gameObject); // ③ 免死
+    state = GameState.Playing;
+    AudioListener.volume = PlayerPrefs.GetFloat(GameConfig.VolumeKey, 1f);
+    Time.timeScale = 1;
+    OnCoinCollected += AddScore;
+}
+```
+
+**两类东西的分界**：
+
+| 类别 | 例子 | 切场景时 |
+|---|---|---|
+| 全局数据（总管） | GameManager、AudioManager、分数、音量 | 免死保留 |
+| 场景物件 | 金币、敌人、面板、玩家位置 | 销毁后照图纸重建 |
+
+### 步骤 5：场景引用"报到"模式（重点难点）
+
+**大白话**：总管搬到主菜单后，WinPanel/LosePanel 还在关卡场景里，编辑器**跨场景拖不了**，而且每关面板都是新建的，总管不认识。
+
+谁能当介绍人？
+
+- 总管自己：不行，跨场景搜不到，隐藏面板 GameObject.Find 也找不到
+- 面板自己：不行，隐藏物体的 Start 不运行（睡着没法自我介绍）
+- **Canvas**：行，它是面板的父节点，加载后激活，且能在编辑器里拖面板
+
+**① 总管身上的"接待处" RegisterLevel**：
+
+```csharp
+public GameObject winText;
+public GameObject loseText;
+
+public void RegisterLevel(GameObject win, GameObject lose)
+{
+    winText = win;
+    loseText = lose;
+    winText.SetActive(false);
+    loseText.SetActive(false);
+    state = GameState.Playing; // 防止上一局 Win 状态带到下一局
+}
+```
+
+**② 场景里的"联络员" LevelSceneSetup（挂 Canvas）**：
+
+```csharp
+using UnityEngine;
+
+public class LevelSceneSetup : MonoBehaviour
+{
+    public GameObject winText;
+    public GameObject loseText;
+    void Start()
+    {
+        GameManager.Instance.RegisterLevel(winText, loseText);
+    }
+}
+```
+
+**③ 分数牌出生时主动问一次当前分数**（否则要等吃到第一个金币才刷新）：
+
+```csharp
+void Start()
+{
+    scoreText = GetComponent<Text>();
+    scoreText.text = "分数：" + GameManager.Instance.score;
+    GameManager.Instance.OnCoinCollected += RefreshScore;
+}
+```
+
+**编辑器操作**：GameManager 物体放到 MenuScene（字段留空）→ MiniLevel 删旧 GameManager → Canvas 挂 LevelSceneSetup 并拖 WinPanel/LosePanel；PauseMenu 也是场景物件，用"复制组件 → 粘贴为新组件"搬到 Canvas 再删旧物体。
+
+验证：DontDestroyOnLoad 区域始终只有一个 GameManager；捡 2 金币回主菜单再进，分数从 2 开始；金币/敌人每关刷新是正常的（本局数据与场景物件分离）。
+
+---
+
+## 🌙 晚上：异步加载 + 进度条
+
+### 步骤 6：LoadSceneAsync 与 AsyncOperation
+
+**大白话**：同步加载像"快递员堵在门口等货"，大场景卡死；异步加载是"后台慢慢搬，前台给你看进度"。
+
+- `SceneManager.LoadSceneAsync(场景名)` 返回 `AsyncOperation`（加载任务单）
+- `op.progress`：进度 0~1，**走到 0.9 就停**（资源就绪，等放行）
+- `op.allowSceneActivation`：默认 true；设 false 时"准备好也不切"，等你铺满进度条再放行
+- 协程里 `yield return null` 每帧查一次进度
+
+StartMenu 改造：
+
+```csharp
+public GameObject loadingPanel;
+public Slider loadingSlider;
+
+void OnStartClick()
+{
+    Debug.Log("游戏开始");
+    loadingPanel.SetActive(true);
+    StartCoroutine(LoadingCoroutine("MiniLevel"));
+}
+
+IEnumerator LoadingCoroutine(string sceneName)
+{
+    AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+    op.allowSceneActivation = false;
+    while (op.progress < 0.9f)
+    {
+        yield return null;
+        loadingSlider.value = op.progress / 0.9f; // 0~0.9 映射成 0~1
+    }
+    loadingSlider.value = 1f;
+    yield return new WaitForSeconds(1f);
+    op.allowSceneActivation = true;
+}
+```
+
+### 步骤 7：0.9f 浮点精度坑（卡死真凶）
+
+**大白话**：0.9（double，64位）和 0.9f（float，32位）不是同一个数。
+
+- `0.9f` 实际存成 0.8999999761…
+- `0.9`（double）实际是 0.90000000000000002…
+- progress 是 float，卡在 0.9f 时和 double 0.9 比：`0.89999997 < 0.90000000000000002` 永远为 true → while 死循环，放行代码永远不执行
+
+**规则：和 Unity 的 float 属性比较，字面量一律带 `f`。**
+
+---
+
+## 🔬 加深版：Input System 新版
+
+**大白话**：旧版是每帧主动问（轮询），新版是动作被触发时系统主动回调（事件推送）。
+
+- **InputAction（输入动作）**：抽象的"动作"（Move/Jump），不关心设备
+- **Binding（绑定）**：动作到具体按键的连线；多键拼一个值用 `AddCompositeBinding`（2DVector），一个路径搞定用 `AddBinding`（如手柄左摇杆）
+- **performed / canceled**：触发/取消事件；**CallbackContext** 是回调时递来的"包裹"，用 `ReadValue<Vector2>()` 取值
+- 动作默认不监听，必须在 OnEnable/OnDisable 里 Enable/Disable
+
+```csharp
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class NewInputTest : MonoBehaviour
+{
+    InputAction moveAction;
+    InputAction jumpAction;
+
+    void Awake()
+    {
+        moveAction = new InputAction("Move", InputActionType.Value);
+        moveAction.AddCompositeBinding("2DVector")
+            .With("Up", "<Keyboard>/w")
+            .With("Down", "<Keyboard>/s")
+            .With("Left", "<Keyboard>/a")
+            .With("Right", "<Keyboard>/d");
+        moveAction.AddBinding("<Gamepad>/leftStick");
+        jumpAction = new InputAction("Jump", InputActionType.Button, "<Keyboard>/space");
+        jumpAction.AddBinding("<Gamepad>/buttonSouth");
+        moveAction.performed += OnMove;
+        moveAction.canceled += OnMove;
+        jumpAction.performed += OnJump;
+    }
+
+    void OnMove(InputAction.CallbackContext context)
+    {
+        Vector2 v = context.ReadValue<Vector2>();
+        Debug.Log("新版移动：" + v);
+    }
+
+    void OnJump(InputAction.CallbackContext context)
+    {
+        Debug.Log("新版跳跃");
+    }
+
+    void OnEnable()
+    {
+        moveAction.Enable();
+        jumpAction.Enable();
+    }
+    void OnDisable()
+    {
+        moveAction.Disable();
+        jumpAction.Disable();
+    }
+}
+```
+
+按 W 打 (0,1)，按住不刷屏（值不变不重复触发），松开 canceled 打 (0,0)。
+
+装包：窗口 → 包管理器 → 团结注册表 → Input System；项目设置 → 玩家 → 主动输入处理选 **Both**（旧代码不报错）。
+
+**新旧对比（面试点）**：
+
+| 维度 | 旧版 Input | 新版 Input System |
+|---|---|---|
+| 方式 | 每帧轮询 | 事件驱动回调 |
+| 按键 | 代码写死 | Action 抽象，绑定可改 |
+| 设备 | 键盘鼠标分开写 | 一套动作自动支持键盘/手柄 |
+| 生命周期 | 直接调 | 必须 Enable/Disable |
+| 读值 | GetKey/GetAxis | ReadValue<T>() |
+
+---
+
+## 顺延与待办
+
+- LeetCode 203 移除链表元素（刷题长线，跳过）
+- CanvasGroup 淡入淡出遮罩（透明度每帧动画，Demo 打磨阶段做）
+- 已知现象：协程边刷边杀时 enemies.Count==0 可能提前触发 WinGame

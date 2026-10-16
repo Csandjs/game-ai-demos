@@ -24,6 +24,7 @@
 | 2026-10-14 | D20 | ✅ 完成 | 音效空引用曾中断核心玩法（已用 `?.` 修复）；互砍被先咬（调整攻击距离解决）；序列化坑 | 按 W4 计划图开始 |
 | 2026-10-14 | D21 | ✅ 完成 | 命令系统把注册语句误写在类体（已修正为构造函数） | W4 Unity 脚本进阶 |
 | 2026-10-16 | D22 | ✅ 完成 | 编辑器编译后端僵死（手动 Roslyn 编译 36 脚本零错误，确认环境问题，刷新/重启解决） | D23 地基期收尾，随后进 Demo1 FSM |
+| 2026-10-16 | D23 | ✅ 完成 | ①0.9 与 0.9f 浮点精度差导致进度条 while 死循环（已改 0.9f）；②持久总管跨场景拖不了 UI，用"场景报到"模式（LevelSceneSetup + RegisterLevel）解决 | D24：W4 地基期最后一天（PlayerPrefs 存档体系），随后进 Demo1 FSM |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -242,3 +243,16 @@
 - 实战：EnemySpawner while(true) 协程刷怪（U 停一个/Y 停全部）；SkillCooldown L 键 3 秒 CD + UI 倒计时，isCooling 锁防止重复释放；BossDirector 倒计时后 SetActive 激活 Boss
 - 事件退订自查：HpUI 缺退订已补；按钮 AddListener 随对象销毁不用退订；GameManager 自订阅不用
 - 环境排错：编译后端僵死，手动 Roslyn 编译零错误，确认是环境不是代码
+
+# D23 完成（10/16 周五）Input 输入系统 + 场景管理
+
+- 旧版 Input：GetKey 按住/ GetKeyDown 单击/ GetKeyUp 松开/ GetAxis 平滑轴（-1~1）/ GetMouseButtonDown 鼠标；GetAxis 重构移动、鼠标左键攻击
+- 静态方法必须带类名前缀：GetMouseButtonDown 裸写报错（不是自己类的方法）
+- 新版 Input System：装包后主动输入处理选 Both；InputAction 动作抽象 + 绑定 + performed/canceled 回调 + Enable/Disable；2DVector 复合绑定 WASD、手柄左摇杆 AddBinding；CallbackContext.ReadValue 取值；事件驱动 vs 轮询（面试点）
+- 场景切换本质：旧场景全销毁、新场景照图纸重建；DontDestroyOnLoad 免死金牌 + 持久单例三件套（判重/登记/免死），AudioManager 为范本
+- 架构分界：全局数据（总管、分数、音量）免死；场景物件（金币、敌人、面板）每关重建
+- 场景引用难点：总管跨场景拖不到关卡 UI，由 Canvas 上的 LevelSceneSetup 在 Start 调 RegisterLevel 报到；隐藏面板不能自报到（Start 不跑）；ScoreUI 出生主动刷一次分数
+- PauseMenu 是场景物件，随 GameManager 物体删除前用"复制组件→粘贴为新组件"搬到 Canvas
+- 异步加载：LoadSceneAsync 返回 AsyncOperation；progress 卡在 0.9 等放行；allowSceneActivation=false 扣住→进度条铺满→等 1 秒→放行；progress/0.9f 映射 0~1
+- 浮点坑：0.9f 实际是 0.89999997，和 double 0.9 比永远小于 → while 死循环，Unity float 比较字面量一律带 f
+- 验证：DontDestroyOnLoad 始终只有一个 GameManager；菜单→关卡→菜单→关卡分数保留；金币每关刷新正常；暂停/胜负面板正常

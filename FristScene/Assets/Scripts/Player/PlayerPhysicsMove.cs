@@ -18,13 +18,8 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
     }
     public void Move()
     {
-        float moveX = 0f;
-        float moveZ = 0f;
-        if (Input.GetKey(KeyCode.W))moveZ = 1f;
-        if (Input.GetKey(KeyCode.S))moveZ = -1f;
-        if (Input.GetKey(KeyCode.A))moveX = -1f;
-        if (Input.GetKey(KeyCode.D))moveX = 1f;
-
+        float moveZ = Input.GetAxis("Vertical");
+        float moveX = Input.GetAxis("Horizontal");
         //目标速度
         Vector3 targetVelocity = new Vector3(moveX * moveSpeed , rb.velocity.y, moveZ * moveSpeed);
         //这一帧速度最多能变多少；

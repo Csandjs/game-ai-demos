@@ -765,6 +765,8 @@ GameObject:
   - component: {fileID: 125956608}
   - component: {fileID: 125956607}
   - component: {fileID: 125956606}
+  - component: {fileID: 125956611}
+  - component: {fileID: 125956610}
   m_Layer: 5
   m_HasEditorInfo: 1
   m_Name: Canvas
@@ -865,6 +867,38 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &125956610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125956605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d3316160287b774aaf16689cf49a874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  winText: {fileID: 684016385}
+  loseText: {fileID: 291866680}
+--- !u!114 &125956611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125956605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f380a6089f61a14e888e423db9e8e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pausePanel: {fileID: 2090237732}
+  continueButton: {fileID: 1129060165}
+  settingsButton: {fileID: 2066374254}
+  settingsPanel: {fileID: 841210121}
+  backButton: {fileID: 58833542}
+  volumeSlider: {fileID: 728072579}
 --- !u!1 &226710706
 GameObject:
   m_ObjectHideFlags: 0
@@ -3101,75 +3135,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 841210121}
   m_CullTransparentMesh: 1
---- !u!1 &874074508
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 7
-  m_Component:
-  - component: {fileID: 874074510}
-  - component: {fileID: 874074509}
-  - component: {fileID: 874074511}
-  m_Layer: 0
-  m_HasEditorInfo: 1
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &874074509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874074508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50d40d3e216cbb34589685c5f71c53b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 0
-  state: 0
-  winText: {fileID: 684016385}
-  restarButton: {fileID: 2097199536}
-  loseText: {fileID: 291866680}
---- !u!4 &874074510
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874074508}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 447.62988, y: 345.81165, z: 131.88487}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &874074511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874074508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f380a6089f61a14e888e423db9e8e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pausePanel: {fileID: 2090237732}
-  continueButton: {fileID: 1129060165}
-  settingsButton: {fileID: 2066374254}
-  settingsPanel: {fileID: 841210121}
-  backButton: {fileID: 58833542}
-  volumeSlider: {fileID: 728072579}
 --- !u!1 &888737810
 GameObject:
   m_ObjectHideFlags: 0
@@ -3756,6 +3721,7 @@ GameObject:
   - component: {fileID: 1097625933}
   - component: {fileID: 1097625934}
   - component: {fileID: 1097625935}
+  - component: {fileID: 1097625936}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: Cube
@@ -3949,6 +3915,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cdText: {fileID: 979722835}
   cooldownTime: 3
+--- !u!114 &1097625936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097625922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ef5d86594bea0944b3f6c10fa572e9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1120122464
 GameObject:
   m_ObjectHideFlags: 0
@@ -6651,7 +6629,6 @@ SceneRoots:
   - {fileID: 519496731}
   - {fileID: 2037074166}
   - {fileID: 1266981915}
-  - {fileID: 874074510}
   - {fileID: 1275105279}
   - {fileID: 1287670369}
   - {fileID: 92393233}

@@ -14,17 +14,29 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     public GameState state;
     public GameObject winText;
-    public GameObject restarButton;
     public GameObject loseText;
+    public void RegisterLevel(GameObject win, GameObject lose)
+    {
+        winText = win;
+        loseText = lose;
+        winText.SetActive(false);
+        loseText.SetActive(false);
+        state = GameState.Playing;
+    }
     public event Action<int> OnCoinCollected;
     void Awake()
-    {
+    {  
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
         state = GameState.Playing;
         AudioListener.volume = PlayerPrefs.GetFloat(GameConfig.VolumeKey, 1f);
         Debug.Log("进游戏时音量：" + AudioListener.volume);
         Time.timeScale = 1;
-        //DontDestroyOnLoad(gameObject);
         OnCoinCollected += AddScore;
         
     }

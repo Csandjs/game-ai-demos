@@ -8,6 +8,7 @@ public class ScoreUI : MonoBehaviour
     {
         scoreText = GetComponent<Text>();
         GameManager.Instance.OnCoinCollected += RefreshScore;
+        scoreText.text = "分数：" + GameManager.Instance.score;
     }
     public void RefreshScore(int amount)
     {
