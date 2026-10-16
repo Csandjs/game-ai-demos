@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,10 +17,16 @@ public class EnemySpawner : MonoBehaviour
     }
     private Transform player;
     public float playerAttackRange = 100f;
+    public float spawnInterval = 2f;
+    Coroutine spawnHandle;
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
-        for (int i = 1; i < 6; i++)
+        spawnHandle = StartCoroutine(SpawnEnemies());
+    }
+    IEnumerator SpawnEnemies()
+    {
+        while (true)
         {
             float x = Random.Range(-10f, 10f);
             float z = Random.Range(2f, 30f);
@@ -27,6 +34,8 @@ public class EnemySpawner : MonoBehaviour
             Enemy e = enemy.GetComponent<Enemy>();
             e.spawner = this;
             enemies.Add(e);
+            yield return new WaitForSeconds(spawnInterval);
+            if (GameManager.Instance.state != GameState.Playing) break;
         }
     }
 
@@ -40,6 +49,14 @@ public class EnemySpawner : MonoBehaviour
             {
                 e.Die();
             }
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            StopCoroutine(spawnHandle);
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            StopAllCoroutines();
         }
     }
 }

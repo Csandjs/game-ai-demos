@@ -23,6 +23,7 @@
 | 2026-10-13 | D19 | ✅ 完成 | PlayerPrefs 键名大小写不一致（"Volume"≠"volume"）；AudioListener.volume 是 static 不在 Inspector 显示；设置面板开着按 Esc 残留，用 activeSelf 判优先级 | D20（按计划图） |
 | 2026-10-14 | D20 | ✅ 完成 | 音效空引用曾中断核心玩法（已用 `?.` 修复）；互砍被先咬（调整攻击距离解决）；序列化坑 | 按 W4 计划图开始 |
 | 2026-10-14 | D21 | ✅ 完成 | 命令系统把注册语句误写在类体（已修正为构造函数） | W4 Unity 脚本进阶 |
+| 2026-10-16 | D22 | ✅ 完成 | 编辑器编译后端僵死（手动 Roslyn 编译 36 脚本零错误，确认环境问题，刷新/重启解决） | D23 地基期收尾，随后进 Demo1 FSM |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -230,3 +231,14 @@
 - 闭卷自测 3 题：事件系统（`event Action<int>` + 双订阅）、`Dictionary<string,Action>` 命令系统（TryGetValue）、`List<Enemy>` FindAll 存活 + Sort 升序
 - 巩固：类体里不能写执行语句（注册放构造函数）、`Sort((a,b)=>a.hp-b.hp)` 升序规则
 - 写 W3 周总结 week3.md
+
+# D22 完成（10/16 周五）MonoBehaviour 生命周期 + 协程入门
+
+- 生命周期：8 个方法执行顺序，Awake/Start 时机保证（所有 Awake 跑完才 Start），FixedUpdate 固定步长与慢帧同帧补跑；实测 Fixed 30 vs Update 302
+- 协程三要素：using System.Collections + IEnumerator 返回 + yield return，StartCoroutine 启动
+- 三种等待：yield null（下一帧）、WaitForSeconds（等秒）、WaitForEndOfFrame（帧末）
+- 停止：StopCoroutine(句柄) 精准停、StopAllCoroutines 全停
+- 反直觉点：禁用脚本组件不停协程，SetActive(false)/销毁才停
+- 实战：EnemySpawner while(true) 协程刷怪（U 停一个/Y 停全部）；SkillCooldown L 键 3 秒 CD + UI 倒计时，isCooling 锁防止重复释放；BossDirector 倒计时后 SetActive 激活 Boss
+- 事件退订自查：HpUI 缺退订已补；按钮 AddListener 随对象销毁不用退订；GameManager 自订阅不用
+- 环境排错：编译后端僵死，手动 Roslyn 编译零错误，确认是环境不是代码

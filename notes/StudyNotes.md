@@ -3879,3 +3879,314 @@ GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 1f, z), Quaternion.id
 4. **序列化坑**：改代码里 public 默认值不影响已挂组件，调数值去 Inspector；
 5. **距离要按每个敌人现算**，不能用预制体 enemyPrefab 全局只算一次；
 6. 冷却计时器初始 0 = 立刻出手，想要前摇就给初始值。
+
+# 📅 D22: MonoBehaviour 生命周期 + 协程入门
+
+今天进入 W4 脚本进阶，核心新内容：生命周期八个方法的执行顺序、协程三要素；并用协程重写刷怪器、做技能冷却 UI、Boss 登场，最后完成事件退订自查。
+
+---
+
+## 🌞 上午：MonoBehaviour 生命周期
+
+### 步骤 1：什么是生命周期
+
+**大白话**：生命周期就是脚本从出生到死亡，Unity 按固定顺序自动调用的一组方法。你把代码写进对应方法，到点自动执行，不用自己喊。
+
+**完整执行顺序**：
+
+```
+出生：Awake → OnEnable → Start
+帧循环：FixedUpdate（物理时间，慢帧可多次）→ Update → LateUpdate
+死亡：OnDisable → OnDestroy
+```
+
+**八个方法各管什么**：
+
+| 方法 | 调用时机 | 用途 |
+|---|---|---|
+| Awake | 物体创建时，一次 | 取自身组件、单例 Instance 赋值 |
+| OnEnable | 每次启用（物体/组件），可多次 | 可重复的初始化 |
+| Start | 第一帧 Update 之前，一次 | 取跨对象引用 |
+| FixedUpdate | 固定 0.02s（50Hz） | 物理移动、速度、力 |
+| Update | 每帧，频率随帧率 | 输入、普通逻辑 |
+| LateUpdate | 每帧，所有 Update 之后 | 相机跟随 |
+| OnDisable | 每次禁用 | 配对 OnEnable 的清理 |
+| OnDestroy | 销毁时，一次 | 退订事件、释放资源 |
+
+验证脚本 `LifecycleTest.cs`，每个方法里打一行日志，折叠（Collapse）后看顺序：
+
+```csharp
+using UnityEngine;
+
+public class LifecycleTest : MonoBehaviour
+{
+    void Awake()    { Debug.Log("Awake"); }
+    void OnEnable() { Debug.Log("OnEnable"); }
+    void Start()    { Debug.Log("Start"); }
+    void FixedUpdate() { Debug.Log("FixedUpdate"); }
+    void Update()   { Debug.Log("Update"); }
+    void LateUpdate() { Debug.Log("LateUpdate"); }
+    void OnDisable() { Debug.Log("OnDisable"); }
+    void OnDestroy() { Debug.Log("OnDestroy"); }
+}
+```
+
+### 步骤 2：Awake / Start 的时机规则（重点）
+
+**大白话**：Unity 保证"所有人都先醒来（Awake），才开始第一个人的 Start；所有 Start 都在第一帧 Update 之前"。
+
+- **取自身组件、单例 `Instance = this`**：放 **Awake**——比如 GameManager、AudioManager 的单例赋值都在 Awake，是对的
+- **取跨对象引用**（比如找玩家、找别的物体）：放 **Start**——此时别人的 Awake 已跑完，组件都就位
+- **Start 一生一次**：物体禁用再激活，Start 不会再跑；OnEnable 每次激活都会跑
+- 组件勾选框取消：只触发 OnDisable/OnEnable，不触发 Start
+
+### 步骤 3：FixedUpdate / Update / LateUpdate 怎么分工
+
+**大白话**：FixedUpdate 按固定物理节拍走，Update 按画面帧数走，LateUpdate 是"大家都动完后"的收尾帧。
+
+- FixedUpdate 默认**固定时间步长 0.02 秒（50Hz）**，与帧率无关，物理逻辑写这里
+- 慢帧（一帧耗时超过 0.02s）：引擎在同一帧内按 0.02 **补跑多次**，欠几次补几次
+- 实测：空场景 FixedUpdate 30 次 vs Update 302 次（空场景约 500fps，Fixed 只跟时间）
+- 最大允许时间步长 0.333s 封顶【以后学】
+- **相机跟随必须 LateUpdate**：所有 Update 跑完、位置最终确定后相机才拍，避免拍旧位置抖动
+
+---
+
+## 🌤 下午：协程 Coroutine
+
+### 步骤 4：什么是协程
+
+**大白话**：协程就是一个可以暂停、之后从暂停处原地继续的方法。它**不是多线程**，代码仍在主线程上跑。
+
+**协程三要素**：
+
+1. `using System.Collections;`
+2. 返回类型写 `IEnumerator`（注意不是 IEnumerable：-or 是"器"，-able 是"能…的"）
+3. 方法体内用 `yield return` 写暂停点，外部用 `StartCoroutine(方法())` 启动
+
+```csharp
+using System.Collections;
+using UnityEngine;
+
+public class CoroutineTest : MonoBehaviour
+{
+    void Start()
+    {
+        StartCoroutine(TimerCoroutine());
+    }
+
+    IEnumerator TimerCoroutine()
+    {
+        Debug.Log("对局开始");
+        yield return null;                       // 等下一帧
+        Debug.Log("第一帧加载完成");
+        yield return new WaitForSeconds(3f);     // 等 3 秒
+        Debug.Log("红Buff刷新");
+        for (int i = 1; i <= 3; i++)
+        {
+            Debug.Log("第" + i + "波小兵出发");
+            yield return new WaitForSeconds(1f);
+        }
+    }
+}
+```
+
+### 步骤 5：三种 yield 等待
+
+| 写法 | 含义 |
+|---|---|
+| `yield return null;` | 等下一帧（下一帧 Update 后继续） |
+| `yield return new WaitForSeconds(nf);` | 等 n 秒 |
+| `yield return new WaitForEndOfFrame();` | 等这一帧结束（相机/渲染之后） |
+
+### 步骤 6：用协程重写刷怪器
+
+**大白话**：把刷怪写进 `while(true)` 协程，每轮生成一个敌人、等 2 秒、再来一轮，逻辑顺序往下写就行。
+
+```csharp
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemySpawner : MonoBehaviour
+{
+    public GameObject enemyPrefab;
+    List<Enemy> enemies = new List<Enemy>();
+    private Transform player;
+    public float playerAttackRange = 100f;
+    public float spawnInterval = 2f;
+    Coroutine spawnHandle;
+
+    void Start()
+    {
+        player = GameObject.FindWithTag("Player").transform;
+        spawnHandle = StartCoroutine(SpawnEnemies());
+    }
+
+    IEnumerator SpawnEnemies()
+    {
+        while (true)
+        {
+            float x = Random.Range(-10f, 10f);
+            float z = Random.Range(2f, 30f);
+            GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 1f, z), Quaternion.identity);
+            Enemy e = enemy.GetComponent<Enemy>();
+            e.spawner = this;
+            enemies.Add(e);
+            yield return new WaitForSeconds(spawnInterval);
+            if (GameManager.Instance.state != GameState.Playing) break;
+        }
+    }
+    // Update 见步骤 7
+}
+```
+
+### 步骤 7：停止协程 + 协程的生命周期
+
+**大白话**：`StopCoroutine(句柄)` 是精准叫停一个，`StopAllCoroutines()` 是把本脚本启动的全部叫停。
+
+```csharp
+void Update()
+{
+    // K 键：范围击杀
+    if (Input.GetKeyDown(KeyCode.K))
+    {
+        List<Enemy> targets = enemies.FindAll(e => e.hp > 0 &&
+            Vector3.Distance(e.transform.position, player.position) <= playerAttackRange);
+        foreach (Enemy e in targets)
+        {
+            e.Die();
+        }
+    }
+    // U 键：停刷怪这一个协程
+    if (Input.GetKeyDown(KeyCode.U))
+    {
+        StopCoroutine(spawnHandle);
+    }
+    // Y 键：停掉全部
+    if (Input.GetKeyDown(KeyCode.Y))
+    {
+        StopAllCoroutines();
+    }
+}
+```
+
+**协程生命周期（反直觉点，已验证）**：
+
+- 只取消勾选脚本组件（enabled=false）：协程**继续跑**——协程跟 GameObject 不跟 enabled
+- 物体 `SetActive(false)` 或销毁：协程自动停
+- 所以协程不能挂在"等待期间会被禁用"的对象上
+- 字符串版只有启动也用字符串 `StartCoroutine("名字")` 才能对应停，不推荐
+
+---
+
+## 🌙 晚上：技能冷却 + Boss 登场 + 事件退订自查
+
+### 步骤 8：技能冷却 UI（L 键）
+
+**大白话**：放技能时用一个 bool 锁住技能，开协程倒计时并每秒更新 UI，时间到自动解锁。妲己放完技能按钮灰掉转 CD，就是这个。
+
+```csharp
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SkillCooldown : MonoBehaviour
+{
+    public Text cdText;
+    public float cooldownTime = 3f;
+    bool isCooling = false;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            if (isCooling) return;          // CD 中不能放
+            Debug.Log("释放技能");
+            StartCoroutine(CooldownCoroutine());
+        }
+    }
+
+    IEnumerator CooldownCoroutine()
+    {
+        isCooling = true;
+        float remainTime = cooldownTime;
+        while (remainTime > 0)
+        {
+            cdText.text = "CD:" + remainTime;
+            yield return new WaitForSeconds(1f);
+            remainTime--;
+        }
+        cdText.text = "技能就绪";
+        isCooling = false;
+    }
+}
+```
+
+**协程 vs 计时器（旧写法对照）**：
+
+- 计时器：字段每帧 `attackTimer -= Time.deltaTime`，到 0 触发——"每帧看表"
+- 协程：流程独立，按秒推进，UI 更新写在流程内部
+- 两种都对，逻辑越复杂协程越好读
+
+### 步骤 9：Boss 登场（倒计时 + SetActive）
+
+**大白话**：Boss 先在场景里藏好（检查器取消勾选），导演协程倒计时结束后 `SetActive(true)` 把它激活。
+
+**两种"让对象出现"的区别**：
+
+| 方式 | 含义 | 适用 |
+|---|---|---|
+| Instantiate | 从无到有克隆 | 刷怪、子弹 |
+| SetActive(true) | 早摆在场景里、只是藏着，激活它 | 固定位置的 Boss |
+
+注意：协程挂在始终激活的 BossDirector 上，不能挂在被禁用的 Boss 身上。
+
+```csharp
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class BossDirector : MonoBehaviour
+{
+    public Text bossText;
+    public GameObject boss;
+
+    void Start()
+    {
+        StartCoroutine(BossAppear());
+    }
+
+    IEnumerator BossAppear()
+    {
+        int bossIncomingTime = 3;
+        yield return new WaitForSeconds(5f);          // 先等 5 秒预警
+        while (bossIncomingTime > 0)
+        {
+            bossText.text = "还有" + bossIncomingTime + "S";
+            yield return new WaitForSeconds(1f);
+            bossIncomingTime--;
+        }
+        boss.SetActive(true);
+        bossText.text = "Boss降临";
+    }
+}
+```
+
+### 步骤 10：事件退订自查（W3 遗留）
+
+**大白话**：`+=` 订阅等于告诉发布者"有事喊我"，发布者会一直记着你；销毁时若不 `-=` 退订，它会对着已销毁的对象喊，空引用报错 + 泄漏。
+
+- **C# 事件（自造 event）必须退订**：在 OnDestroy 里 `-=`
+- **UnityEvent（按钮 onClick、滑条 onValueChanged 的 AddListener）不用退订**：随对象一起销毁
+- 自查结果：CoinSound、ScoreUI 有配对 ✅；HpUI 缺退订，已补 ✅；GameManager 自订阅同生共死不用
+- 稳妥写法：OnDestroy 里退订前先判 `if (playerHealth != null)`（销毁顺序不保证）
+
+---
+
+## 📌 今日新增 / 改动
+
+- 改：`EnemySpawner.cs`（协程刷怪 + U/Y 停止）、`HpUI.cs`（补 OnDestroy 退订）
+- 新：`SkillCooldown.cs`（L 键技能 CD 倒计时）、`BossDirector.cs`（倒计时 Boss 登场）
+- 练习：`LifecycleTest.cs`、`CoroutineTest.cs`
+- 场景 MiniLevel：CdText、BossText、Boss、BossDirector

@@ -22,4 +22,8 @@ public class HpUI : MonoBehaviour
     {
         
     }
+    void OnDestroy()
+    {
+        playerHealth.OnHpChanged -= RefreshHp;
+    }
 }
