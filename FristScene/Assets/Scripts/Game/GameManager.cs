@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         AudioListener.volume = SaveManager.LoadVolume();
         Debug.Log("进游戏时音量：" + AudioListener.volume);
         Time.timeScale = 1;
+        SaveData data = SaveManager.LoadGame();
         OnCoinCollected += AddScore;
         
     }
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviour
         winText.SetActive(true);
         SaveManager.SaveHighScore(score);
         SaveManager.SaveLastScore(score);
+        SaveManager.SaveGame(SaveManager.LoadHighScore(), score, 2);
         winResultText.text ="游戏胜利" + "\n本局得分：" + score + "\n最高分：" + SaveManager.LoadHighScore();
         AudioManager.Instance?.PlayWin();
     }
@@ -76,6 +78,7 @@ public class GameManager : MonoBehaviour
         loseText.SetActive(true);
         SaveManager.SaveHighScore(score);
         SaveManager.SaveLastScore(score);
+        SaveManager.SaveGame(SaveManager.LoadHighScore(), score, SaveManager.LoadGame().unlockedLevel);
         loseResultText.text = "游戏失败" + "\n本局得分：" + score + "\n最高分：" + SaveManager.LoadHighScore();
         AudioManager.Instance?.PlayLose();
     }
