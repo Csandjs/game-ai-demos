@@ -25,6 +25,7 @@
 | 2026-10-14 | D21 | ✅ 完成 | 命令系统把注册语句误写在类体（已修正为构造函数） | W4 Unity 脚本进阶 |
 | 2026-10-16 | D22 | ✅ 完成 | 编辑器编译后端僵死（手动 Roslyn 编译 36 脚本零错误，确认环境问题，刷新/重启解决） | D23 地基期收尾，随后进 Demo1 FSM |
 | 2026-10-16 | D23 | ✅ 完成 | ①0.9 与 0.9f 浮点精度差导致进度条 while 死循环（已改 0.9f）；②持久总管跨场景拖不了 UI，用"场景报到"模式（LevelSceneSetup + RegisterLevel）解决 | D24：W4 地基期最后一天（PlayerPrefs 存档体系），随后进 Demo1 FSM |
+| 2026-10-17 | D24（压缩日上午+下午） | ✅ 完成 | ①SaveManager 初版把 key 当参数、SetInt 误存旧值（已修）；②结算面板字号160溢出，重构为"遮罩根物体+内容"标准弹窗；③JSON 序列化与反序列化原理 | D25 压缩日：Boss 状态机补 Hurt/Dead + 攻击前摇后摇 + Boss 血条 + 录屏 |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -256,3 +257,22 @@
 - 异步加载：LoadSceneAsync 返回 AsyncOperation；progress 卡在 0.9 等放行；allowSceneActivation=false 扣住→进度条铺满→等 1 秒→放行；progress/0.9f 映射 0~1
 - 浮点坑：0.9f 实际是 0.89999997，和 double 0.9 比永远小于 → while 死循环，Unity float 比较字面量一律带 f
 - 验证：DontDestroyOnLoad 始终只有一个 GameManager；菜单→关卡→菜单→关卡分数保留；金币每关刷新正常；暂停/胜负面板正常
+
+# D24 完成（10/17 周六，压缩日）PlayerPrefs 封装 + JSON 存档
+
+- PlayerPrefs：SetInt/GetInt/SetFloat/GetFloat/SetString/GetString + Save 强制落盘；键名全部收进 GameConfig 常量
+- SaveManager 封装（static class）：SaveVolume/LoadVolume、SaveHighScore（内部比较才存）/LoadHighScore、SaveLastScore（无条件覆盖）/LoadLastScore；踩坑：static 成员默认 private、SetInt 第二参数才是新值、key 不能当参数传
+- 全局 PlayerPrefs 只允许出现在 SaveManager 一个文件里
+- GameManager 收尾：RegisterLevel 每局 score 归零 + timeScale 恢复；结算三行文字用 \n；Restart 用 GetActiveScene().name 重载本关；GetComponentInChildren<Text>(true) 搜隐藏子物体
+- 报错洪水排查：必须从 MenuScene 播放（GameManager 在主菜单），直接放关卡场景会导致一堆 Instance 空引用；找最早时间戳、共同根因
+- Rider 自动 using 陷阱：游戏脚本只认 UnityEngine 开头命名空间，不选 UnityEditor
+- 标准弹窗结构：Image 半透明遮罩根物体 → ResultText 子物体 + 按钮平级；UIManager 是以后的升级
+- 主菜单新增最近得分：HighScoreText 加 LastScoreText 字段同时刷新
+- JSON 存档：数据箱 SaveData 是普通类（不继承 MonoBehaviour）+ [Serializable]，只打包 public 字段，不支持 Dictionary/属性
+- JsonUtility.ToJson 序列化（箱子→文本）、FromJson<T> 反序列化（文本→新箱子，像复印）；PlayerPrefs.HasKey 首次启动判空，返回 new SaveData 默认箱
+- 完整数据流：内存箱子→ToJson→SetString→硬盘，重启 GetString→FromJson→新箱子；验证：通关→停止重播放→Awake 读档日志正确→失败一局 unlockedLevel 不掉
+- 接线顺序：先 SaveHighScore 比较更新散键，再 LoadHighScore 读出拍进 JSON 快照，两处数据一致
+- 删档：DeleteKey 删单页（ClearSave）、DeleteAll 清全部（ClearAll）；不用字符串当开关（拼错静默失败），拆两个方法或用枚举
+- 架构边界：设置类走散键、进度类走整包；唯一数据源原则；最高分过渡阶段两边都写，以后重构收进箱子
+- 升级路线：嵌套箱子 → Newtonsoft.Json → 文件存档（persistentDataPath 多槽） → 云存档/加密/压缩
+- 工程整理：四个测试脚本（Coroutine/Lifecycle/NewInput/JsonSave）统一移入 Scripts/Test；EnemySpawner 加非 Playing 状态守卫

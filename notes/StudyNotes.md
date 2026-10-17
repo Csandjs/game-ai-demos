@@ -4484,3 +4484,270 @@ public class NewInputTest : MonoBehaviour
 - LeetCode 203 移除链表元素（刷题长线，跳过）
 - CanvasGroup 淡入淡出遮罩（透明度每帧动画，Demo 打磨阶段做）
 - 已知现象：协程边刷边杀时 enemies.Count==0 可能提前触发 WinGame
+
+# 📅 D24: 存档系统（PlayerPrefs 封装 + JSON 整包）
+
+今天是 W4 地基期收官日，核心内容：PlayerPrefs 散键存档、SaveManager 统一封装、结算面板标准结构、GameManager 收尾（Restart/本局分数）、JSON 序列化整包存档（ToJson/FromJson）、删档。
+
+---
+
+## 🌞 上午：PlayerPrefs 散键存档 + SaveManager 封装
+
+### 步骤 1：PlayerPrefs 是什么
+
+**大白话**：PlayerPrefs 是 Unity 自带的"笔记本"，游戏关掉、电脑重启，写进去的东西还在（内存像黑板，下课就擦；硬盘像笔记本，写进去永久保留）。
+
+- `PlayerPrefs.SetInt(键, 值)` / `GetInt(键, 默认值)`：存整数
+- `PlayerPrefs.SetFloat / GetFloat`：存小数（音量 0~1）
+- `PlayerPrefs.SetString / GetString`：存文本
+- `PlayerPrefs.Save()`：强制立刻写进硬盘（Set 类有时攒到退出时才写）
+- 键名统一放 GameConfig 常量，不写裸字符串
+
+### 步骤 2：为什么要封装 SaveManager
+
+**大白话**：PlayerPrefs 直接散写在 5 个脚本里，有三个毛病：① 同样逻辑到处重复；② 业务代码和存储细节搅在一起；③ 以后换存档方案要改 5 个地方。封装就是把"怎么存"收进一个管家，业务只管说"我要存最高分"。
+
+**踩的坑**：
+- 第一版把 key 当参数传入 → 封装失败（键名应该是管家的内部细节，调用方不关心）
+- `static class` 里方法默认是 private，外部调不到，必须显式写 `public static`
+- `SetInt(key, LoadX())` 存了旧值，新值永远写不进——**第二参数才是要存的新值**
+- SaveHighScore 内部比较才存；SaveLastScore 无条件覆盖（每局都更新）
+
+最终版：
+
+```csharp
+using UnityEngine;
+
+static class SaveManager
+{
+    public static void SaveVolume(float volumeValue)
+    {
+        PlayerPrefs.SetFloat(GameConfig.VolumeKey, volumeValue);
+        AudioListener.volume = volumeValue;   // 存设置时同步生效
+    }
+    public static float LoadVolume()
+    {
+        return PlayerPrefs.GetFloat(GameConfig.VolumeKey, 1f);
+    }
+    public static void SaveHighScore(int score)
+    {
+        int oldScore = PlayerPrefs.GetInt(GameConfig.HighScoreKey, 0);
+        if (score > oldScore)
+        {
+            PlayerPrefs.SetInt(GameConfig.HighScoreKey, score);
+        }
+    }
+    public static int LoadHighScore()
+    {
+        return PlayerPrefs.GetInt(GameConfig.HighScoreKey, 0);
+    }
+    public static void SaveLastScore(int score)
+    {
+        PlayerPrefs.SetInt(GameConfig.LastScoreKey, score);
+    }
+    public static int LoadLastScore()
+    {
+        return PlayerPrefs.GetInt(GameConfig.LastScoreKey, 0);
+    }
+}
+```
+
+验证标准：全局搜索 PlayerPrefs，只出现在 SaveManager 一个文件里；其他脚本全调 SaveManager。
+
+---
+
+### 步骤 3：GameManager 收尾
+
+**RegisterLevel 每局归零**（D23 为了验证免死故意保留分数，现在回归正轨）：
+
+```csharp
+public void RegisterLevel(GameObject win, GameObject lose)
+{
+    score = 0;                          // 本局分数每局清零
+    winText = win;
+    loseText = lose;
+    winResultText = win.GetComponentInChildren<Text>(true);
+    loseResultText = lose.GetComponentInChildren<Text>(true);
+    winText.SetActive(false);
+    loseText.SetActive(false);
+    Time.timeScale = 1;                 // 暂停后重开要恢复时间
+    state = GameState.Playing;
+}
+```
+
+**新 API：GetComponentInChildren<Text>(true)**：在子物体里找组件；默认**不搜隐藏物体**，面板开局是隐藏的，必须传 true。对照旧写法：GetComponent 是在自己身上找（自己身上没有 Text 就空引用），GetComponentInChildren 才是向下找。
+
+**结算三行文字**：`"\n"` 换行，一个 Text 显示三行：
+
+```csharp
+winResultText.text = "游戏胜利" + "\n本局得分：" + score + "\n最高分：" + SaveManager.LoadHighScore();
+```
+
+**Restart() 重开本关**：`SceneManager.LoadScene(SceneManager.GetActiveScene().name)`——读当前场景名再加载，比写死字符串通用。
+
+**踩坑**：
+- Rider 自动补 using 选了 `UnityEditor.SearchService`（编辑器命名空间）——游戏脚本只认 UnityEngine 开头的命名空间
+- 字段声明了 Text 但不在编辑器拖引用，运行时就是 null
+- 直接播放关卡场景 → 7+ 个 NullReferenceException：GameManager 已搬到 MenuScene，**必须从主菜单启动**。排查方法：找最早时间戳的报错，所有错误都是同一个根因（Instance 为 null）
+
+---
+
+### 步骤 4：结算面板的标准结构（UI 通用模式）
+
+**大白话**：弹窗 = 背景层 + 内容层。原来的面板是个 300×80 的 Text 但字号 160，文字溢出糊满屏。
+
+标准结构（所有游戏通用）：
+
+```
+弹窗根物体（Image，半透明黑遮罩 A≈180~220）
+├── ResultText（子物体，Text，居中，三行结算）
+├── 重新开始按钮（与文字平级的子物体）
+└── 返回主菜单按钮
+```
+
+- 半透明遮罩让 3D 场景透出但不抢注意力；想更沉就调大 Image 的 A
+- 这就是工业界标准弹窗层级，以后做 UIManager 也不推倒重来
+- 重构方法：新建父物体加 Image → 旧 Text 移进去改名 ResultText → 按钮提为子物体 → 代码换 GetComponentInChildren<Text>(true) → 重拖 LevelSceneSetup 的引用
+
+**主菜单"最近得分"**：HighScoreText 脚本加 `public Text LastScoreText` 字段，Start 同时刷新两个 Text，字段在编辑器拖到新 Text 物体。
+
+---
+
+## 🌤 下午：JSON 整包存档
+
+### 步骤 5：为什么需要 JSON
+
+**大白话**：PlayerPrefs 只认识 int/float/string 三种"标准件"，不认识你自己造的数据类。玩家数据一多（最高分、解锁关卡、背包……），散键存要写几十次，还容易漏一项。
+
+做法：把所有数据打包成一个"箱子"，压扁成一段字符串（SetString 能存），读的时候再撑回箱子。
+
+- 压扁 = 序列化（ToJson），撑回 = 反序列化（FromJson）
+- JSON 就是"键:值"的纯文本：`{"highScore":12,"lastScore":3,"unlockedLevel":2}`
+
+### 步骤 6：数据箱子 SaveData
+
+**大白话**：数据箱子是普通 C# 类，不继承 MonoBehaviour（不挂物体，只装数据）。
+
+```csharp
+using System;   // [Serializable] 在这个命名空间
+
+[Serializable]  // 许可令：允许 Unity 把这个类打包成文本
+public class SaveData
+{
+    public int highScore;       // 最高分
+    public int lastScore;       // 最近分
+    public int unlockedLevel;   // 已解锁关卡数
+}
+```
+
+**JsonUtility 的规矩**：
+- 只打包 public 字段（private 要加 [SerializeField]）
+- 不支持 Dictionary、不支持属性（get/set）
+- 箱子里可以再套小箱子（嵌套类也要 [Serializable]）
+
+### 步骤 7：四个 API
+
+| API | 作用 | 进/出 |
+|---|---|---|
+| `[Serializable]` | 类的打包许可令 | 写在类上方 |
+| `JsonUtility.ToJson(箱子)` | 箱子 → JSON 文本 | 进对象，出 string |
+| `JsonUtility.FromJson<T>(文本)` | JSON 文本 → 新箱子 | 进 string，出 T 类型对象（泛型告诉它还原成什么） |
+| `PlayerPrefs.HasKey(键)` | 这页存没存过 | 出 bool，第一次玩必须先判空 |
+
+完整数据流：
+
+```
+内存箱子 →ToJson→ JSON文本 →SetString→ 硬盘
+══════════ 重启游戏 ══════════
+硬盘 →GetString→ JSON文本 →FromJson→ 内存新箱子（数据照旧）
+```
+
+FromJson 像复印：复印件内容和原件一样，但它是一张新纸（新对象）。
+
+### 步骤 8：正式集成（SaveManager 加两个方法）
+
+```csharp
+//整包存取
+public static void SaveGame(int highScore, int lastScore, int unlockedLevel)
+{
+    SaveData d = new SaveData();
+    d.highScore = highScore;
+    d.lastScore = lastScore;
+    d.unlockedLevel = unlockedLevel;
+    string json = JsonUtility.ToJson(d);
+    PlayerPrefs.SetString(GameConfig.SaveDataKey, json);
+    PlayerPrefs.Save();
+}
+
+public static SaveData LoadGame()
+{
+    if (PlayerPrefs.HasKey(GameConfig.SaveDataKey))
+    {
+        string json = PlayerPrefs.GetString(GameConfig.SaveDataKey);
+        return JsonUtility.FromJson<SaveData>(json);
+    }
+    else
+    {
+        return new SaveData();   // 第一次玩：返回全 0 的默认箱子
+    }
+}
+```
+
+**GameManager 接线**：
+
+```csharp
+// WinGame：先更新散键，再把最新值拍进 JSON 快照
+SaveManager.SaveHighScore(score);
+SaveManager.SaveLastScore(score);
+SaveManager.SaveGame(SaveManager.LoadHighScore(), score, 2);  // 通关解锁=2
+
+// LoseGame：失败不解锁，解锁关卡从旧箱子读出原样传回
+SaveManager.SaveGame(SaveManager.LoadHighScore(), score,
+    SaveManager.LoadGame().unlockedLevel);
+```
+
+- 执行顺序很关键：先 SaveHighScore 内部比较出最新值，再 LoadHighScore 读出来打包，散键和 JSON 永远一致
+- 整包覆盖，没有任何字段能残留旧值——测试假数据在第一次真实结算后自然消失
+- `LoadGame().unlockedLevel` 是"先搬箱子再取字段"的连写；要取多个字段必须先接住箱子，别连写三遍（会重复读三次硬盘）
+
+### 步骤 9：删档
+
+```csharp
+public static void ClearSave()
+{
+    PlayerPrefs.DeleteKey(GameConfig.SaveDataKey);  // 只撕整包这一页
+    PlayerPrefs.Save();
+}
+public static void ClearAll()
+{
+    PlayerPrefs.DeleteAll();   // 清空全部（音量/最高分/进度）
+    PlayerPrefs.Save();
+}
+```
+
+- 开发期清档：Edit（编辑）→ Clear All PlayerPrefs
+- 正式按钮做在设置页，调试按键不留在正式代码里（录屏误按风险）
+- 坑：字符串当开关参数（`ClearSave("All")`）拼错编译器不报错、静默失败；开关要么拆两个方法，要么用枚举（enum）
+
+### 架构边界（面试点）
+
+- **唯一数据源原则**：一份数据只该有一个权威的家
+- 标准分工：设置类（音量、画质）走散键；进度类（解锁、背包、养成）走 JSON 整包
+- 今天最高分两边都写是过渡方案（老代码已跑通），以后重构统一收进箱子
+- 键名区分大小写：`"saveData"` 和 `"SaveData"` 是两页
+
+### 存档升级路线（以后再学）
+
+1. 字段多：嵌套箱子（SaveData 里放 PlayerData/LevelData）
+2. JsonUtility 不够：换 Newtonsoft.Json（支持 Dictionary/属性，团结引擎自带）
+3. 多存档槽/大数据：写文件（File + Application.persistentDataPath，slot1.json）
+4. 云存档：JSON 不变，存放地换成服务器；再往后有加密（防改档）、压缩
+
+---
+
+## 顺延与待办
+
+- JsonSaveTest 验证脚本保留在 Scripts/Test 目录（测试脚本统一归档）
+- 以后做选关界面：读 LoadGame().unlockedLevel
+- 以后做设置页"清除存档"按钮：调 ClearSave/ClearAll
+- Awake 里 LoadGame 返回值暂未接住（内部日志验证），有使用场景时再接
