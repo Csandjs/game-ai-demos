@@ -47,7 +47,9 @@ public class Enemy : MonoBehaviour
     void ChaseBehavior()
     {
         Debug.Log("追击！");
-        transform.position = Vector3.MoveTowards(transform.position,player.position,chaseSpeed * Time.deltaTime);
+        Vector3 target = player.position;
+        target.y = transform.position.y;
+        transform.position = Vector3.MoveTowards(transform.position, target, chaseSpeed * Time.deltaTime);
         transform.LookAt(player);
     }
     //攻击算法
@@ -77,6 +79,7 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
+        if (GameManager.Instance.state != GameState.Playing) return;
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance <= attackRanfe) state = EnemyState.Attack;
         else if (distance <= detectRange) state = EnemyState.Chase;

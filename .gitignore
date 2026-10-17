@@ -28,3 +28,6 @@ bin/
 # Unity自动生成的工程/解决方案文件（不提交）
 /FristScene/*.csproj
 /FristScene/*.sln
+
+# 录屏产物（本地保留，不进 git）
+/FristScene/Recordings/

@@ -7,6 +7,7 @@ public class BossDirector : MonoBehaviour
 {
     public Text bossText;
     public GameObject boss;
+    public GameObject bossHpSlider;
     void Start()
     {
         StartCoroutine(BossAppear());
@@ -22,7 +23,10 @@ public class BossDirector : MonoBehaviour
             bossIncomingTime--;
         }
         boss.SetActive(true);
+        bossHpSlider.SetActive(true);
         bossText.text = "Boss降临";
+        yield return new WaitForSeconds(0.5f);
+        bossText.text = "击倒boss获取游戏胜利";
     }
     void Update()
     {

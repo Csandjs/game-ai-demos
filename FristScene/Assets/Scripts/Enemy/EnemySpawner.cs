@@ -10,12 +10,9 @@ public class EnemySpawner : MonoBehaviour
     {
         enemies.Remove(enemy);
         Debug.Log("剩余敌人：" + enemies.Count);
-        if(enemies.Count == 0)
-        {
-            GameManager.Instance.WinGame();
-        }
     }
     private Transform player;
+    public Boss boss;
     public float playerAttackRange = 100f;
     public float spawnInterval = 2f;
     Coroutine spawnHandle;
@@ -49,6 +46,13 @@ public class EnemySpawner : MonoBehaviour
             foreach(Enemy e in targets)
             {
                 e.Die();
+            }
+            if (boss != null && 
+            boss.gameObject.activeInHierarchy && 
+            boss.IsAlive && 
+            Vector3.Distance(boss.transform.position, player.position) <= playerAttackRange)
+            {
+                boss.TakeDamage(1);
             }
         }
         if (Input.GetKeyDown(KeyCode.U))
