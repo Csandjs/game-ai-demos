@@ -26,6 +26,7 @@
 | 2026-10-16 | D22 | ✅ 完成 | 编辑器编译后端僵死（手动 Roslyn 编译 36 脚本零错误，确认环境问题，刷新/重启解决） | D23 地基期收尾，随后进 Demo1 FSM |
 | 2026-10-16 | D23 | ✅ 完成 | ①0.9 与 0.9f 浮点精度差导致进度条 while 死循环（已改 0.9f）；②持久总管跨场景拖不了 UI，用"场景报到"模式（LevelSceneSetup + RegisterLevel）解决 | D24：W4 地基期最后一天（PlayerPrefs 存档体系），随后进 Demo1 FSM |
 | 2026-10-17 | D24（压缩日上午+下午） | ✅ 完成 | ①SaveManager 初版把 key 当参数、SetInt 误存旧值（已修）；②结算面板字号160溢出，重构为"遮罩根物体+内容"标准弹窗；③JSON 序列化与反序列化原理 | D25 压缩日：Boss 状态机补 Hurt/Dead + 攻击前摇后摇 + Boss 血条 + 录屏 |
+| 2026-10-18 | D25（跨夜，Boss 日） | ✅ 完成 | ①Boss 死亡分支漏 return 导致"死后复活"、Hurt 守卫位置错导致硬直无敌、协程醒来覆盖 Dead（已修）；②Boss 血条 maxValue 默认 1 导致一直满；③录屏半灰翻转，Play Maximized 解决 | D26（顺延周日上午）：W4 速查表 + 闭卷自测 3 题 + week4 周总结 + 面试口述 |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -276,3 +277,24 @@
 - 架构边界：设置类走散键、进度类走整包；唯一数据源原则；最高分过渡阶段两边都写，以后重构收进箱子
 - 升级路线：嵌套箱子 → Newtonsoft.Json → 文件存档（persistentDataPath 多槽） → 云存档/加密/压缩
 - 工程整理：四个测试脚本（Coroutine/Lifecycle/NewInput/JsonSave）统一移入 Scripts/Test；EnemySpawner 加非 Playing 状态守卫
+
+# D25 完成（10/17 晚→10/18 凌晨，跨夜）Boss 五态状态机 + 攻击协程 + 血条 + 录屏
+
+- Boss 五态 FSM：Idle/Chase/Attack/Hurt/Dead，enum 定义；激活即 Chase（物体未激活由 Director 倒数后 SetActive，Start 直接进入战斗）；Update 门禁 Idle/Hurt/Dead 直接 return
+- 追击：MoveTowards 匀速移动 + LookAt；XZ 平面拍平（目标 y 改成自己的 y，玩家跳起不朝天歪）；小怪 Enemy 同步修了这个坑
+- 攻击三段式协程：前摇 0.7s 变红+Lerp 放大 1.15 倍+每帧面向玩家 → 判定瞬间第二次查距离（跑出范围空大）+ 玩家未死才 TakeDamage(15) → 后摇 0.9s 缩回原地不动（输出窗口）
+- 新 API：GetComponent<Renderer>().material.color 变色；Vector3.Lerp 插值做逐帧动画；while(t<时间){t+=Time.deltaTime; yield return null;} 协程逐帧模板
+- 视觉与判定分离：缩放/颜色只影响观感，判定只看 transform.position 距离
+- 受击：Dead 守卫→扣血→Invoke 事件→死亡分支（启 DieRoutine 后 return）→PlayHit 音效→Hurt 中只掉血不刷新硬直→Attack 中 StopCoroutine 打断+恢复外观→HurtRoutine 闪黄 0.4s
+- 三个协程竞态 bug：①死亡漏 return 被 HurtRoutine 复活（漏的活移交 DieRoutine 开头停攻击协程）②Hurt 守卫写在扣血前导致硬直无敌（先扣血再判状态）③HurtRoutine 醒来无脑回 Chase 覆盖 Dead（末尾 if(state!=Hurt) yield break 守卫）
+- 核心教训：协程是并行的另一条时间线，切换状态必须想"还有谁在跑、醒来会不会覆盖我"
+- 接线：EnemySpawner 加 public Boss boss，攻击判断同时查 activeInHierarchy（物体层激活）和 IsAlive（state!=Dead）；删掉"小怪清空即胜利"（小怪无限刷+提前胜利 bug），改为杀 Boss 才 WinGame
+- BossDirector：加 bossHpSlider 字段，激活 Boss 后激活血条
+- BossHpUI：Slider 血条订阅 OnHpChanged 事件，Start 设 maxValue=boss.maxHp/value=hp，死亡隐藏，OnDestroy 退订
+- 坑：Slider MaxValue 默认 1，value=5 被截断血条一直满；玩家血条是检查器手动设的 100，Boss 血条代码里设（改血量自动跟上）
+- GetComponent 与拖引用分界：组件在自己身上用 GetComponent（BossHpUI 挂滑块根物体），在别的物体上才 public 拖引用（HpUI 挂 Text 物体）
+- 音效：Boss 挨打漏接，补 PlayHit（死亡分支后、Hurt 判定前），致命一击只播胜利音
+- Unity Recorder 4.0.3：Game View + FHD 1080p + 30FPS + H.264 MP4 + 含音频；游戏视图 16:9；选 Play Maximized（播放最大化）；START RECORDING 自动进播放，STOP 自动退出
+- 录屏坑：游戏视图面板太小+1.5x 缩放导致半灰翻转画面，Play Maximized 后正常；缩放不影响录制分辨率
+- 工程：Recordings/ 已加 .gitignore（视频不进 git）；D25 已提交 commit cfae8ff 并 push
+- 正式成片 Movie_007（约 44 秒，本地 Recordings）；打磨期录完整作品集版

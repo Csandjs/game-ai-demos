@@ -4751,3 +4751,297 @@ public static void ClearAll()
 - 以后做选关界面：读 LoadGame().unlockedLevel
 - 以后做设置页"清除存档"按钮：调 ClearSave/ClearAll
 - Awake 里 LoadGame 返回值暂未接住（内部日志验证），有使用场景时再接
+
+# 📅 D25: Boss 五态状态机 + 攻击前摇后摇 + 受击打断死亡 + Boss 血条
+
+今天是 W4 地基期最后一个编码日（10/17 晚 → 10/18 凌晨跨夜），核心内容：给 Boss 从零写完整 AI——五态有限状态机（FSM）、追击、攻击协程（前摇→判定→后摇）、受击硬直与打断、死亡结算、事件驱动血条、Unity Recorder 录屏。Boss 是个 3 倍大的立方体，未激活放在关卡里，由 BossDirector 倒数后激活。
+
+---
+
+## 🌙 晚上：Boss 五态状态机
+
+### 步骤 1：状态机是什么（大白话）
+
+**状态机 = 一个角色在同一时刻只能处于一种状态，处于什么状态就只做那个状态的事。** 王者荣耀里的英雄：站着（Idle）、跑（Chase）、放技能（Attack）、被打硬直（Hurt）、死了（Dead）。没有状态机的 Boss 就会"边死边追边打"，动作全乱套。
+
+- 状态用 **enum（枚举）** 定义，就是一组起好名字的编号，比数字 0/1/2 可读
+- 状态切换 = 给 state 赋新值；Update 里按 state 决定行为
+- 门禁：Idle/Hurt/Dead 三个状态 Update 直接 return，什么都不做
+
+### 步骤 2：五态骨架与激活即追击
+
+```csharp
+public enum BossState
+{
+    Idle, Chase, Attack, Hurt, Dead
+}
+private BossState state = BossState.Idle;
+```
+
+**为什么激活瞬间就是 Chase**：Boss 物体在场景里默认未激活，Director 倒数后 `SetActive(true)` 才开始它的生命周期（Start）。Start 里直接 `state = BossState.Chase`，表示"一睁眼就进入战斗"。不需要先 Idle 再切——Idle 是给以后"巡逻待机"预留的。
+
+**为什么小怪不用这样**：小怪没有前摇/硬直/死亡演出这些复杂状态，巡逻→追击→攻击三态就够了；Boss 有完整的战斗节奏，必须显式管理状态。
+
+### 步骤 3：追击（XZ 平面，照抄小怪但修一个坑）
+
+```csharp
+void ChaseBehavior()
+{
+    Vector3 target = player.position;
+    target.y = transform.position.y;   // 关键：目标点 y 拍平成自己的 y
+    transform.position = Vector3.MoveTowards(transform.position, target, chaseSpeed * Time.deltaTime);
+    transform.LookAt(target);
+}
+```
+
+**大白话**：MoveTowards 是"匀速朝目标点挪"，参数：当前位置、目标位置、**这一帧挪多远（速度 × 每帧时间）**。
+
+**坑（小怪也有，一起修了）**：直接朝玩家的 3D 坐标追，玩家一跳起来，Boss 就会朝天上歪（因为 y 不同）。把目标点的 y 改成自己的 y，只在水平面（XZ 平面）追。LookAt 同理要面向拍平后的点。
+
+### 步骤 4：攻击协程——前摇、判定、后摇（今天含金量最高的一段）
+
+**大白话**：Boss 攻击不是"贴脸立刻掉血"，而是三段式，王者荣耀里都见过：
+
+- **前摇（windup）**：蓄力、变红、变大，0.7 秒——给玩家反应时间，可以跑
+- **判定**：前摇结束的一瞬间，检查玩家还在不在范围、死没死，在才掉血
+- **后摇（recover）**：收招原地不动，0.9 秒——玩家的输出窗口，可以连打
+
+**协程是"另一条时间线"**：Update 是每帧从头跑到尾的主时间线；协程（IEnumerator + yield）可以让一段代码"等几秒再继续"，期间 Update 照常跑。攻击期间 Boss 处于 Attack 状态，Update 门禁不让它移动。
+
+**新 API：**
+
+- `GetComponent<Renderer>().material.color`：Renderer（渲染器）里有材质，改材质颜色就能变色。`Color.red/yellow/gray`
+- `Vector3.Lerp(a, b, p)`：在 a 和 b 之间按比例 p（0~1）插值，做平滑动画
+- `while (t < 时间) { t += Time.deltaTime; ...; yield return null; }`：协程逐帧动画的标准写法，每帧推进一步，t 从 0 走到目标时间
+
+**两次距离判定（重点）**：进攻击范围时判定一次（启动协程），**前摇结束判定瞬间再判一次**——玩家前摇时跑出去了，这一拳就空大，不掉血。
+
+```csharp
+IEnumerator AttackCoroutine()
+{
+    state = BossState.Attack;
+    bossRenderer.material.color = Color.red;
+    float t = 0;
+    while (t < windupTime)   // 前摇：变红 + 放大到 1.15 倍，每帧面向玩家
+    {
+        t += Time.deltaTime;
+        float p = t / windupTime;
+        transform.localScale = Vector3.Lerp(baseScale, 1.15f * baseScale, p);
+        Vector3 target = player.position;
+        target.y = transform.position.y;
+        transform.LookAt(target);
+        yield return null;
+    }
+    float distance = Vector3.Distance(transform.position, player.position);
+    if (distance <= attackRange && !playerHealth.IsDead)   // 判定瞬间：第二次查距离
+    {
+        playerHealth.TakeDamage(attackATK);
+    }
+    bossRenderer.material.color = originalColor;
+    t = 0;
+    while (t < recoverTime)  // 后摇：从 1.15 倍缩回原样，原地不动
+    {
+        t += Time.deltaTime;
+        float p = t / recoverTime;
+        transform.localScale = Vector3.Lerp(baseScale * 1.15f, baseScale, p);
+        yield return null;
+    }
+    attackRoutine = null;
+    state = BossState.Chase;
+}
+```
+
+注意：缩放/变色只是**视觉表现**，不影响判定——判定只看 transform.position 之间的距离。
+
+### 步骤 5：受击、硬直、打断、死亡（状态机最容易踩的坑都在这）
+
+**大白话**：
+
+- **硬直（Hurt）**：被打中的短暂 0.4 秒闪黄、不能动，玩家的输出窗口
+- **打断**：Boss 正在前摇蓄力时被打，攻击协程要立刻停掉，不能让它继续打完
+- **死亡（Dead）**：灰色、缩小到消失、弹胜利
+
+```csharp
+public void TakeDamage(int dmg)
+{
+    if (state == BossState.Dead) return;        // 死了不再挨打
+    hp -= dmg;
+    OnHpChanged?.Invoke(hp);
+    if (hp <= 0)
+    {
+        StartCoroutine(DieRoutine());
+        return;                                 // 致命一击：直接走死亡，后面都不执行
+    }
+    AudioManager.Instance?.PlayHit();
+    if (state == BossState.Hurt) return;        // 硬直中只掉血、不刷新硬直
+    if (state == BossState.Attack)
+    {
+        StopCoroutine(attackRoutine);           // 打断蓄力
+        attackRoutine = null;
+        transform.localScale = baseScale;       // 恢复外观，避免卡在红色放大态
+        bossRenderer.material.color = originalColor;
+    }
+    StartCoroutine(HurtRoutine());
+}
+
+IEnumerator HurtRoutine()
+{
+    state = BossState.Hurt;
+    bossRenderer.material.color = Color.yellow;
+    yield return new WaitForSeconds(hurtTime);
+    if (state != BossState.Hurt) yield break;   // 守卫：硬直中已被击杀/再次打断，别覆盖状态
+    bossRenderer.material.color = originalColor;
+    state = BossState.Chase;
+}
+
+IEnumerator DieRoutine()
+{
+    state = BossState.Dead;
+    if (attackRoutine != null)                  // 唯一能停止攻击协程的地方
+    {
+        StopCoroutine(attackRoutine);
+        attackRoutine = null;
+    }
+    bossRenderer.material.color = Color.gray;
+    float t = 0;
+    while (t < 0.8f)
+    {
+        t += Time.deltaTime;
+        float p = t / 0.8f;
+        transform.localScale = Vector3.Lerp(baseScale, baseScale * 0, p);
+        yield return null;
+    }
+    GameManager.Instance.WinGame();
+    Destroy(gameObject);
+}
+```
+
+**今天踩的三个真实 bug（面试可以讲）：**
+
+1. **死亡后还会复活**：TakeDamage 死亡分支漏了 return，致命一击后继续走到 HurtRoutine，Dead 被覆盖成 Hurt。**提前 return 后，遗漏的活要移交给死亡协程**（比如停攻击协程，统一在 DieRoutine 开头做）
+2. **硬直无敌**：最初把 `if (Hurt) return` 写在了掉血之前，导致硬直期间刀砍上去不掉血。正确顺序：**先扣血、先通知血条，再按状态决定要不要新硬直**
+3. **硬直中被击杀后状态被覆盖**：HurtRoutine 醒来无脑把 state 改回 Chase，会把已被设成的 Dead 覆盖。末尾加守卫 `if (state != Hurt) yield break`
+
+**共同教训**：协程是"另一条时间线在并行跑"，任何状态切换都要想——**此刻还有谁在跑？它醒来会不会覆盖我？**
+
+### 步骤 6：玩家攻击接线（EnemySpawner）
+
+```csharp
+public Boss boss;
+// K 键 / 左键攻击分支里，小怪循环之后：
+if (boss != null &&
+    boss.gameObject.activeInHierarchy &&   // 物体层：Boss 有没有被激活（登场前不挨打）
+    boss.IsAlive &&                        // 脚本层：Boss 状态上是不是还活着
+    Vector3.Distance(boss.transform.position, player.position) <= playerAttackRange)
+{
+    boss.TakeDamage(1);
+}
+```
+
+**两个"活着"的区别（重要）**：
+
+- `gameObject.activeInHierarchy`：物体在场景里有没有被激活（未激活的物体组件还在，但不在场上）
+- `boss.IsAlive => state != Dead`：物体激活着，但状态可能已经 Dead
+
+**胜利条件改掉**：原来小怪列表清空就 WinGame，但小怪是无限刷的（而且有提前胜利的 bug）。改为：RemoveEnemy 里的 WinGame 删掉，**杀 Boss 才赢**。
+
+### 步骤 7：BossDirector 激活 Boss 和血条
+
+```csharp
+public GameObject bossHpSlider;
+// ...倒数结束
+boss.SetActive(true);
+bossHpSlider.SetActive(true);
+bossText.text = "Boss降临";
+```
+
+### 步骤 8：事件驱动血条（BossHpUI）
+
+**大白话**：血条和玩家血条是同一个模式——Slider 显示数值，订阅 Boss 的 OnHpChanged 事件，Boss 一掉血就刷新。这是 HpUI 的第二次独立复现。
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class BossHpUI : MonoBehaviour
+{
+    private Slider bossHpSlider;
+    public Boss boss;
+    void Start()
+    {
+        bossHpSlider = GetComponent<Slider>();
+        bossHpSlider.maxValue = boss.maxHp;   // 量程！不设默认是 1
+        bossHpSlider.value = boss.hp;
+        boss.OnHpChanged += RefreshHp;
+    }
+    public void RefreshHp(int hp)
+    {
+        bossHpSlider.value = hp;
+        if (hp <= 0) gameObject.SetActive(false);
+    }
+    void OnDestroy()
+    {
+        boss.OnHpChanged -= RefreshHp;        // 退订，防止泄漏
+    }
+}
+```
+
+**今天踩的坑：为什么和 HpUI 差不多却不工作？**
+
+- 滑块 MaxValue 默认是 1，Boss 有 6 血，value=5 被截断成 1，血条永远满，死了才空
+- 玩家血条能用是因为当时在检查器手动把最大值设成了 100；Boss 血条在代码里设，以后调血量自动跟上
+- **GetComponent vs 拖引用的分界**：组件在自己身上用 GetComponent（BossHpUI 挂在 Slider 根物体上）；组件在别的物体上才 public 拖引用（HpUI 挂在 Text 上，滑块是另一个物体）
+
+**事件订阅三件套（固定套路）**：Start 里 `+=`、事件触发时自动调刷新方法、OnDestroy 里 `-=`。
+
+### 步骤 9：Unity Recorder 录屏
+
+- 安装：窗口（Window）→ 包管理器（Package Manager）→ Unity 注册表 → Unity Recorder 4.0.3
+- 配置：窗口 → 常规 → Recorder；+ 添加录制器 → 影片录制
+  - Source = Game View、Output Resolution = FHD 1080p、Aspect 16:9
+  - 常量 30 FPS + Cap FPS、Encoder H.264 MP4、Include audio 勾上
+  - 游戏视图顶部 Free Aspect 改 16:9
+- **游戏视图工具栏下拉选 Play Maximized（播放最大化）**：进入播放自动占满编辑器
+- 操作顺序：START RECORDING（自动进入播放）→ 演流程 → STOP RECORDING（自动停止）
+- 产物在 `FristScene/Recordings/`，已加进 .gitignore（视频不进 git）
+
+**踩坑**：第一版录像半屏灰、内容翻转重复——游戏视图面板太小（974×634）+ 1.5x 缩放，录制器强行渲染 1080p 时缓冲错位。开 Play Maximized 后满屏正常。缩放滑块只影响编辑器预览，不影响录制分辨率。
+
+### 音效补漏
+
+Boss 挨打漏接了音效：小怪死亡走 Enemy.Die 的 `PlayHit()`、玩家受击走 PlayerHealth 的 `PlayHurt()`，Boss.TakeDamage 没调。补在死亡分支之后、Hurt 判定之前，前 5 刀播打怪音、致命一击只播胜利音（不重叠）。
+
+---
+
+## 今日关键概念速查
+
+| 概念 | 一句话 |
+|---|---|
+| 状态机 FSM | 同一时刻只有一种状态，什么状态干什么事 |
+| enum | 一组有名字的编号，比裸数字可读 |
+| 协程 | 另一条时间线，能"等几秒再继续"，期间 Update 照跑 |
+| 前摇/后摇 | 前摇给玩家躲，后摇给玩家打 |
+| 硬直/打断 | 受击短暂失控（输出窗口）；蓄力被打要停掉协程 |
+| Lerp | 两个值之间按比例插值，做平滑动画 |
+| 协程句柄 | StartCoroutine 的返回值存下来，StopCoroutine 才能精确停 |
+| 状态守卫 | 协程醒来先检查 state 还是不是我，防止覆盖新状态 |
+| activeInHierarchy / IsAlive | 物体激没激活 / 状态死没死，是两层判断 |
+| 事件驱动 UI | 数据变化 Invoke 事件，UI 订阅刷新，双方互不直接引用 |
+| Slider 量程 | 不设 maxValue，value 超过最大值会被截断 |
+
+## 面试点
+
+1. 状态机怎么设计的？为什么用枚举不用一堆 bool？（互斥状态枚举天然互斥；bool 可以同时为 true 出非法组合）
+2. 协程和 Update 的区别？协程里怎么判断攻击命中？（两段时间线；判定瞬间二次确认距离）
+3. 状态切换时怎么防止协程竞态？（提前 return、句柄停协程、醒来守卫 state）
+4. UI 怎么和游戏数据同步？（event 订阅/退订，事件驱动，不每帧轮询）
+5. 为什么判定要做两次？（前摇给了玩家躲避窗口，跑出范围必须空大）
+
+## 顺延与待办（打磨期）
+
+- BossHpUI.cs 现在放在 Scripts/Enemy 文件夹，以后挪到 Scripts/UI
+- BossHpSlider 的 Handle Slide Area 子物体可删（不影响功能）
+- playerAttackRange 检查器值为 3（Boss 攻击范围 3.5），手感偏难，可调 4~5
+- Boss 专用厚重受击音效（现在复用打怪音效）
+- Boss 前 WaitForSeconds(5f) 录屏时可临时改 1 秒，录完改回
+- 正式录屏 Movie_007（约 44 秒，本地 Recordings 文件夹），打磨期录完整作品集版
