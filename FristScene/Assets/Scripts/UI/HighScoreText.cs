@@ -3,9 +3,11 @@ using UnityEngine.UI;
 
 public class HighScoreText : MonoBehaviour
 {
+    public Text LastScoreText;
     void Start()
     {
-        GetComponent<Text>().text = "最高分：" + PlayerPrefs.GetInt(GameConfig.HighScoreKey, 0);
+        LastScoreText.text = "最近得分:" + SaveManager.LoadLastScore();
+        GetComponent<Text>().text = "最高分：" + SaveManager.LoadHighScore();
     }
 
     // Update is called once per frame

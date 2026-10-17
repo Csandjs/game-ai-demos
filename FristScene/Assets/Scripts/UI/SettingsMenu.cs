@@ -20,13 +20,12 @@ public class SettingsMenu : MonoBehaviour
     }
     void OnVolumeSlider(float value)
     {
-        AudioListener.volume = value;
-        PlayerPrefs.SetFloat(GameConfig.VolumeKey ,value);
+        SaveManager.SaveVolume(value);
         Debug.Log("拖动滑块，已存音量：" + value);
     }
     void Start()
     { 
-        volumeSlider.value = AudioListener.volume = PlayerPrefs.GetFloat(GameConfig.VolumeKey,1f);
+        volumeSlider.value = AudioListener.volume = SaveManager.LoadVolume();
         settingsButton.onClick.AddListener(OnSettingsClick);
         backButton.onClick.AddListener(OnBackClick);
         volumeSlider.onValueChanged.AddListener(OnVolumeSlider);
