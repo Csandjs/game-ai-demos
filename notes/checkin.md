@@ -27,6 +27,8 @@
 | 2026-10-16 | D23 | ✅ 完成 | ①0.9 与 0.9f 浮点精度差导致进度条 while 死循环（已改 0.9f）；②持久总管跨场景拖不了 UI，用"场景报到"模式（LevelSceneSetup + RegisterLevel）解决 | D24：W4 地基期最后一天（PlayerPrefs 存档体系），随后进 Demo1 FSM |
 | 2026-10-17 | D24（压缩日上午+下午） | ✅ 完成 | ①SaveManager 初版把 key 当参数、SetInt 误存旧值（已修）；②结算面板字号160溢出，重构为"遮罩根物体+内容"标准弹窗；③JSON 序列化与反序列化原理 | D25 压缩日：Boss 状态机补 Hurt/Dead + 攻击前摇后摇 + Boss 血条 + 录屏 |
 | 2026-10-18 | D25（跨夜，Boss 日） | ✅ 完成 | ①Boss 死亡分支漏 return 导致"死后复活"、Hurt 守卫位置错导致硬直无敌、协程醒来覆盖 Dead（已修）；②Boss 血条 maxValue 默认 1 导致一直满；③录屏半灰翻转，Play Maximized 解决 | D26（顺延周日上午）：W4 速查表 + 闭卷自测 3 题 + week4 周总结 + 面试口述 |
+| 2026-10-18 | D26（W4 复盘日上午） | ✅ 完成 | 协程闭卷首答漏 WaitForFixedUpdate、IEnumerator 拼写错；面试口述协程机制首答 60 分（没讲清 yield return 交还控制权+Unity 每帧轮询）；虚构"玩家攻击用了协程"被当场纠正 | D27：地基期收官整合（攻击动画+试玩修bug+BGM+录屏+README） |
+| 2026-10-18 | D27（地基期收官日下午） | ✅ 完成 | ①AudioManager 初版两行 GetComponent 拿到同一个喇叭→改 AddComponent；②出生点保护初版永远传西南角→改方向向量版，又把 dir.z 写成 dir.y 导致正北方玩家被放进 Boss 中心；③SettingsMenu 漏设 Toggle 初始 isOn→UI 不反映存档 | D28：地基期阶段总结+作品集+git tag v0.1+LeetCode |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -298,3 +300,21 @@
 - 录屏坑：游戏视图面板太小+1.5x 缩放导致半灰翻转画面，Play Maximized 后正常；缩放不影响录制分辨率
 - 工程：Recordings/ 已加 .gitignore（视频不进 git）；D25 已提交 commit cfae8ff 并 push
 - 正式成片 Movie_007（约 44 秒，本地 Recordings）；打磨期录完整作品集版
+
+## D26 完成（10/18 周日上午）W4 复盘日
+
+- 速查表闭卷回忆：生命周期口述正确（Awake/Start 区别、FixedUpdate/Update/LateUpdate 分工到位）；协程漏 WaitForFixedUpdate、IEnumerator 拼写错，补全后生成 W4速查表.md（四模块：生命周期/协程/Input/场景存档+高频坑清单）
+- 闭卷自测 3 题：题1 生命周期分析 90 分（GetKeyDown 放 FixedUpdate 漏按、相机为何 LateUpdate）；题2 协程刷怪器（每2秒1个共5个、X停止、防重复）初版 78 分（缺判空、门禁写协程内部导致句柄被覆盖、bool 没置 true），两轮指导修正；题3 单例+PlayerPrefs 主动要求看参考完成（标注"参考完成未闭卷"）
+- week4.md 周总结：知识地图/踩坑全清单/自测结果/待办池/面试题，交付后贴入 notes/
+- 面试口述 3 题：题1 生命周期 85 分（结算界面例子不当）；题2 协程机制首答 60 分（没讲清 yield return 交还控制权+Unity 每帧轮询），重讲后 80 分；题3 单例 75 分（缺"第二个管理员怎么冒出来"的具体场景：返回主菜单重新加载 MenuScene）
+- 当场纠正：面试时虚构"玩家攻击用了协程"，核实工程确认是 EnemySpawner.Update 里 GetKeyDown 瞬间调 TakeDamage，无协程
+
+## D27 完成（10/18 周日下午）地基期收官整合
+
+- 攻击动画补全：Attack.anim 三关键帧（Cube 缩放 0:00→0:10 压扁拉长→0:20 还原），Animator 加 Attack 状态+isAttacking Trigger 参数，AnyState→Attack（无 Exit Time、Duration 0）、Attack→Idle（Exit Time 1、Duration 0.1），PlayerPhysicsMove.Update 加 K/鼠标左键→animator.SetTrigger("isAttacking")
+- 试玩 3 遍发现 3 问题：①跑到边缘掉下去→四面空气墙（空物体+BoxCollider 无渲染，公式：墙位置=地面中心+半边长，地面 5×1×35 → 北/南 z=±17.5、东/西 x=±2.5）；②Boss 降临与玩家重合被挤入虚空→出生点保护（先挪人再 SetActive，水平方向拍平 y，向量归一化推出 5.5m，零向量默认 Vector3.back）；③Boss 挨打音效只播 5 下→确认是设计（第 6 刀致命一击走死亡分支 return，只播胜利音，避免叠加）
+- BGM+开关存档：双 AudioSource 架构（音效喇叭 PlayOneShot 可叠加 + BGM 喇叭 loop 循环独立开关），AudioManager 用 AddComponent 动态新建第二个喇叭，GameConfig 加 MusicOnKey，SaveManager 加 SaveMusicOn/LoadMusicOn（PlayerPrefs 不认识 bool，int 存 1/0，默认 1 开），SettingsMenu 加 Toggle 开关（onValueChanged 带 bool 参数，和 Button.onClick 不带参数的区别），Start 读档设 musicToggle.isOn 初始值
+- 踩坑三连：①AudioManager 初版 bgmSource=GetComponent<AudioSource>() 和 audioSource 拿到同一个喇叭→改 gameObject.AddComponent<AudioSource>() 动态新建；②出生点保护初版永远传西南角 (boss.x-5.5, boss.z-5.5)→改方向向量版，又把 z 分量写成 dir.y（dir 拍平后 y=0）导致正北方玩家被放进 Boss 中心→改 dir.z；③SettingsMenu 漏设 musicToggle.isOn 初始值→关音乐重开后 Toggle 仍显示开
+- 完整流程录屏：主菜单→设置（演示音量+音乐开关）→开始游戏→吃金币杀小怪→Boss 战→胜利结算
+- README 大更新：胜利条件改杀 Boss、加 Boss 五态 FSM 描述、技术亮点（双 AudioSource/空气墙/出生点保护/事件驱动 UI）、W4 学习进度、目录结构加 Animations/Recordings
+- Git 提交 b9e2f80（17 个文件，982 insertions）并 push 到 main

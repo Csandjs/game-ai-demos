@@ -5045,3 +5045,399 @@ Boss 挨打漏接了音效：小怪死亡走 Enemy.Die 的 `PlayHit()`、玩家�
 - Boss 专用厚重受击音效（现在复用打怪音效）
 - Boss 前 WaitForSeconds(5f) 录屏时可临时改 1 秒，录完改回
 - 正式录屏 Movie_007（约 44 秒，本地 Recordings 文件夹），打磨期录完整作品集版
+
+---
+
+# 📅 D26: W4 复盘——速查表 + 闭卷自测 + 周总结 + 面试口述
+
+今天是 W4 复盘日（10/18 周日上午），不写新代码，做四件事：闭卷回忆速查表、闭卷自测 3 题、写 week4 周总结、面试口述 3 题。核心目标是把 W4 学的生命周期/协程/Input/场景存档从"看得懂"逼到"说得出、写得出"。
+
+---
+
+## ☀️ 上午：速查表闭卷回忆
+
+### 生命周期闭卷
+
+口述生命周期 8 个方法执行顺序，全部正确：
+
+- **Awake**：物体创建时立刻执行，所有物体的 Awake 跑完才跑 Start；适合取组件、初始化引用、单例登记
+- **OnEnable**：物体每次激活时执行（SetActive(true) 或勾选组件）
+- **Start**：第一帧 Update 之前，只执行一次；适合需要别的物体 Awake 已完成的初始化
+- **FixedUpdate**：固定步长（默认 0.02s），慢帧会同帧补跑多次；物理操作写这里
+- **Update**：每帧一次，帧率不固定；输入检测、非物理逻辑写这里
+- **LateUpdate**：所有 Update 跑完后执行；相机跟随写这里（保证角色先移动相机再跟）
+- **OnDisable**：物体每次禁用时执行
+- **OnDestroy**：物体销毁时执行；事件退订写这里
+
+**Awake vs Start（面试高频）**：Awake 是"自己醒过来"，不管别的物体有没有醒；Start 是"大家都醒了，准备开始第一帧"。单例必须写 Awake（DontDestroyOnLoad + 判重），因为别的脚本可能在 Start 里就引用 Instance。
+
+**FixedUpdate vs Update（面试高频）**：FixedUpdate 固定时间步长，物理引擎在它之后结算；Update 随帧率波动。GetKeyDown 放 FixedUpdate 会漏按（按键事件只在一帧内有效，FixedUpdate 可能错过），所以输入检测放 Update，物理移动放 FixedUpdate。
+
+### 协程闭卷
+
+首答漏了两个点：
+
+1. **IEnumerator 拼写**：一开始写成 IEnumertor，纠正为 IEnumerator（e-r-a-t-o-r）
+2. **WaitForFixedUpdate**：只记得 WaitForSeconds / WaitForEndOfFrame / yield return null，漏了 WaitForFixedUpdate（等到下一次 FixedUpdate 之后）
+
+补全后协程三要素：
+
+- `using System.Collections;` + 返回类型 `IEnumerator`
+- 方法体内 `yield return xxx` 交还控制权
+- `StartCoroutine(方法名())` 启动，返回值存句柄可 `StopCoroutine(句柄)` 精准停
+
+**三种等待对比**：
+
+| 等待 | 含义 |
+|---|---|
+| `yield return null` | 下一帧 Update 之后继续 |
+| `yield return new WaitForSeconds(n)` | 等 n 秒（受 timeScale 影响） |
+| `yield return new WaitForFixedUpdate()` | 等下一次 FixedUpdate 之后 |
+| `yield return new WaitForEndOfFrame()` | 等本帧渲染结束（最末尾） |
+
+**反直觉点**：禁用脚本组件（enabled=false）不停协程；SetActive(false) 或销毁物体才停。
+
+---
+
+## 🌤 闭卷自测 3 题
+
+### 题 1：生命周期分析题（90 分）
+
+题目：把 `Input.GetKeyDown(KeyCode.Space)` 写在 FixedUpdate 里会怎样？相机跟随为什么写 LateUpdate？
+
+回答正确：GetKeyDown 只在按下的那一帧有效，FixedUpdate 固定步长可能错过那一帧 → 漏按；相机写 LateUpdate 保证所有 Update（含角色移动）先跑完，相机再跟，不抖动。
+
+扣 10 分：没提到"慢帧时 FixedUpdate 同帧补跑多次，GetKeyDown 在补跑的那次也会重复触发"。
+
+### 题 2：协程刷怪器（初版 78 分，两轮修正）
+
+题目：写一个协程，每 2 秒生成 1 个敌人，共 5 个；按 X 停止；防止重复启动。
+
+初版三个问题：
+
+1. **缺判空**：生成器引用没判 null，生成器被销毁后协程还在跑 → 空引用
+2. **门禁写在协程内部**：`if (isSpawning) yield break;` 写在 IEnumerator 方法体开头，导致 StartCoroutine 被调用后句柄已被覆盖，StopCoroutine 停不掉旧的。正确做法：门禁写在调用方（启动协程之前判断 isSpawning）
+3. **bool 没置 true**：启动协程后忘了 `isSpawning = true`，门禁永远不生效
+
+修正后标准写法：调用方判 `!isSpawning` 才 StartCoroutine 并置 true；协程末尾置 false；StopCoroutine(句柄) 精准停。
+
+### 题 3：单例 + PlayerPrefs（参考完成，未闭卷）
+
+主动要求看参考答案。涉及 ClosedBookScore / ClosedBookMenuText 两个脚本，核心是单例三件套（判重/登记/免死）+ PlayerPrefs 存取最高分。标注"参考完成未闭卷"，打磨期需重测。
+
+---
+
+## 🌙 面试口述 3 题
+
+### 题 1：生命周期（85 分）
+
+能讲清顺序和分工，但举例子时用了"结算界面"不当（结算界面是 UI 显隐，不是生命周期典型场景）。应举"玩家跳跃输入放 Update、刚体移动放 FixedUpdate、相机跟随放 LateUpdate"。
+
+### 题 2：协程机制（首答 60 分 → 重讲 80 分）
+
+首答只说了"协程可以等几秒"，没讲清核心机制：
+
+- **yield return 是"交还控制权"**：协程跑到 yield return 就暂停，把控制权还给 Unity 主循环
+- **Unity 每帧轮询所有协程**：检查每个协程的等待条件满足了没，满足了就从暂停处继续
+- **协程不是多线程**：它和 Update 在同一个主线程上跑，只是"分段执行"
+
+重讲后 80 分，扣 20 分：没提到"协程句柄"和"StopCoroutine 精准停止 vs StopAllCoroutines 全停"。
+
+**当场纠正一个虚构**：口述时说"玩家攻击用了协程"，核实工程代码确认是 EnemySpawner.Update 里 GetKeyDown 瞬间调 TakeDamage，没有协程。面试不能编代码细节，不确定就说"这个功能我用的是 Update 轮询"。
+
+### 题 3：单例（75 分）
+
+能讲清单例三件套，但缺"第二个管理员怎么冒出来"的具体场景：返回主菜单重新加载 MenuScene 时，场景里的 GameManager 物体被重建，Awake 发现 Instance 已存在 → Destroy 自己。这是单例判重的真实触发场景，必须能讲出来。
+
+---
+
+## 今日关键概念速查
+
+| 概念 | 一句话 |
+|---|---|
+| Awake vs Start | Awake 所有物体跑完才 Start；单例写 Awake，依赖别人的写 Start |
+| FixedUpdate vs Update | Fixed 固定步长跑物理，Update 每帧跑输入；GetKeyDown 放 Fixed 会漏按 |
+| LateUpdate | 所有 Update 之后，相机跟随写这里防抖动 |
+| 协程三要素 | IEnumerator 返回 + yield return + StartCoroutine 启动 |
+| yield return | 交还控制权给 Unity，等待条件满足后从暂停处继续 |
+| 协程不是多线程 | 和 Update 同主线程，只是分段执行 |
+| 协程句柄 | StartCoroutine 返回值存下来，StopCoroutine 才能精准停 |
+| 门禁位置 | 防重复启动的 bool 判断写在调用方，不写协程内部 |
+| 禁用组件不停协程 | enabled=false 不停，SetActive(false)/销毁才停 |
+
+## 面试点
+
+1. 生命周期执行顺序？Awake 和 Start 的区别？（所有 Awake 先跑完；单例写 Awake）
+2. 为什么输入放 Update、物理放 FixedUpdate？（GetKeyDown 只一帧有效；Fixed 固定步长结算物理）
+3. 协程原理？yield return 做了什么？（交还控制权+Unity 每帧轮询；不是多线程）
+4. 怎么停止一个协程？（句柄 StopCoroutine 精准停；StopAllCoroutines 全停）
+5. 单例怎么防止重复创建？第二个实例什么时候冒出来？（Awake 判重 Destroy；切场景重新加载时）
+
+## 顺延与待办（打磨期）
+
+- 题 3 单例+PlayerPrefs 是参考完成，打磨期需闭卷重测
+- ClosedBookScore / ClosedBookMenuText 脚本在 Scripts/Test/，可保留
+- week4.md 需贴入 notes/ 并提交
+
+---
+
+# 📅 D27: 地基期收官整合——攻击动画 + 试玩修 bug + BGM + 录屏 + README
+
+今天是地基期最后一天（10/18 周日下午），把 W1-W4 学的所有东西整合成一个完整可玩的游戏。四件事：补攻击动画、试玩修 bug、加 BGM 音乐开关、录屏+README+提交。
+
+---
+
+## ☀️ 攻击动画补全
+
+### 现状：Animator 只有三态，缺 Attack
+
+打开 Animator 窗口，现有 Idle（默认）/ Move / Jump 三个状态，参数 isMoving（Bool）/ isJumping（Bool）。玩家 K 键攻击时没有动画，Cube 原地不动。
+
+### 步骤 1：录制 Attack.anim
+
+Animation 窗口（窗口 → 动画 → 动画）点录制红点，Cube 没骨骼，动画属性录 Transform.Scale 即可，做"出拳前扑"三帧：
+
+- 0:00 帧：Scale (1, 1, 1)
+- 0:10 帧：Scale (0.8, 0.8, 1.4)——压扁拉长，像往前扑
+- 0:20 帧：Scale (1, 1, 1)——还原
+
+片段时长拖到 0.3 秒左右（攻击要干脆）。
+
+### 步骤 2：Animator 加 Attack 状态 + Trigger 参数
+
+把 Attack.anim 拖进 Animator 窗口自动生成 Attack 状态。Parameters 面板点 + → Trigger（触发器），命名 isAttacking。
+
+**Trigger vs Bool（重要区别）**：
+
+- Bool 是持续 true/false（"在不在跑"），需要手动设回 false
+- Trigger 是**瞬间触发一次、被 Animator 消费后自动重置**（"打了一拳"），适合攻击这种瞬时动作
+
+代码里 `animator.SetTrigger("isAttacking")` 触发一次，Animator 消费后自动归零，不用手动设 false。
+
+### 步骤 3：两条过渡线
+
+| 过渡 | Has Exit Time | Transition Duration | 条件 |
+|---|---|---|---|
+| Any State → Attack | 取消（不等当前动画播完） | 0（立刻切入） | isAttacking |
+| Attack → Idle | 保留（播完才走） | 0.1（轻微混合） | 无条件（播完自动回） |
+
+**Any State 的含义**：从任何状态都能切到 Attack——移动中、跳跃中按 K 都能立刻攻击，不用先回 Idle。
+
+**Transition Duration（过渡持续时间）在哪里**：点过渡线，检查器里展开 Settings（设置）折叠项，"过渡持续时间"就是它。Any State→Attack 设 0 是为了攻击响应零延迟。
+
+### 步骤 4：代码接线
+
+PlayerPhysicsMove.cs 的 Update 里，Playing 状态判断内部，加 K/鼠标左键检测：
+
+```csharp
+if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
+{
+    animator.SetTrigger("isAttacking");
+}
+```
+
+验证：按 K 时 Cube 有前扑缩放动作，Animator 窗口状态高亮流转到 Attack 再回 Idle/Move。
+
+---
+
+## 🌤 试玩 3 遍，修 3 个 bug
+
+完整试玩（主菜单→通关）三遍，发现三个问题。
+
+### Bug 1：跑到边缘掉下去
+
+**根因**：场地没有边界，Cube 是刚体，走到边缘就掉下去。
+
+**修法：空气墙**。Collider（碰撞体）和 Renderer（渲染器）是两个独立组件——只有 BoxCollider 没有模型的物体，玩家看不见但会被挡住。
+
+1. 层级面板 + → 创建空对象，命名 Wall_North
+2. 添加组件 → 物理 → Box Collider（盒形碰撞体）
+3. 改 Collider 的 Size（大小），不用改 Transform 的 Scale
+4. Ctrl+D 复制四面，围住场地
+
+**公式**：墙的位置 = 地面中心 + 半边长方向偏移。
+
+地面 5×1×35（中心假设在原点），半宽 2.5，半长 17.5：
+
+| 墙 | Position | BoxCollider Size |
+|---|---|---|
+| Wall_North | (0, 2.5, 17.5) | (6, 5, 1) |
+| Wall_South | (0, 2.5, -17.5) | (6, 5, 1) |
+| Wall_East | (2.5, 2.5, 0) | (1, 5, 36) |
+| Wall_West | (-2.5, 2.5, 0) | (1, 5, 36) |
+
+墙高 5，中心 y=2.5（从地面到 5 米高，跳不出去）；长度 +1 是墙角多盖一点不留缝。
+
+### Bug 2：Boss 降临时和玩家重合，被挤入虚空
+
+**根因**：Boss 出生点 (0,1,10)，玩家如果站在那里等，Boss SetActive(true) 时两个碰撞体重叠，物理引擎暴力把玩家弹开，可能弹出空气墙（早期没墙时直接飞出地图）。
+
+**修法：出生点保护**。在 Boss 激活之前，检测玩家离出生点是否小于安全距离，是的话沿水平方向把玩家推到 5.5 米外。
+
+**核心思路**：
+
+1. **先挪人，再激活 Boss**（顺序反了，这一帧还是会弹）
+2. 方向向量拍平 y：只在水平面挪，否则人被挪到天上
+3. 向量归一化（Normalize）：长度缩成 1 只保留方向，再乘 5.5 保证无论从哪儿来都正好推到 5.5 米外
+4. 玩家正好站在 Boss 中心时方向是零向量，给默认方向 Vector3.back（朝 -z）
+
+```csharp
+Vector3 bossPos = boss.transform.position;
+Vector3 playerPos = player.position;
+Vector3 dir = new Vector3(playerPos.x - bossPos.x, 0, playerPos.z - bossPos.z);
+
+if (dir.magnitude < 0.01f) dir = Vector3.back;
+
+if (dir.magnitude < 5.5f)
+{
+    dir.Normalize();
+    player.position = new Vector3(
+        bossPos.x + dir.x * 5.5f,
+        playerPos.y,
+        bossPos.z + dir.z * 5.5f
+    );
+}
+boss.SetActive(true);
+```
+
+**今天踩的两个真实 bug**：
+
+1. **初版永远传西南角**：写成 `boss.x - 5.5, boss.z - 5.5`，不管玩家从哪边来都传到西南角，视觉上穿过 Boss。正确做法是沿"Boss 指向玩家"的方向推出。
+2. **dir.z 写成 dir.y**：方向向量拍平后 dir.y=0，第三个分量用 dir.y 导致 z 偏移永远是 0，正北方站着的玩家被放进 Boss 中心。正确是 `dir.z * 5.5f`。
+
+**magnitude 是什么**：向量的长度，√(x²+y²+z²)，就是起点到终点的直线距离。`Vector3.Distance(a,b)` 内部算的就是 `(a-b).magnitude`。Normalize 把长度缩成 1 只保留方向。
+
+### Bug 3：Boss 挨打音效只播 5 下（不是 bug，是设计）
+
+Boss.TakeDamage 的顺序：扣血 → 通知血条 → `if (hp <= 0) { StartCoroutine(DieRoutine()); return; }` → `PlayHit()`。
+
+第 6 刀是致命一击，走死亡分支 return，不播打怪音，之后 DieRoutine 里 WinGame 播胜利音。所以是 5 声打怪音 + 1 声胜利音，避免两个音效叠在一起糊掉。保持现状。
+
+---
+
+## 🌙 BGM 背景音乐 + 开关存档
+
+### 为什么要两个 AudioSource
+
+AudioSource 像播音喇叭。现有一个喇叭用 PlayOneShot 播一次性音效（可叠加）。BGM 是循环长音乐，要常播、要独立开关——和音效混用一个喇叭，静音乐会把音效也静了。
+
+工业界标准：两个喇叭各管一摊——
+
+- sfxSource（现有）：PlayOneShot 播一次性音效
+- bgmSource（新加）：loop 循环播 BGM，独立 mute 开关
+
+### 两种播放模式对比
+
+| 模式 | 怎么播 | 能循环 | 能叠加 | 适合 |
+|---|---|---|---|---|
+| `PlayOneShot(clip)` | 临时传 clip，播完就完 | ❌ | ✅ | 音效（叮、受击） |
+| `clip = xxx; Play()` | 播喇叭自己存的那首 | ✅ | ❌ | 背景音乐 |
+
+PlayOneShot 不需要给 source.clip 赋值；Play() 播的是 source.clip 字段里的东西，所以必须先 `bgmSource.clip = bgmClip` 再 Play。
+
+### AddComponent vs GetComponent（今天的核心坑）
+
+`GetComponent<AudioSource>()` 是"在我身上找已经存在的组件"——AudioManager 物体上只挂了一个 AudioSource，写两行 GetComponent 拿到的是**同一个**。
+
+要第二个喇叭必须用 `gameObject.AddComponent<AudioSource>()` 动态新建——这是代码版的"添加组件"按钮。
+
+```csharp
+bgmSource = gameObject.AddComponent<AudioSource>();
+bgmSource.clip = bgmClip;
+bgmSource.loop = true;
+bgmSource.playOnAwake = false;
+bgmSource.volume = 0.3f;
+bool musicOn = SaveManager.LoadMusicOn();
+bgmSource.mute = !musicOn;
+if (musicOn && bgmClip != null) bgmSource.Play();
+```
+
+`bgmSource.mute = !musicOn`：mute（静音）和 musicOn（音乐开）语义是反的，要取反对齐——音乐开→不静音，音乐关→静音。
+
+### PlayerPrefs 存 bool（int 1/0）
+
+PlayerPrefs 不认识 bool，用 int 存：1=开，0=关。
+
+```csharp
+public static void SaveMusicOn(bool isOn)
+{
+    PlayerPrefs.SetInt(GameConfig.MusicOnKey, isOn ? 1 : 0);
+}
+public static bool LoadMusicOn()
+{
+    return PlayerPrefs.GetInt(GameConfig.MusicOnKey, 1) == 1;  // 默认开
+}
+```
+
+`isOn ? 1 : 0` 是三元运算符：条件为 true 取 1，false 取 0。
+
+### Toggle 开关接线
+
+Toggle（中文界面叫"切换"）是勾选框组件，记住开/关状态。和 Button 的区别：
+
+- Button.onClick：点一下触发一次，不记状态，绑定的方法不带参数
+- Toggle.onValueChanged：状态变化时触发，**自动传一个 bool 参数**（当前是开还是关）
+
+SettingsMenu 里：
+
+```csharp
+public Toggle musicToggle;
+
+void Start()
+{
+    musicToggle.isOn = SaveManager.LoadMusicOn();  // 界面和存档一致
+    musicToggle.onValueChanged.AddListener(OnMusicToggle);
+}
+
+void OnMusicToggle(bool isOn)
+{
+    SaveManager.SaveMusicOn(isOn);
+    AudioManager.Instance.SetMusicOn(isOn);
+}
+```
+
+**踩坑**：Start 里如果不设 `musicToggle.isOn`，玩家关了音乐重开游戏，Toggle 还是显示场景默认的 Is On（通常是 true），和实际存档不一致。必须读档设初始值。
+
+设置 isOn 会触发 onValueChanged → 调 OnMusicToggle → 重新存同样的值 + 重新设 mute，无害。
+
+---
+
+## 今日关键概念速查
+
+| 概念 | 一句话 |
+|---|---|
+| Trigger 参数 | 瞬间触发一次、被消费后自动重置，适合攻击；不用手动设回 false |
+| Any State | 从任何状态都能切到目标状态，适合"随时能攻击" |
+| Transition Duration | 两个动画混合的过渡时间，检查器 Settings 折叠项里 |
+| 空气墙 | 只有 Collider 没有 Renderer 的物体，看不见但挡人 |
+| 墙位置公式 | 地面中心 + 半边长方向偏移 |
+| 出生点保护 | 激活 Boss 前把玩家沿水平方向推到安全距离外 |
+| 向量归一化 Normalize | 长度缩成 1 只保留方向，乘距离保证推出固定米数 |
+| magnitude | 向量长度，√(x²+y²+z²)，= Vector3.Distance |
+| 双 AudioSource | 音效喇叭 PlayOneShot 可叠加 + BGM 喇叭 loop 独立开关 |
+| AddComponent | 代码动态新建组件，GetComponent 是找已有的 |
+| PlayOneShot vs Play | OneShot 临时传 clip 不循环可叠加；Play 播 source.clip 可循环 |
+| mute = !musicOn | 静音和开语义相反，取反对齐 |
+| PlayerPrefs 存 bool | 不认识 bool，用 int 1/0 存 |
+| Toggle.onValueChanged | 状态变化触发，自动传 bool 参数；Button.onClick 不带参数 |
+
+## 面试点
+
+1. Animator 的 Trigger 和 Bool 有什么区别？（Trigger 自动重置瞬时触发；Bool 持续需手动改）
+2. 怎么实现"移动中也能攻击"？（Any State → Attack，取消 Has Exit Time，Duration 0）
+3. 玩家掉出地图怎么修？（空气墙=无渲染的 Collider；或死亡平面触发器）
+4. 两个物体碰撞体重叠时物理引擎会怎样？怎么避免？（暴力弹开；激活前挪开/生成点保护）
+5. 向量归一化是做什么的？（长度缩 1 保留方向，推出固定距离）
+6. 为什么 BGM 和音效要用两个 AudioSource？（一个要循环独立开关，一个要一次性可叠加）
+7. AddComponent 和 GetComponent 的区别？（新建 vs 查找已有）
+8. PlayerPrefs 怎么存 bool？（int 1/0，因为不认识 bool）
+9. Toggle 和 Button 的事件有什么不同？（onValueChanged 传 bool；onClick 无参数）
+
+## 顺延与待办（打磨期）
+
+- week4.md 需贴入 notes/ 并提交
+- 录屏文件确认位置（Unity Recorder 默认输出 Recordings/）
+- playerAttackRange=3 手感偏难，可调 4~5
+- Boss 专用厚重受击音效（现在复用打怪音效）
+- public 字段重构为 [SerializeField] private
+- ClosedBookSpawmer.cs 命名拼写（CloseBook→ClosedBook，Spawmer→Spawner）
