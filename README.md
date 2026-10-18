@@ -28,6 +28,10 @@
 
 ![胜利结算](docs/screenshots/05_victory.png)
 
+### 完整通关录屏
+
+🎬 [点击在 Release 页在线观看完整通关视频（18.8MB，含主菜单/设置/通关全流程）](https://github.com/Csandjs/game-ai-demos/releases/tag/v0.1)
+
 ### 玩法
 
 - **目标**：收集金币、击杀小怪，最终击败 Boss
