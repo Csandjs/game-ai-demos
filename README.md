@@ -6,6 +6,28 @@
 
 第三人称 3D 动作小游戏：在场景中收集金币、击杀巡逻敌人，最终迎战 Boss。包含完整的主菜单、暂停、设置（音量+音乐开关）、胜负结算和本地存档。
 
+### 游戏截图
+
+**主菜单**（最高分 / 最近得分本地存档）
+
+![主菜单](docs/screenshots/01_mainmenu.png)
+
+**游戏中**（金币、巡逻小怪、Boss 登场倒计时）
+
+![游戏中](docs/screenshots/02_gameplay.png)
+
+**Boss 战**（五态 AI + 头顶血条）
+
+![Boss战](docs/screenshots/03_boss.png)
+
+**暂停菜单**（Esc 暂停、设置、返回主菜单）
+
+![暂停菜单](docs/screenshots/04_pause.png)
+
+**胜利结算**（本局得分 / 最高分 / 最近得分）
+
+![胜利结算](docs/screenshots/05_victory.png)
+
 ### 玩法
 
 - **目标**：收集金币、击杀小怪，最终击败 Boss
