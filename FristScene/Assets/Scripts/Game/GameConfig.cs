@@ -11,6 +11,7 @@ static class GameConfig
     public const string HighScoreKey = "HighScore";
     public const string LastScoreKey = "LastScore";
     public const string SaveDataKey = "SaveData";
+    public const string MusicOnKey = "MusicOn";
     public static float Get(string key)
     {
         if (config.TryGetValue(key, out float value))

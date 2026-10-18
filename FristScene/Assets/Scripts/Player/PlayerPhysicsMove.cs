@@ -62,6 +62,10 @@ public class PlayerPhysicsMove : MonoBehaviour , IMovable
                 rb.AddForce(Vector3.up * jumpForce ,ForceMode.Impulse);
                 AudioManager.Instance?.PlayJump();
             }
+            if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
+            {
+                animator.SetTrigger("isAttacking");
+            }
             animator.SetBool("isJumping", !isGrounded);
         }
         

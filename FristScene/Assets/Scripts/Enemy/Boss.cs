@@ -100,12 +100,12 @@ public class Boss : MonoBehaviour
         if (state == BossState.Dead) return;
         hp -= dmg;
         OnHpChanged?.Invoke(hp);
+        AudioManager.Instance?.PlayHit();
         if (hp <= 0)
         {
             StartCoroutine(DieRoutine());
             return;
         }
-        AudioManager.Instance?.PlayHit();
         if (state == BossState.Hurt) return;
         if(state == BossState.Attack)
         {

@@ -11,6 +11,14 @@ static class SaveManager
     {
         return PlayerPrefs.GetFloat(GameConfig.VolumeKey,1f);
     }
+    public static void SaveMusicOn(bool isOn)
+    {
+        PlayerPrefs.SetInt(GameConfig.MusicOnKey, isOn ? 1 : 0);
+    }
+    public static bool LoadMusicOn()
+    {
+        return PlayerPrefs.GetInt(GameConfig.MusicOnKey, 1) == 1;
+    }
     public static void SaveHighScore(int score)
     {
         int oldScore = PlayerPrefs.GetInt(GameConfig.HighScoreKey,0);

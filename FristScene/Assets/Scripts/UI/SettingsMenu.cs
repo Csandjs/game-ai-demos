@@ -8,6 +8,7 @@ public class SettingsMenu : MonoBehaviour
     public GameObject startPanel;
     public Button settingsButton;
     public Button backButton;
+    public Toggle musicToggle;
     void OnSettingsClick()
     {
         startPanel.SetActive(false);
@@ -23,12 +24,19 @@ public class SettingsMenu : MonoBehaviour
         SaveManager.SaveVolume(value);
         Debug.Log("拖动滑块，已存音量：" + value);
     }
+    void OnVolumeToggle(bool isOn)
+    {
+        SaveManager.SaveMusicOn(isOn);
+        AudioManager.Instance.SetMusicOn(isOn);
+    }
     void Start()
     { 
         volumeSlider.value = AudioListener.volume = SaveManager.LoadVolume();
+        musicToggle.isOn = SaveManager.LoadMusicOn();
         settingsButton.onClick.AddListener(OnSettingsClick);
         backButton.onClick.AddListener(OnBackClick);
         volumeSlider.onValueChanged.AddListener(OnVolumeSlider);
+        musicToggle.onValueChanged.AddListener(OnVolumeToggle);
     }
 
     // Update is called once per frame
