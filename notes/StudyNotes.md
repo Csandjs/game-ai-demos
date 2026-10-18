@@ -5441,3 +5441,220 @@ void OnMusicToggle(bool isOn)
 - Boss 专用厚重受击音效（现在复用打怪音效）
 - public 字段重构为 [SerializeField] private
 - ClosedBookSpawmer.cs 命名拼写（CloseBook→ClosedBook，Spawmer→Spawner）
+
+# 📅 D28: 地基期收官整理——阶段总结 + API 速查表 + git tag/Release + 截图
+
+今天（10/18 晚）不写新代码，做作品集整理：把地基期沉淀成可展示、可回顾的资产。四件事：阶段总结、API 速查表、打 tag 发 Release、截图进 README。
+
+---
+
+## ☀️ 阶段总结与 API 速查表（notes/）
+
+- `notes/stage1.md`：W1-W4 地基期总结。知识地图（C# 语言基础→OOP→集合/委托/事件→Unity 生命周期/物理/协程/Input/UGUI/存档/音频/Animator/简单 FSM）、已完成成果、踩坑表、面试自评、下一阶段（Demo1 状态机小怪 AI）规划。
+- `notes/UnityAPI速查表.md`：16 大类 API，每个写清**参数、代码示例、坑、高频固定模式**，面试和查手册时都能快速翻。
+
+---
+
+## 🌤 git tag 与 GitHub Release
+
+### tag 是什么、Release 是什么
+
+- **git tag**：在本地给某一个 commit 贴一个**名字标签**（如 v0.1），是代码层面的标记，存在 git 里。
+- **GitHub Release**：在网页上给这个 tag 套一层**版本发布说明**（标题、正文、附件），是展示层给人看的东西。
+- 关系：**先有 tag，Release 才能挂到这个 tag 上**。tag 像小说里"第一章完结"的标记，Release 像在书城上架"第一章正式版"并写简介。
+
+### 命令（tag 要单独推送）
+
+```powershell
+git tag v0.1          # 本地给当前 commit 打标签（只在本机）
+git push origin v0.1  # 把标签推到 GitHub（tag 不随 main 自动推！）
+```
+
+`git push origin main` 只推代码分支，**tag 必须单独推**。
+
+### 网页发 Release 的字段
+
+- Choose a tag（选择标签）：选 v0.1，固定这个版本对应的代码快照
+- Target（目标）：默认 main，不改
+- Release title（标题）：人话版本名，如"v0.1 地基期——MiniLevel"
+- Describe（正文）：版本更新日志（changelog），写玩法/功能/技术栈
+- Attach binaries（附件区）：挂 exe、zip、视频，最大 2GB
+- Publish release（发布）
+
+### 两个上传区域的区别（踩坑）
+
+- **正文 Markdown 文本框**：写文字，贴图/视频限 **10MB**
+- **页面下方大虚线框附件区**（"通过在这里放置或选择…"）：挂下载文件，最大 **2GB**，视频/exe 放这里
+
+---
+
+## 🌙 截图进 README
+
+### 图片要显示在 GitHub 上，需要两件事
+
+1. **图片文件本身进 git**：git 不自动跟踪新文件，必须 `git add` 告诉它
+2. **README 里写图片引用**：markdown 图片语法
+
+```markdown
+![主菜单](docs/screenshots/01_mainmenu.png)
+```
+
+中括号是加载失败时显示的文字；小括号是相对 README 的路径，必须和实际文件位置一字不差。
+
+### git 三步（大白话）
+
+| 命令 | 大白话 |
+|---|---|
+| `git add 文件` | 放进购物车（暂存区），git 开始跟踪 |
+| `git commit -m "说明"` | 把购物车打包成一个版本，记录在本地 |
+| `git push origin main` | 把本地版本上传到 GitHub |
+
+新文件不 add 不跟踪；只 commit 不 push 就只在本机。
+
+### 为什么 GitHub 上不能直接玩
+
+GitHub 存的是**源码**（.cs/.unity/.meta），必须装 Unity 才能跑。想让别人不装 Unity 也能玩，要 **Build（打包）**：Unity 菜单 文件→构建设置（File→Build Settings），选 Windows 平台，生成 .exe + Data 文件夹 + dll，双击 exe 即可运行。**打包任务放打磨期**，做完后压缩成 zip 挂到 Release 附件区。
+
+### 今日关键概念速查
+
+| 概念 | 一句话 |
+|---|---|
+| git tag | 给某个 commit 贴名字标签，代码层标记 |
+| GitHub Release | 套在 tag 上的版本说明+附件，展示层 |
+| tag 单独推 | `git push origin v0.1`，不随 main 自动推 |
+| 正文框 vs 附件区 | 正文框限 10MB，下方大虚线附件区限 2GB |
+| README 图片语法 | `![文字](相对路径.png)` |
+| git add/commit/push | 放购物车→打包成本地版本→上传 GitHub |
+| Build 打包 | 把源码编译成免 Unity 运行的 exe+Data |
+
+# 📅 D29: 简历收尾 + FSM 状态机入门（Demo1 预热）
+
+今天（10/18 晚）晚上做技术 C 的简历收尾（作品集对外检查），上午的 FSM 概念在晚上补课完成，并写了一个纯 C# 控制台状态机，为明天开始的 Demo1 预热。
+
+---
+
+## ☀️ 简历收尾：作品集对外检查
+
+### 简历四个节点（别搞混）
+
+| 时间 | 任务 |
+|---|---|
+| D3（9/5） | 简历骨架（已完成） |
+| D65（11/8） | 简历初稿，含 Demo1 录屏 + GitHub 链接 |
+| D95（12/8） | 简历二版，含 Demo2 开源项目 |
+| 2027/1/31 | 简历终版 v3（春招版）+ 项目一页纸 |
+
+**D29 不写简历**，只做"收尾"：确认仓库公开、录屏/README 齐全。简历初稿要等 Demo1 完成（D65）才有"独立实现 FSM AI、协程攻击系统、事件驱动"这些硬货可写。
+
+### 检查清单
+
+1. 仓库公开可访问：不带认证访问仓库 URL 返回 HTTP 200
+2. README 含项目描述、操作、技术亮点、5 张截图
+3. 录屏挂到 Release：Movie_017.mp4（18.8MB）拖进**附件区**（不是正文框）
+4. README 加视频链接：链接到 Release 页（GitHub 会内联播放 mp4），不要直接贴 mp4 地址（会触发下载）
+
+```markdown
+🎬 [点击在 Release 页在线观看完整通关视频](https://github.com/用户名/仓库/releases/tag/v0.1)
+```
+
+---
+
+## 🌤 FSM 有限状态机是什么
+
+### 大白话定义
+
+**有限状态机（Finite State Machine）**：一个对象**同一时刻只能处于一种状态，满足条件就切换状态**的行为组织方式。
+
+**解决什么问题**：把一坨互相嵌套、越堆越乱的 if-else，拆成一张清晰的"状态表"。
+
+王者荣耀例子：妲己在巡逻（走河道找敌人）→ 视野出现英雄（条件）→ 追击 → 进技能范围（条件）→ 释放技能 → 敌人跑远消失（条件）→ 回巡逻。任何瞬间只做一件事。
+
+### 三个核心概念
+
+| 概念 | 大白话 | Boss.cs 里对应 |
+|---|---|---|
+| 状态 State | 此刻在干什么 | `enum BossState`（巡逻/追击/攻击/受击/死亡） |
+| 转换条件 Transition | 什么情况下从 A 变 B | `if (distance < range)` |
+| 当前状态指针 Current State | 记住"现在在哪个状态"的变量 | `currentState` 字段 |
+
+`Update` 里的 `switch (currentState)` 就是在说：**根据当前状态执行对应行为**。
+
+### 小怪 4 状态 + 5 转换（设计规格）
+
+```
+巡逻 →(距离<5m 发现)→ 追击
+追击 →(距离<1.5m 进攻击范围)→ 攻击
+攻击 →(距离>1.5m 玩家跑开)→ 追击
+追击 →(距离>8m 丢失)→ 巡逻
+任意状态 →(血量<=0)→ 死亡（终点，不再切出）
+```
+
+---
+
+## 🌙 纯 C# 控制台版 FSM（DailyPractice/FsmPractice）
+
+**目的**：证明 FSM 是通用编程模式，不是 Unity 专属。Unity 用 `Update` 每帧跑 switch，控制台用 `while` 每轮跑 switch，逻辑一模一样。
+
+### 控制台与 Unity 的对应
+
+| Unity（Boss.cs） | 控制台版 |
+|---|---|
+| `Update()` 每帧 | `while` 循环每一轮 |
+| 真实距离 Transform | 一个 `distance` 变量手动模拟 |
+| `currentState` 字段 | 同名变量 |
+| 移动/攻击 | `Console.WriteLine()` 打印 |
+| 游戏一直跑 | 循环跑 20 轮 |
+
+### 结构（依赖顺序）
+
+1. `enum EnemyState { Patrol, Chase, Attack, Dead }`（状态定义，底层）
+2. 字段：`currentState`（初始 Patrol）、`distance`（初始 10）、`hp`（100）
+3. 模拟玩家走位：bool `isPlayerApproaching`，靠近时 distance 每轮减 1，到 0 翻转为远离、每轮加 1
+4. 主循环 `while` 跑 20 轮，每轮先更新 distance，再 switch
+5. `switch(currentState)`：每个 case 打印行为并检查转换条件
+
+### 运行结果（验证）
+
+玩家先靠近后远离，小怪自动走出完整一圈：
+
+```
+巡逻(1-5轮) → 第6轮距离<5 发现玩家 → 追击
+→ 第9轮距离<1.5 贴身 → 攻击
+→ 第12轮距离>1.5 玩家跑开 → 追击
+→ 第19轮距离>8 追丢 → 巡逻(20轮)
+```
+
+### 关键设计：滞回（Hysteresis，加分点）
+
+发现用 **5m**、丢失用 **8m**，中间留 3m 缓冲带。如果发现和丢失都用 5m，玩家在 5m 边缘来回晃，小怪会在巡逻/追击之间疯狂横跳。双阈值让状态一旦进入就稳定，防抖动。
+
+### 边界细节
+
+- 严格 `<`/`>`：距离正好 =5 不切巡逻→追击，正好 =8 不切追击→巡逻，边界无歧义
+- hp 永远 100 时，死亡分支写了但不触发；要观察死亡，可在 Attack 状态让 hp 每轮减少（扩展）
+
+### 今日关键概念速查
+
+| 概念 | 一句话 |
+|---|---|
+| 有限状态机 FSM | 同一时刻只在一个状态，满足条件就切换 |
+| 状态 State | 此刻在干什么 |
+| 转换条件 Transition | 从 A 变 B 的条件 |
+| 当前状态指针 | 记住当前状态的变量（currentState） |
+| while 循环 | 控制台版的"Update"，每轮跑一次 switch |
+| 滞回 | 进入/退出用不同阈值（5m/8m），中间缓冲带防抖动 |
+| 死亡状态 | 终点态，不再切出 |
+
+### 面试点
+
+1. 什么是有限状态机？解决什么问题？（同一时刻一状态、条件触发切换；把嵌套 if-else 拆成状态表）
+2. FSM 三个核心要素？（状态、转换条件、当前状态指针）
+3. 为什么发现玩家和丢失玩家用不同距离？（滞回防抖，避免边界状态闪烁）
+4. 状态机和 Unity 是什么关系？（无关，是通用编程模式；Update 换成 while 循环就是控制台版）
+5. 状态多了 FSM 会有什么问题？（状态数爆炸、转换连线复杂，这时用行为树 BT——正是后续 Demo2 的内容）
+
+## 顺延与待办
+
+- LeetCode 283 移动零、121 买卖股票（穿插做）
+- EnemyFSM 默写自检（不查资料写一遍，工程 Enemy.cs 可对照）
+- 打磨期：Build 打包 exe 挂 Release；画面中间多余红横线排查；Boss 专用受击音效；public 字段重构 [SerializeField] private；ClosedBookSpawmer 命名拼写

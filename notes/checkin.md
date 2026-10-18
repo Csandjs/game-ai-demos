@@ -29,6 +29,8 @@
 | 2026-10-18 | D25（跨夜，Boss 日） | ✅ 完成 | ①Boss 死亡分支漏 return 导致"死后复活"、Hurt 守卫位置错导致硬直无敌、协程醒来覆盖 Dead（已修）；②Boss 血条 maxValue 默认 1 导致一直满；③录屏半灰翻转，Play Maximized 解决 | D26（顺延周日上午）：W4 速查表 + 闭卷自测 3 题 + week4 周总结 + 面试口述 |
 | 2026-10-18 | D26（W4 复盘日上午） | ✅ 完成 | 协程闭卷首答漏 WaitForFixedUpdate、IEnumerator 拼写错；面试口述协程机制首答 60 分（没讲清 yield return 交还控制权+Unity 每帧轮询）；虚构"玩家攻击用了协程"被当场纠正 | D27：地基期收官整合（攻击动画+试玩修bug+BGM+录屏+README） |
 | 2026-10-18 | D27（地基期收官日下午） | ✅ 完成 | ①AudioManager 初版两行 GetComponent 拿到同一个喇叭→改 AddComponent；②出生点保护初版永远传西南角→改方向向量版，又把 dir.z 写成 dir.y 导致正北方玩家被放进 Boss 中心；③SettingsMenu 漏设 Toggle 初始 isOn→UI 不反映存档 | D28：地基期阶段总结+作品集+git tag v0.1+LeetCode |
+| 2026-10-18 | D28（作品集整理日晚） | ✅ 完成 | ①git tag 和 Release 关系搞混（tag=代码标记，Release=套在 tag 上给人看的版本说明）；②tag 要单独 `git push origin v0.1`，不是推 main 就带上；③视频/截图拖错到正文 Markdown 框（限 10MB）→改拖下方大虚线附件区（限 2GB）；④疑惑 GitHub 为何不能直接玩（源码 vs exe，要 Build 打包，打磨期做） | D29：简历收尾 + FSM 状态机预热 |
+| 2026-10-18 | D29（Demo1 预热晚） | ✅ 完成 | ①误以为 D29 要写简历初稿（实为 D65 11/8，Demo1 后才有东西写），D29 是"简历收尾"（仓库公开+录屏/README 齐全）；②控制台 FSM 里 hp 永不减→死亡分支写了但不触发（可选扩展）；③git push 曾遇 GitHub 502 服务器错误，重试/调大 http.postBuffer 后成功 | D30 起：阶段2 Demo1 状态机小怪 AI |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -318,3 +320,23 @@
 - 完整流程录屏：主菜单→设置（演示音量+音乐开关）→开始游戏→吃金币杀小怪→Boss 战→胜利结算
 - README 大更新：胜利条件改杀 Boss、加 Boss 五态 FSM 描述、技术亮点（双 AudioSource/空气墙/出生点保护/事件驱动 UI）、W4 学习进度、目录结构加 Animations/Recordings
 - Git 提交 b9e2f80（17 个文件，982 insertions）并 push 到 main
+
+## D28 完成（10/18 晚）作品集整理：阶段总结 + 速查表 + tag/Release + 截图
+
+- 地基期阶段总结 notes/stage1.md：W1-W4 知识地图、已完成成果、踩坑表、面试自评、下一阶段（Demo1）规划、关键数字
+- UnityAPI速查表.md：16 大类 API（生命周期/协程/Input/物理/UGUI/Animator/场景/存档/音频/单例等），每个含参数说明、代码示例、坑、高频固定模式
+- git tag v0.1：学会 tag（本地给某个 commit 贴名字标签，`git tag v0.1`）和推送（`git push origin v0.1`，tag 不随 main 自动推，要单独推）
+- GitHub Release v0.1：理解 tag（代码层标记）与 Release（展示层版本说明，挂标题/正文/附件）的关系，自己在网页发布"v0.1 地基期——MiniLevel"，含玩法/功能/技术栈
+- 5 张截图进 README：docs/screenshots/ 放 01 主菜单/02 游戏中/03 Boss 战/04 暂停/05 胜利，README 用 `![文字](docs/screenshots/xx.png)` 相对路径引用；学会图片要"文件进 git + README 写引用"两件事，git add→commit→push 三步
+- 理解 GitHub 为什么不能直接玩：仓库存的是源码，要 File→Build Settings 打包成 exe+Data 才能免 Unity 运行，打包任务放打磨期；Release 附件区 2GB 可挂 exe/视频，正文 Markdown 框限 10MB
+- 提交：13fcb64（文档）、ff028e2（截图）；tag v0.1 已推；期间 push 遇 GitHub 502 服务器错误，重试后成功
+
+## D29 完成（10/18 晚）简历收尾 + FSM 状态机预热
+
+- 简历收尾（技术 C）：核对仓库公开可访问（HTTP 200）；README 含 5 张截图；完整通关录屏 Movie_017.mp4（18.8MB）挂到 Release v0.1 附件区（一开始误拖进正文 Markdown 文本框报"小于 10MB"，改拖下方大虚线附件区成功）；README 加视频链接（提交 840c395）。至此作品集闭环：代码+截图+视频+Release 齐全
+- 澄清简历四个节点：D3 骨架（已完成）/ D65 11/8 初稿（含 Demo1 录屏+GitHub）/ D95 12/8 二版（含 Demo2）/ 2027/1/31 终版 v3；D29 不写简历，只做作品集展示检查
+- FSM 状态机入门（技术 A）：有限状态机=同一时刻只能处于一种状态、满足条件就切换；把嵌套 if-else 拆成状态表；三个核心概念——状态 State、转换条件 Transition、当前状态指针 currentState；对照 Boss.cs 的 enum+switch 确认自己早就在用
+- 纯 C# 控制台版 FSM（DailyPractice/FsmPractice）：enum EnemyState（Patrol/Chase/Attack/Dead）+ while 循环（等价 Unity Update 每帧）+ switch 状态流转；用 bool 标记模拟玩家先靠近后远离、distance 每轮 ±1；运行 20 轮输出完整走出"巡逻→追击→攻击→追击→巡逻"
+- 设计亮点：发现用 5m、丢失用 8m，中间 3m 缓冲带（滞回），防止玩家在边界横跳导致状态闪烁；严格 `<`/`>` 边界无歧义；hp 分支已写但未触发（death 扩展留待）
+- 下午 EnemyFSM（技术 B）：工程里 Enemy.cs 已是 3D 三态 FSM（巡逻/追击/攻击），比任务卡要求的横版 Vector2 超额，仅留默写自检
+- 待办：LeetCode 283/121 穿插做；EnemyFSM 默写自检；打磨期 exe 打包 + 画面中间多余红横线 + Boss 专用受击音效
