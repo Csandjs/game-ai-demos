@@ -31,6 +31,7 @@
 | 2026-10-18 | D27（地基期收官日下午） | ✅ 完成 | ①AudioManager 初版两行 GetComponent 拿到同一个喇叭→改 AddComponent；②出生点保护初版永远传西南角→改方向向量版，又把 dir.z 写成 dir.y 导致正北方玩家被放进 Boss 中心；③SettingsMenu 漏设 Toggle 初始 isOn→UI 不反映存档 | D28：地基期阶段总结+作品集+git tag v0.1+LeetCode |
 | 2026-10-18 | D28（作品集整理日晚） | ✅ 完成 | ①git tag 和 Release 关系搞混（tag=代码标记，Release=套在 tag 上给人看的版本说明）；②tag 要单独 `git push origin v0.1`，不是推 main 就带上；③视频/截图拖错到正文 Markdown 框（限 10MB）→改拖下方大虚线附件区（限 2GB）；④疑惑 GitHub 为何不能直接玩（源码 vs exe，要 Build 打包，打磨期做） | D29：简历收尾 + FSM 状态机预热 |
 | 2026-10-18 | D29（Demo1 预热晚） | ✅ 完成 | ①误以为 D29 要写简历初稿（实为 D65 11/8，Demo1 后才有东西写），D29 是"简历收尾"（仓库公开+录屏/README 齐全）；②控制台 FSM 里 hp 永不减→死亡分支写了但不触发（可选扩展）；③git push 曾遇 GitHub 502 服务器错误，重试/调大 http.postBuffer 后成功 | D30 起：阶段2 Demo1 状态机小怪 AI |
+| 2026-10-20 | D30（跨夜 10/19 晚→10/20 凌晨） | ✅ 完成 | ①Gizmos 连线误写 i++（后置自增）→零长度线+跳点，改 i+1；②预制体引用场景物体拖不进→EnemySpawner 注入 waypoints；③暂停设置滑块被 Boss UI 挡→关 BossText raycast；④Normalize() 返回 void 不能当参数；⑤Mathf.Lerp 不夹紧进度，讨论 else-if 跳帧边界 | D31：阶段1 最后冲刺 |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -340,3 +341,15 @@
 - 设计亮点：发现用 5m、丢失用 8m，中间 3m 缓冲带（滞回），防止玩家在边界横跳导致状态闪烁；严格 `<`/`>` 边界无歧义；hp 分支已写但未触发（death 扩展留待）
 - 下午 EnemyFSM（技术 B）：工程里 Enemy.cs 已是 3D 三态 FSM（巡逻/追击/攻击），比任务卡要求的横版 Vector2 超额，仅留默写自检
 - 待办：LeetCode 283/121 穿插做；EnemyFSM 默写自检；打磨期 exe 打包 + 画面中间多余红横线 + Boss 专用受击音效
+
+## D30 完成（10/19 晚→10/20 凌晨）状态机小怪升级：巡逻点 + 扇形视野 + 追击加速度 + 换低模
+
+- 巡逻点系统：`public Transform[] waypoints` 替代硬编码 2 点；新增 Idle 状态 + waitTimer 表达"到达停留"（不用协程，等待可被打断，协程睡死会覆盖状态）；修 3 个巡逻 bug（patrolTarget 到点不更新、回绕 > 改 >=、Update 每帧无脑覆盖 Idle）
+- 预制体引用场景物体：EnemySpawner 持有 waypoints，生成时 `e.waypoints = this.waypoints` 注入（预制体拖不到场景物体）
+- Gizmos：OnDrawGizmos 画黄色检测球、青色巡逻路径、红色视野射线；踩坑 DrawLine 用 i++（后置自增）→同点零长度线+i 被加两次跳点，改 i+1
+- 扇形视野：`Vector3.Angle` 判夹角；发现 `distance<5 且 angle<60`，丢失只看 `distance>8`；正面被追、背后不追、绕到正面瞬间被发现
+- 追击加速度：`Mathf.Lerp(a,b,t)` 插值，p=(8-distance)/(8-1.5)，远慢近快
+- 换静态低模：Cube Pig 替换胶囊；理解资源包模块化（身体/脸/尾巴分开，Full 已拼好）；逻辑/外观分离（根挂脚本碰撞体、模型当子物体）
+- Bug 修复：BGM 重开无声（Play 逻辑并入 SetMusicOn，原只在 Awake 播一次）；暂停滑块被挡（关 BossText raycast）
+- 里程碑验收：继承多态口头抽查通过（virtual/override、is-a 关系、左边定能调谁/右边定执行谁）
+- 待办：Mathf.Clamp01 夹紧追击进度（可选）；暂停面板补音乐 Toggle；D31 阶段1 最后冲刺

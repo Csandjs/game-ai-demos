@@ -1,15 +1,23 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     enum EnemyState
     {
+        Idle,
         Patrol,
         Chase,
         Attack
     }
     private EnemyState state = EnemyState.Patrol;
+    public Transform[] waypoints;
+    int waypointIndex = 0;
+    public float waitTimer = 0;
+    public float fieldOfView = 60f;
+    public float idleTime = 2f;
     private Transform player;
+    public float lostRange = 8f;
     public float detectRange = 5f;
     public float attackRanfe = 1.5f;
     public int hp = 1;
@@ -28,8 +36,6 @@ public class Enemy : MonoBehaviour
     public float patrolSpeed = 1.5f;
     public float patrolDistance = 3f;
     private Vector3 startPosition;//出生点
-    private Vector3 patrolPointA;//出生点左侧
-    private Vector3 patrolPointB;//出生点右侧
     private Vector3 patrolTarget;//目标点
     void PatrolBehavior()
     {
@@ -38,17 +44,34 @@ public class Enemy : MonoBehaviour
         transform.LookAt(patrolTarget);
         if (Vector3.Distance(transform.position, patrolTarget) < 0.2)
         {
-            if (patrolTarget == patrolPointB) patrolTarget = patrolPointA;
-            else patrolTarget = patrolPointB;
+            waitTimer = idleTime;
+            state = EnemyState.Idle;
+        }
+    }
+    void IdleBehavior()
+    {
+        waitTimer -= Time.deltaTime;
+        if (waitTimer <= 0)
+        {
+            waypointIndex++;
+            if(waypointIndex >= waypoints.Length) waypointIndex = 0;
+            patrolTarget = waypoints[waypointIndex].position;
+            state = EnemyState.Patrol;
         }
     }
     //追击算法
-    public float chaseSpeed = 3f;
+    public float chaseSpeed_F = 4f;
+    public float chaseSpeed_s = 1f;
+    private float distance;
+    public float chaseSpeed;
     void ChaseBehavior()
     {
         Debug.Log("追击！");
         Vector3 target = player.position;
         target.y = transform.position.y;
+        float p = (lostRange - distance)/(lostRange - attackRanfe);
+        Mathf.Clamp01(p);
+        chaseSpeed = Mathf.Lerp(chaseSpeed_s, chaseSpeed_F, p);
         transform.position = Vector3.MoveTowards(transform.position, target, chaseSpeed * Time.deltaTime);
         transform.LookAt(player);
     }
@@ -72,18 +95,22 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player").transform;
         startPosition = transform.position;
-        patrolPointA = startPosition + new Vector3(-patrolDistance, 0, 0);
-        patrolPointB = startPosition + new Vector3(patrolDistance, 0, 0);
-        patrolTarget = patrolPointB;
+        patrolTarget = waypoints[waypointIndex].position;
         playerHealth = player.GetComponent<PlayerHealth>();
     }
     void Update()
     {
         if (GameManager.Instance.state != GameState.Playing) return;
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance <= attackRanfe) state = EnemyState.Attack;
-        else if (distance <= detectRange) state = EnemyState.Chase;
-        else state = EnemyState.Patrol;
+        Vector3 dir = player.position - transform.position;
+        dir.y = 0;
+        dir.Normalize();
+        float angle = Vector3.Angle(transform.forward, dir);
+        distance = Vector3.Distance(transform.position, player.position);
+        if (distance < attackRanfe) state = EnemyState.Attack;
+        else if (state == EnemyState.Attack && distance > detectRange) state = EnemyState.Chase;
+        else if (distance < detectRange && angle < fieldOfView) state = EnemyState.Chase;
+        else if (state == EnemyState.Chase && distance > lostRange) state = EnemyState.Patrol;
+        else { }
         switch (state)
         {
             case EnemyState.Patrol:
@@ -95,6 +122,31 @@ public class Enemy : MonoBehaviour
             case EnemyState.Attack:
             AttackBehavior();
             break;
+            case EnemyState.Idle:
+            IdleBehavior();
+            break;
         }
+    }
+    void OnDrawGizmos()
+    {
+        if(waypoints == null) return;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectRange);
+        
+        Gizmos.color = Color.cyan;
+        for (int i = 0; i < waypoints.Length; i++)
+        {
+            if (i < waypoints.Length - 1)
+            {
+                Gizmos .DrawLine(waypoints[i].position, waypoints[i + 1].position);
+            }
+            else
+            Gizmos.DrawLine(waypoints[i].position, waypoints[0].position);
+        }
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, transform.forward * detectRange);
+        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, -fieldOfView,0) * transform.forward * detectRange);
+        Gizmos.DrawRay(transform.position, Quaternion.Euler(0, fieldOfView,0) * transform.forward * detectRange);
     }
 }

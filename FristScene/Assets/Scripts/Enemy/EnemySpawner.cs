@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public Transform[] waypoints;
     List<Enemy> enemies = new List<Enemy>();
     public void RemoveEnemy(Enemy enemy)
     {
@@ -30,6 +31,7 @@ public class EnemySpawner : MonoBehaviour
             GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 1f, z), Quaternion.identity);
             Enemy e = enemy.GetComponent<Enemy>();
             e.spawner = this;
+            e.waypoints = this.waypoints;
             enemies.Add(e);
             yield return new WaitForSeconds(spawnInterval);
             if (GameManager.Instance.state != GameState.Playing) break;

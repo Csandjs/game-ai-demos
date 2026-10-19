@@ -5658,3 +5658,201 @@ GitHub 存的是**源码**（.cs/.unity/.meta），必须装 Unity 才能跑。�
 - LeetCode 283 移动零、121 买卖股票（穿插做）
 - EnemyFSM 默写自检（不查资料写一遍，工程 Enemy.cs 可对照）
 - 打磨期：Build 打包 exe 挂 Release；画面中间多余红横线排查；Boss 专用受击音效；public 字段重构 [SerializeField] private；ClosedBookSpawmer 命名拼写
+
+# 📅 D30: 状态机小怪升级——巡逻点系统 + 扇形视野 + 追击加速度 + 换静态低模
+
+D29 已预热 FSM 概念，今天把工程里的 Enemy.cs 全面升级：巡逻从硬编码改成可配置巡逻点，感知从 360° 半径升级成有朝向的扇形视野，并换成了带明确正面的低模。
+
+---
+
+## ☀️ 巡逻点系统（可配置 + 到达停留）
+
+### 巡逻点的本质
+
+巡逻点是场景里的空物体（Empty），小怪在它们之间按顺序循环移动。用 `public Transform[] waypoints` 数组代替之前写死的两个坐标。
+
+### 为什么加 Idle 状态
+
+到达巡逻点后要停留 1-2 秒。用 **Idle 状态 + waitTimer** 表达，而不是协程：
+
+- **关键判断**：停留是**可以被打断**的——玩家随时可能出现，小怪必须立刻反应
+- 如果用协程睡死 2 秒，醒来后无脑覆盖状态，可能把"正在追玩家"覆盖回巡逻（和 Boss.cs 之前"协程醒来覆盖 Dead"是同款 bug）
+- 用 waitTimer 每帧 `waitTimer -= Time.deltaTime` 倒计时，天然可被打断，状态机一发现玩家立刻切走
+
+### 巡逻的三个 bug（首版踩的坑）
+
+1. **patrolTarget 只在 Start 赋值一次**：waypointIndex++ 后目标没更新，永远走第一个点。要在 Idle 结束时重新 `patrolTarget = waypoints[waypointIndex].position`
+2. **回绕条件写错**：`waypointIndex > waypoints.Length` 应为 `>=`（否则 index=N 时数组越界）
+3. **Update 每帧无脑覆盖 Idle**：末尾 else 写 `state=Patrol` 会把刚进入的 Idle 立刻覆盖，停留根本不执行。状态转换只在玩家相关时切换，Idle/Patrol 内部自流转，不写无脑 else 覆盖
+
+### 预制体引用场景物体：注入模式
+
+**问题**：Enemy 是预制体，PatrolPoint 是场景物体，直接拖不进预制体的 Inspector。
+
+**修法**：让场景里的 **EnemySpawner** 持有 waypoints，生成敌人时注入：
+
+```csharp
+e.waypoints = this.waypoints;   // 和已有的 e.spawner = this 同模式
+```
+
+这是"依赖注入"的简单形态：预制体不写死场景引用，由场景里的生成器在运行时传入。
+
+---
+
+## 🌤 Gizmos 可视化
+
+### 三个 Gizmos 用途
+
+| 方法 | 作用 | 参数 |
+|---|---|---|
+| `DrawWireSphere(center, radius)` | 画检测半径球 | 球心、半径 |
+| `DrawLine(from, to)` | 画巡逻路径 | 两个点 |
+| `DrawRay(start, direction)` | 画方向射线 | 起点、方向（长度=方向向量长度） |
+
+OnDrawGizmos 是 Unity 自动调用的特殊方法，只在 Scene 视图显示辅助线，打包后玩家看不到。
+
+### 踩坑：循环里的 i++
+
+错误写法：
+
+```csharp
+Gizmos.DrawLine(waypoints[i].position, waypoints[i++].position);
+```
+
+`i++` 是**后置自增**：先用 i 当前值、用完再加 1。于是：
+- 第二个参数取的也是自增前的 i → 同一点画线（零长度，看不见）
+- i 在循环体被加一次、for 末尾又加一次 → 跳过下一个点
+
+结果只剩最后一条"末点→起点"的闭合线。改成 `i + 1`（只算索引、不自增）即可。
+
+### DrawRay vs DrawLine
+
+- DrawLine：给起点和终点
+- DrawRay：给起点和方向，长度由方向决定，画"从某点朝某方向延伸"更直观
+
+---
+
+## 🌙 扇形视野（Field of View）
+
+### 要解决什么问题
+
+半径检测下，玩家在小怪背后也被发现，很假。扇形视野让小怪**只发现正前方扇形区域内的玩家**，背后偷袭不触发。
+
+### 新 API：Vector3.Angle
+
+`Vector3.Angle(Vector3 from, Vector3 to)` 返回两向量夹角（0~180 度）：
+- 0° = 同向（正前方），90° = 侧面，180° = 正背后
+- 只看方向、不看长度，传没归一化的向量结果一样
+
+### 状态转换条件
+
+- **发现**（Patrol/Idle → Chase）：`distance < detectRange 且 angle < fieldOfView`（距离够近 + 在正面扇形）
+- **丢失**（Chase → Patrol）：只看 `distance > lostRange`，**不看角度**——已经追上去了，小怪知道玩家在哪，跑远 8m 才放弃
+
+### Normalize 的坑
+
+`dir.Normalize()` 是实例方法，**直接改 dir、返回 void**，不能写在参数里（`Angle(forward, dir.Normalize())` 报红）。要单独一行调用，或者干脆不用归一化（Angle 不在乎长度）。
+
+### 实测效果
+
+- 正面靠近 5m 内被追
+- 背后贴脸（夹角 >60°）不追，继续巡逻
+- 从背后绕到正面，进入 60° 扇形瞬间被发现
+- 跑远 8m 放弃追击
+
+---
+
+## ⭐ 追击加速度（Mathf.Lerp）
+
+### Lerp 是什么
+
+`Mathf.Lerp(float a, float b, float t)`：在两个值之间按进度插值，t=0 返回 a、t=1 返回 b。
+
+### 思路
+
+远慢近快：把距离换算成 0~1 进度，再插值出当前速度。
+
+```
+p = (lostRange - distance) / (lostRange - attackRanfe)
+距离 8m  → p=0 → 慢速度
+距离 1.5m → p=1 → 快速度
+chaseSpeed = Mathf.Lerp(慢, 快, p)
+```
+
+注意：慢速度别给 0，否则远处小怪不动。
+
+### 为什么要 Clamp01
+
+Mathf.Lerp 不会自动夹紧进度，t<0 或 >1 会外推。正常状态机把 distance 限制在 1.5~8，但 else-if 链命中一条就停，存在"Attack→Chase 转换那帧跳过丢失检查"的边界，可能算出负速度。用 `Mathf.Clamp01(p)` 自己夹紧输入，不依赖状态机保证——防御性编程。
+
+---
+
+## 🧱 换静态低模（逻辑 / 外观分离）
+
+### 为什么要换
+
+胶囊体绕 Y 轴旋转后看不出朝向，扇形视野的"正面/背后"玩家读不出来。换成带脸的模型，机制才成立。
+
+### 资源包的模块化设计
+
+这个 Cube Pig 资源是拼装的：
+- 身体（Pig.fbx，无眼睛）
+- 脸（Face 01 睁眼 / Face 02 表情，自带眼睛材质）
+- 尾巴（Pig Tail）
+- 已拼好的完整猪：`Prefabs/Full/Pig No Root.prefab`
+
+直接把眼睛材质塞进身体的材质槽是错的（身体没有脸的子网格，材质会渲染成肚子底下的黑块）。
+
+### 换模型的通用流程（以后都这么做）
+
+1. 获取资源：资源商店（团结引擎用 assetstore.u3d.cn → 包管理器"我的资产"），或外部 FBX 拖进 Project
+2. 检查四样：朝向（正面 +Z，不对转子物体）、大小（Scale）、材质、碰撞体（角色用 Capsule Collider）
+3. 组装：**根物体挂脚本 + 碰撞体，模型当子物体**——以后再换外观只换子物体，逻辑一行不改
+4. 用预制体管理：改一处，所有实例同步
+
+### 静态 vs 带动画模型
+
+静态模型（无动作）= 换个形状的胶囊；带动画模型要额外配 Animator + 动画控制器（后续阶段学）。
+
+---
+
+## 🔧 Bug 修复
+
+### BGM 重开无声
+
+根因：BGM 只在 AudioManager 诞生时 Play 一次，关了再开只改 mute 没重新 Play。
+修法：把 Play 逻辑并入 `SetMusicOn`，开启时若没在播就 Play。调用方只调一个方法，更可靠。
+
+### 暂停设置滑块被挡
+
+根因：BossText 排在 SettingsPanel 上层（同级越靠下越在上），拦截了鼠标拖拽。
+修法：取消 BossText 组件的 Raycast Target（射线检测目标）。更彻底的做法是把暂停/设置面板拖到 Canvas 子物体最底部。
+
+---
+
+## 🏁 里程碑验收：继承多态口头抽查
+
+- 父类方法用 `virtual`、子类重写用 `override`
+- 子类能装进 `List<父类>` 是因为继承的 is-a 关系（里氏替换）
+- 调同一个 `Attack()` 各跑各的是多态；口诀"左边（声明类型）决定能不能点出方法，右边（new 的类型）决定执行谁"
+
+## D30 关键概念速查
+
+| 概念 | 一句话 |
+|---|---|
+| 巡逻点 Transform[] | 可配置的巡逻路线点 |
+| Idle 状态 + waitTimer | 可被打断的停留，不用协程 |
+| 注入模式 | 场景生成器把场景引用传给预制体 |
+| Vector3.Angle | 两向量夹角 0~180 |
+| 扇形视野 | 发现看距离+夹角，丢失只看距离 |
+| Mathf.Lerp | 两值之间按进度插值 |
+| Mathf.Clamp01 | 把进度锁在 0~1 |
+| 逻辑/外观分离 | 根挂脚本碰撞体、模型当子物体 |
+| 后置自增 i++ | 先用旧值再加 1，别在循环参数里误用 |
+
+## 待办
+
+- Mathf.Clamp01 夹紧追击进度（可选）
+- 暂停面板补音乐 Toggle + 音量滑块实时生效（OnVolumeSlider 加 AudioListener.volume）
+- D31 阶段 1 最后冲刺
+- LeetCode 283/121 穿插；打磨期 exe 打包、Boss 专用音效等

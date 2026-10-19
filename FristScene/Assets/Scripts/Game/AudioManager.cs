@@ -46,7 +46,12 @@ public class AudioManager : MonoBehaviour
     public void PlayLose() => PlaySfx(loseClip);
     public void SetMusicOn(bool isOn)
     {
-        bgmSource.mute = !isOn;
+        bgmSource.mute = !isOn; 
+        bool musicOn = SaveManager.LoadMusicOn();
+        if (musicOn && bgmClip != null)
+        {
+            bgmSource.Play();
+        }
     }
     void Start()
     {
