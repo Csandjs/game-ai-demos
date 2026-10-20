@@ -8,7 +8,7 @@ public class AxisMove : MonoBehaviour
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        Debug.Log("水平h=" + h + "前后v=" + v );
+        //Debug.Log("水平h=" + h + "前后v=" + v );
         transform.Translate(new Vector3(h, 0, v) * speed * Time.deltaTime);
     }
 }

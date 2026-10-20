@@ -9,7 +9,7 @@ public class Coin : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GameManager.Instance.CollectCoin((int)GameConfig.Get("coinValue"));
-            spawner.RemoveCoin(gameObject);
+            spawner?.RemoveCoin(gameObject);
             Destroy(gameObject);
             AudioManager.Instance?.PlayCoin();
         }

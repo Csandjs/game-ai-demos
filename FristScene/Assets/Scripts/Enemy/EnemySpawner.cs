@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
     }
     private Transform player;
     public Boss boss;
-    public float playerAttackRange = 100f;
+    public float playerAttackRange = 4f;
     public float spawnInterval = 2f;
     Coroutine spawnHandle;
     void Start()
@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     }
     IEnumerator SpawnEnemies()
     {
-        while (true)
+        while (enemies.Count <= 15)
         {
             float x = Random.Range(-10f, 10f);
             float z = Random.Range(2f, 30f);

@@ -72,16 +72,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waypoints:
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   waitTimer: 0
+  fieldOfView: 60
   idleTime: 2
   lostRange: 8
   detectRange: 5
   attackRanfe: 1.5
-  hp: 1
+  hp: 5
+  maxHp: 5
   spawner: {fileID: 0}
+  coinPrefab: {fileID: 2785786325422028376, guid: 0eae5b6f1fbaeab4c9a9974ac32c65fc, type: 3}
+  coinDropcount: 2
   patrolSpeed: 1.5
   patrolDistance: 3
-  chaseSpeed: 3
+  chaseSpeed_F: 4
+  chaseSpeed_s: 1
+  chaseSpeed: 0
   attackATK: 10
   attackInterval: 1
 --- !u!1001 &5740189731348567498
@@ -92,6 +100,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3273018453291769823}
     m_Modifications:
+    - target: {fileID: 1547902889590891545, guid: ae5bc7adf926e12499fa95496079d191, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: bdf87af55c33e9a43a27ae06fa03c1ba, type: 2}
+    - target: {fileID: 1547902889590891545, guid: ae5bc7adf926e12499fa95496079d191, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4871608018667601507, guid: ae5bc7adf926e12499fa95496079d191, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.4

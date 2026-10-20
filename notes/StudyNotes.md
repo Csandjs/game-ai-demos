@@ -5856,3 +5856,235 @@ Mathf.Lerp 不会自动夹紧进度，t<0 或 >1 会外推。正常状态机把 
 - 暂停面板补音乐 Toggle + 音量滑块实时生效（OnVolumeSlider 加 AudioListener.volume）
 - D31 阶段 1 最后冲刺
 - LeetCode 283/121 穿插；打磨期 exe 打包、Boss 专用音效等
+
+---
+
+## 🎯 D31（10/20）Demo1 核心战斗收尾 + 金币模型与掉落 + 动画联动
+
+### 任务重设计（用户主导，比原任务卡更专业）
+
+原任务卡有 Flee（低血逃跑），实际游戏中小怪都是死战到底（MC 村民是特例）。重新设计：
+- **小怪**：取消 Flee，玩家跑出 >8m → 回巡逻点并**脱战回血**（黑魂/WOW 标准脱战重置）
+- **Boss**：血量 <30% 进入**狂暴**（伤害↑、前摇↓、速度↑、体型↑、变橙）
+- **金币**：去掉场景散落，只保留打怪掉落；金币改成立着的金色模型 + 悬空自转浮动
+
+---
+
+## 🩹 脱战回血
+
+### 为什么要回血
+
+玩家跑远后怪物回巡逻，如果不回血，玩家可以"打一下跑远、再打一下"无限磨死怪。脱战回满血鼓励持续输出，是动作游戏标准设计。
+
+### 实现
+
+Enemy 加 `maxHp=5`，在 Chase 状态的丢失判定里先回满血再切巡逻：
+
+```csharp
+else if (state == EnemyState.Chase && distance > lostRange)
+{
+    hp = maxHp;          // 脱战回满
+    state = EnemyState.Patrol;
+}
+```
+
+---
+
+## 🔥 Boss 狂暴（模式开关，不是新状态）
+
+### 核心认知
+
+狂暴**不是一个新的 enum 状态**，而是一个 **bool 模式开关**。Boss 还是在 Chase/Attack 里跑，只是参数变了。如果做成新状态，要复制一套 Chase/Attack 逻辑，重复且容易出 bug。
+
+### 实现要点
+
+- 字段 `bool enraged`，触发后置 true，防止重复触发
+- `TakeDamage` 里**先扣血再判狂暴**：`hp -= dmg; if (!enraged && hp <= maxHp * 0.3f) EnterEnrage();`
+- `EnterEnrage` 改已有字段：attackATK 15→25、windupTime 0.7→0.3、chaseSpeed 2→4、模型放大 1.5 倍、颜色变橙 `Color(1f, 0.4f, 0f)`
+- `HurtRoutine` 结束时按 `enraged` 恢复狂暴色（否则受伤闪红后恢复成原色，狂暴色就没了）
+
+### 狂暴三连 bug（全踩过）
+
+1. **狂暴晚一刀**：先判狂暴再扣血，用的是扣血前的血量 → 改先扣血再判
+2. **无限变大**：缺 `!enraged` 守卫，每刀都触发 EnterEnrage，modelBaseScale 每刀乘 1.5 → 加守卫
+3. **打不到玩家**：缩放根物体连 BoxCollider 一起放大，玩家被物理挡在攻击范围外 → **只缩放模型子物体，根物体（碰撞体/位置/攻击距离）永远不动**
+
+### 逻辑/外观分离（反复出现的原则）
+
+根物体挂脚本 + 碰撞体 + 管逻辑位置；模型当子物体 + 管外观（缩放/颜色/旋转）。改外观只改子物体，逻辑一行不动。
+
+---
+
+## 🪙 金币模型（根 + 模型子结构）
+
+### 为什么不能一个圆柱搞定
+
+金币需要两个独立旋转：**根物体自转（Y 轴，金币绕圈转）** 和 **模型立起（X 轴 90°，圆柱从躺变立）**。如果都在一个物体上，自转会把立起的旋转也带着转，朝向乱掉。所以拆成两层：
+
+```
+Coin（根）          ← 挂碰撞体 + Coin + CoinMotion，管自转和拾取
+  └ CoinModel（子）  ← 圆柱，Rotation X=90 立起，Scale(1,0.15,1) 压扁，金色材质
+```
+
+### 金币平躺根因
+
+CoinSpawner 用 `Instantiate(prefab, pos, Quaternion.identity)`，`identity`（无旋转）覆盖了预制体里模型 90°X 立起的旋转，生成的全平躺。改成根+子结构后，根怎么生成都不影响子物体的立起旋转。
+
+### 材质
+
+金色材质：Metallic（金属度）= 1、Smoothness（平滑度）≈ 0.7，颜色金黄。光感来自材质，不是套多层圆柱。
+
+---
+
+## 🌊 CoinMotion 悬空（Mathf.Sin）
+
+### 新 API：Mathf.Sin
+
+大白话：**匀速规律起伏的数字发生器**。输入一个一直增大的数（Time.time），输出 -1~1 之间正弦波动的值，正好用来做上下浮动。
+
+```csharp
+// 根自转
+transform.Rotate(0, spinSpeed * Time.deltaTime, 0);
+// 模型上下浮动
+Vector3 p = model.localPosition;
+p.y = Mathf.Sin(Time.time * bobFreq) * bobAmount;
+model.localPosition = p;
+```
+
+### 关键坑：不能直接改 position.y
+
+```csharp
+model.position.y = ...;  // ❌ 编译报错
+```
+
+`position` 是属性，get 返回的是 Vector3 的**复印件**，改复印件的 y 毫无意义，C# 直接报错。必须用临时变量接住、改 y、再整个赋回。
+
+用 `localPosition`（相对父物体）而非 `position`（世界坐标），否则浮动围绕世界 y=0，金币会脱离根物体乱飞。
+
+---
+
+## 💀 怪物掉金币
+
+Die() 里循环生成：
+
+```csharp
+while (coinDropcount > 0)
+{
+    Vector2 circle = Random.insideUnitCircle;  // 单位圆内随机点，散开
+    Vector3 pos = transform.position + new Vector3(circle.x, 0.5f, circle.y);
+    Instantiate(coinPrefab, pos, Quaternion.identity);
+    coinDropcount--;
+}
+```
+
+`Random.insideUnitCircle` 返回单位圆内随机 Vector2，用来让金币水平散开，不叠在一起。y+0.5 抬到拾取高度。
+
+Coin.cs 用 `spawner?.RemoveCoin` 可空，掉落金币没有 spawner 也不报错。
+
+---
+
+## 🚨 死循环卡死（最严重的一次）
+
+### 根因
+
+```csharp
+while (coinDropcount > 0)
+{
+    Instantiate(...);
+    // 忘写 coinDropcount--
+}
+```
+
+循环体里没有让条件变 false 的动作，`coinDropcount` 永远 >0，Instantiate 每秒几千枚 → 内存爆 → Unity 卡死。
+
+### 铁律
+
+写 while 必须确认循环体里有"让条件变 false 的动作"。for 循环把初始化/条件/自增写在一行，最不容易漏。
+
+---
+
+## 🔧 其他 bug
+
+### 每帧 Debug.Log 洪水
+
+Patrol/Chase 里 Debug.Log 每帧跑，多只怪叠加把 Console 刷爆拖死编辑器。原则：Debug.Log 很昂贵（抓堆栈），绝不放 Update 或每帧方法，只在状态切换那一刻打。
+
+### Mathf.Clamp01 返回值没接住
+
+```csharp
+Mathf.Clamp01(p);  // ❌ 返回值丢了，p 没变
+p = Mathf.Clamp01(p);  // ✅
+```
+
+Clamp01 是纯函数，不修改输入，必须接住返回值。
+
+### Boss 换猪后全功能失效
+
+猪的渲染器在子物体深处，`GetComponent<Renderer>()` 只搜自身返回 null，下一行 `material.color` 空引用中断 Start，导致 baseScale 和 state=Chase 没执行，Boss 永久卡 Idle。改 `GetComponentInChildren<Renderer>()`。
+
+---
+
+## 🎬 Animator 动画系统（Idle/Run 联动）
+
+### 资源包调研
+
+Cube Pig 包实际只有 3 个片段：Idle、Run Forward In Place、Run Forward W Root。没有 Walk/Eat/Attack/Die。用 **In Place（原地跑）**，脚本负责移动，不用 W Root（带根运动会和脚本抢位置）。
+
+### 控制器搭建
+
+- 新建 Animator Controller，加 float 参数 `Speed`
+- 两个状态：Idle（默认）、Run
+- 两条转换：Idle→Run（Speed > 0.1）、Run→Idle（Speed < 0.1）
+- **Has Exit Time（有退出时间）取消勾选**（即时响应，不等动画播完）
+- Transition Duration（转换时长）= 0.1（快速混合）
+
+### 脚本驱动：Animator.SetFloat
+
+大白话：给控制器里的参数赋值。`anim.SetFloat("Speed", 1f)` 告诉控制器"现在在动"，控制器自己切 Run。参数名大小写敏感。
+
+Animator 在模型子物体上，用 `GetComponentInChildren<Animator>()` 缓存。
+
+### 两个 Speed 别混
+
+| 参数 | 作用 |
+|---|---|
+| Parameters 里的 `Speed` | 开关：>0.1 切 Run，<0.1 切 Idle |
+| Run 状态 Inspector 里的 `Speed` | 固定播放倍率 |
+| Parameters 里的 `RunSpeed`（进阶） | 动态播放倍率，勾 Speed Parameter 后由脚本驱动 |
+
+小怪 Patrol/Chase 必须设 `Speed=1`（开跑开关）+ `RunSpeed=实际速度/4`（腿速匹配）。只设 RunSpeed 不设 Speed → 永远在 Idle，腿不动。
+
+### Boss 复用同一控制器
+
+Boss 和小怪目前都只需要 Idle/Run，直接拖同一个 EnemyAnimator，不重复造。Boss.cs 在 Update 里设 `Speed = state==Chase ? 1 : 0`，Chase 时设 `RunSpeed = chaseSpeed/4f`。以后 Boss 要专属攻击/狂暴/死亡动画时再复制一份 BossAnimator。
+
+### 模型朝向
+
+`transform.LookAt(target)` 让根物体 +Z（蓝色箭头）指向玩家。如果模型脸不是朝 +Z 建的，就会"横着追"。修法：给模型子物体补 Y 轴旋转，让脸和根 +Z 同向。
+
+---
+
+## D31 关键概念速查
+
+| 概念 | 一句话 |
+|---|---|
+| 脱战回血 | 玩家跑远后怪回巡逻并回满，防止磨血 |
+| 狂暴模式开关 | bool enraged，不是新状态，改参数不改逻辑 |
+| 逻辑/外观分离 | 根管碰撞体/位置，模型子物体管缩放/颜色 |
+| 根+模型子结构 | 两个独立旋转不打架（根自转 + 模型立起） |
+| Mathf.Sin | 匀速起伏数字发生器，-1~1，做浮动 |
+| position.y 不能直接改 | 属性返回复印件，用临时变量接住再赋回 |
+| Random.insideUnitCircle | 单位圆内随机点，让掉落物散开 |
+| while 铁律 | 循环体必须有让条件变 false 的动作 |
+| Animator.SetFloat | 给控制器参数赋值，驱动状态切换 |
+| Has Exit Time | 关了才能即时切动画，不等播完 |
+| Speed vs RunSpeed | 一个是走/跑开关，一个是跑动画播放倍率 |
+| GetComponentInChildren | 组件在子物体上时用，不只搜自身 |
+
+## 待办
+
+- D32：录屏验收 + 首批投递准备（投 2-3 家）
+- 动画：Boss 专属攻击/狂暴/死亡动画（等需要时拆 BossAnimator）
+- Boss 奖励：等背包系统后做（当前 Boss 死直接结束）
+- 金币掉落弹跳（推迟，以后需要再写）
+- LeetCode 283/121；打磨期 exe 打包、Boss 专用音效、暂停面板音乐 Toggle

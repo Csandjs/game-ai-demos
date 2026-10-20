@@ -32,6 +32,7 @@
 | 2026-10-18 | D28（作品集整理日晚） | ✅ 完成 | ①git tag 和 Release 关系搞混（tag=代码标记，Release=套在 tag 上给人看的版本说明）；②tag 要单独 `git push origin v0.1`，不是推 main 就带上；③视频/截图拖错到正文 Markdown 框（限 10MB）→改拖下方大虚线附件区（限 2GB）；④疑惑 GitHub 为何不能直接玩（源码 vs exe，要 Build 打包，打磨期做） | D29：简历收尾 + FSM 状态机预热 |
 | 2026-10-18 | D29（Demo1 预热晚） | ✅ 完成 | ①误以为 D29 要写简历初稿（实为 D65 11/8，Demo1 后才有东西写），D29 是"简历收尾"（仓库公开+录屏/README 齐全）；②控制台 FSM 里 hp 永不减→死亡分支写了但不触发（可选扩展）；③git push 曾遇 GitHub 502 服务器错误，重试/调大 http.postBuffer 后成功 | D30 起：阶段2 Demo1 状态机小怪 AI |
 | 2026-10-20 | D30（跨夜 10/19 晚→10/20 凌晨） | ✅ 完成 | ①Gizmos 连线误写 i++（后置自增）→零长度线+跳点，改 i+1；②预制体引用场景物体拖不进→EnemySpawner 注入 waypoints；③暂停设置滑块被 Boss UI 挡→关 BossText raycast；④Normalize() 返回 void 不能当参数；⑤Mathf.Lerp 不夹紧进度，讨论 else-if 跳帧边界 | D31：阶段1 最后冲刺 |
+| 2026-10-20 | D31（Demo1 核心战斗+金币掉落） | ✅ 完成 | ①金币掉落 while 忘自增→Instantiate 死循环瞬间卡死（加 coinDropcount--）；②Patrol/Chase 每帧 Debug.Log 洪水拖死编辑器（删）；③Mathf.Clamp01 返回值没接住（改 p=）；④Boss 换猪后 GetComponent 拿不到子物体渲染器→Start 中断全功能失效（改 GetComponentInChildren）；⑤狂暴缩放根物体把碰撞体一起放大→打不到玩家（只缩放模型子物体，逻辑/外观分离）；⑥金币躺着根因=CoinSpawner 用 Quaternion.identity 覆盖预制体立起旋转（改根+模型子结构） | D32：录屏验收+首批投递准备；动画 Idle/Run 推 D34/D35；Boss 奖励等背包系统 |
 ## D1 回顾（9/3 周四）
 - 环境搭建：Git、.NET SDK、VS Code 全套安装完成
 - GitHub 仓库 `game-ai-demos` 创建，本地克隆成功
@@ -353,3 +354,24 @@
 - Bug 修复：BGM 重开无声（Play 逻辑并入 SetMusicOn，原只在 Awake 播一次）；暂停滑块被挡（关 BossText raycast）
 - 里程碑验收：继承多态口头抽查通过（virtual/override、is-a 关系、左边定能调谁/右边定执行谁）
 - 待办：Mathf.Clamp01 夹紧追击进度（可选）；暂停面板补音乐 Toggle；D31 阶段1 最后冲刺
+
+## D31 完成（10/20）Demo1 核心战斗收尾 + 金币模型与掉落
+
+- 任务重设计（用户主导）：取消小怪 Flee 逃离（"玩过的游戏没有打他会跑的，除了 MC 村民"），改为玩家跑出 >8m 怪物回巡逻并**脱战回血**；Boss 血量 <30% 进入**狂暴**（伤害↑、前摇↓、速度↑、体型↑、变橙）；去掉场景散落金币，只保留打怪掉落。
+- 脱战回血：Enemy 加 maxHp=5，Chase 状态且 distance>lostRange 时 hp=maxHp 并切回 Patrol（黑魂/WOW 标准脱战重置，鼓励持续输出）。
+- Boss 狂暴：不是新 enum 状态，而是**模式开关 bool enraged**（Boss 仍在 Chase/Attack 里，只是参数变）；TakeDamage 先扣血再判 `!enraged && hp<=maxHp*0.3` 触发一次；改 attackATK 15→25、windupTime 0.7→0.3、chaseSpeed 2→4、模型放大 1.5 倍、颜色变橙 Color(1,0.4,0)；HurtRoutine 结束按 enraged 恢复狂暴色。
+- 狂暴三连 bug：①狂暴晚一刀（先判狂暴再扣血，用扣血前血量判断）；②缺 !enraged 守卫，每刀重复触发、baseScale 无限翻倍；③缩放根物体连 BoxCollider 一起放大，玩家被物理挡在攻击范围外打不到——修复原则：**缩放只改模型子物体，根物体（碰撞体/位置/攻击距离）永远不动**。
+- Boss 换猪：猪渲染器在子物体深处，GetComponent<Renderer>() 只搜自身返回 null，下一行 material.color 空引用中断 Start，导致 baseScale 和 state=Chase 未执行、Boss 永久卡 Idle；改 GetComponentInChildren<Renderer>()。
+- 金币模型：根+模型子结构（Coin 根挂 SphereCollider 触发器+Coin+CoinMotion；CoinModel 子物体圆柱 Rotation X=90 立起、Scale(1,0.15,1) 压扁、金色材质 Metallic=1/Smoothness=0.7）。
+- 金币躺着根因：CoinSpawner 用 `Instantiate(prefab, pos, Quaternion.identity)`，identity 覆盖了预制体里 90°X 立起的旋转，生成的全平躺；根+子结构后根怎么生成都不影响模型立起。
+- CoinMotion 悬空：根自转 transform.Rotate(0, spinSpeed*dt, 0)；模型上下浮动 model.localPosition.y = Mathf.Sin(Time.time*bobFreq)*bobAmount。新 API Mathf.Sin（匀速规律起伏的数字发生器，-1~1）。
+- 关键坑：不能直接写 `model.position.y = ...`（position 是属性，返回 Vector3 复印件，改复印件无效，C# 直接报错）；必须用临时变量 Vector3 p 接住、改 p.y、再整个赋回。用 localPosition（相对父物体）而非 position（世界），否则浮动围绕世界 y=0 会脱离根。
+- 掉落弹跳：用户决定暂不做（悬空够了，以后需要再写）。
+- 怪物掉金币：Die() 里 for/while 循环 coinDropcount 次，Random.insideUnitCircle 算水平散开偏移，y+0.5 抬到拾取高度，Instantiate 金币；Coin.cs 用 spawner?.RemoveCoin 可空，掉落金币无 spawner 不报错。
+- 死循环卡死：while(coinDropcount>0) 循环体里忘写 coinDropcount--，条件永远成立，Instantiate 每秒几千枚→内存爆→Unity 卡死。铁律：写 while 必须确认循环体里有"让条件变 false 的动作"；for 循环把初始化/条件/自增写一行最不容易漏。
+- 每帧 Debug.Log 洪水：PatrolBehavior/ChaseBehavior 里 Debug.Log 每帧跑，多只怪叠加把 Console 刷爆拖死编辑器；原则：Debug.Log 很昂贵（抓堆栈），绝不放 Update 或每帧方法，只在状态切换那一刻打。
+- 追击夹紧：Mathf.Clamp01(p) 返回值没接住等于没夹紧，改 p = Mathf.Clamp01(p)。
+- 动画调研（推 D34/D35）：Cube Pig 包实际只有 3 个片段——Idle、Run Forward In Place、Run Forward W Root（无 Walk/Eat/Attack/Die）；Animator 已在 Pig W Root 上（Avatar=PigAvatar，Apply Root Motion 已关，Controller 当前为"无"）；D34/D35 自建 EnemyAnimator 控制器（float Speed 参数 + Idle/Run 两态），用 Run Forward In Place（脚本移动，不用根运动版）。
+- Boss 掉金币：暂不做（Boss 死亡直接结束游戏无操作空间；应做成奖励形式但当前无背包系统，等以后有背包再做）。
+- 旧脚本去向：RotateCube 通用旋转脚本文件保留（别处可复用），从金币移除、旋转逻辑并进 CoinMotion；CoinSpawner 场景物体已删（去散落金币），.cs 文件保留；Coin 拾取脚本保留。
+- 待办：D32 录屏验收 + 首批投递准备；动画 Idle/Run 控制器（D34/D35）；Boss 奖励等背包系统；LeetCode 283/121；打磨期 exe 打包。
