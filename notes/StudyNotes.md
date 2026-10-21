@@ -2,170 +2,307 @@
 
 > 从零开始学习 Unity + C# 游戏开发，按天按步骤记录
 
----
+
+
+***
 
 # 📅 D1（第一天）：环境搭建 + C# 入门 + GitHub
 
-## ☀️ 上午：环境搭建（3小时）
+## ☀️ 上午：环境搭建（3 小时）
 
-### 步骤1：安装团结引擎（Unity中国版）
+### 步骤 1：安装团结引擎（Unity 中国版）
+
+
 
 1. 浏览器访问团结引擎官网
-2. 下载「旧版本团结 Hub(Windows)」
-   - ⚠️ 注意：新版 Tuanjie Cowork 是 AI 编程工具，需要许可证，不是传统 Unity Hub，不要下错
-3. 安装团结 Hub
-4. 打开 Hub，点「以后登录」可以先进入（也可以注册账号登录）
-5. 在 Hub 里安装团结编辑器 1.10.2（约4.83GB，安装路径默认即可）
-6. 安装完成后桌面会有 Tuanjie 快捷方式
+
+2. 下载「旧版本团结 Hub (Windows)」
+
+* ⚠️ 注意：新版 Tuanjie Cowork 是 AI 编程工具，需要许可证，不是传统 Unity Hub，不要下错
+
+1. 安装团结 Hub
+
+2. 打开 Hub，点「以后登录」可以先进入（也可以注册账号登录）
+
+3. 在 Hub 里安装团结编辑器 1.10.2（约 4.83GB，安装路径默认即可）
+
+4. 安装完成后桌面会有 Tuanjie 快捷方式
 
 **许可证说明：**
-- 个人版完全免费
-- 在 Hub → 设置（齿轮图标）→ 许可证 → 添加 → 获取免费个人版许可证
-- 勾选同意协议，自动激活
 
----
 
-### 步骤2：安装 VS Code
+
+* 个人版完全免费
+
+* 在 Hub → 设置（齿轮图标）→ 许可证 → 添加 → 获取免费个人版许可证
+
+* 勾选同意协议，自动激活
+
+
+
+***
+
+### 步骤 2：安装 VS Code
+
+
 
 1. 浏览器访问 VS Code 官网，下载 Windows 版
+
 2. 双击安装包，一路下一步
+
 3. 安装路径保持默认即可
-4. 可以勾选"创建桌面快捷方式"
+
+4. 可以勾选 "创建桌面快捷方式"
+
 5. 安装完成后打开 VS Code
 
----
 
-### 步骤3：VS Code 装中文语言包
+
+***
+
+### 步骤 3：VS Code 装中文语言包
+
+
 
 1. 打开 VS Code
+
 2. 点左侧扩展图标（四个方块那个）
+
 3. 搜索框输入 `Chinese`
+
 4. 找到微软官方的「中文（简体）语言包」，点安装
+
 5. 安装后重启 VS Code，界面就变成中文了
 
----
 
-### 步骤4：VS Code 装 C# 扩展
+
+***
+
+### 步骤 4：VS Code 装 C# 扩展
+
+
 
 1. 左侧扩展商店搜索 `C#`
+
 2. 找到微软官方的 C# 扩展，点安装
+
 3. 安装完成即可
 
----
 
-### 步骤5：安装 .NET SDK
+
+***
+
+### 步骤 5：安装 .NET SDK
+
+
 
 1. 浏览器访问 `https://dotnet.microsoft.com/zh-cn/download`
+
 2. 下载 .NET SDK（不是 Runtime），选长期支持版
+
 3. 双击安装包，一路下一步，安装路径默认
+
 4. 安装完成后，**关闭所有 cmd 窗口，重新打开一个新的**
+
 5. 输入 `dotnet --version` 验证，如果显示版本号就成功了
 
-**如果提示"不是内部或外部命令"：**
+**如果提示 "不是内部或外部命令"：**
+
+
+
 1. 确认 `C:\Program Files\dotnet\dotnet.exe` 文件存在
+
 2. 右键「此电脑」→ 属性 → 高级系统设置 → 环境变量
+
 3. 在「系统变量」里找到 `Path`，点编辑
+
 4. 点新建，添加 `C:\Program Files\dotnet`
+
 5. 一路确定保存
+
 6. 关闭所有 cmd，重新打开，再输入 `dotnet --version`
 
----
 
-## 🌤️ 下午：GitHub + Git（3小时）
 
-### 步骤6：注册 GitHub 账号并创建仓库
+***
+
+## 🌤️ 下午：GitHub + Git（3 小时）
+
+### 步骤 6：注册 GitHub 账号并创建仓库
+
+
 
 1. 浏览器访问 `https://github.com`，注册账号（用邮箱注册）
+
 2. 登录后，点右上角 `+` → `New repository`
+
 3. 仓库名输入：`game-ai-demos`
+
 4. 选 Public（公开）
+
 5. 勾选「Add a README file」
-6. 描述可以写：游戏AI学习练习代码
+
+6. 描述可以写：游戏 AI 学习练习代码
+
 7. 点「Create repository」创建完成
 
----
 
-### 步骤7：安装 Git
+
+***
+
+### 步骤 7：安装 Git
+
+
 
 1. 浏览器访问 Git 官网，下载 Windows 版
+
 2. 双击安装包，一路下一步，所有选项保持默认
+
 3. 安装完成后，打开 cmd，输入 `git --version` 验证
 
----
 
-### 步骤8：配置 Git 身份（整台电脑只配一次）
+
+***
+
+### 步骤 8：配置 Git 身份（整台电脑只配一次）
 
 打开 cmd，输入：
-```bash
+
+
+
+```
 git config --global user.name "你的GitHub用户名"
 git config --global user.email "你的注册邮箱"
 ```
 
 > 配置一次永久生效，以后所有仓库都不用再配。
 
----
 
-### 步骤9：克隆仓库到本地
+
+***
+
+### 步骤 9：克隆仓库到本地
+
+
 
 1. 打开你的 GitHub 仓库页面，点绿色「Code」按钮，复制 HTTPS 地址
+
 2. 打开 cmd，切换到你想存放的目录：
-```bash
+
+
+
+```
 D:
 cd D:\projects\xuexi\code
 ```
-3. 克隆仓库：
-```bash
+
+
+
+1. 克隆仓库：
+
+
+
+```
 git clone https://github.com/你的用户名/game-ai-demos.git
 ```
-4. 克隆完成后，本地会多出 `game-ai-demos` 文件夹，这就是你的本地仓库
+
+
+
+1. 克隆完成后，本地会多出 `game-ai-demos` 文件夹，这就是你的本地仓库
 
 > 一个仓库只克隆一次，以后所有项目都放在这个文件夹里。
 
----
 
-## 🌙 晚上：第一个 C# 程序（1.5小时）
 
-### 步骤10：新建 C# 控制台项目
+***
+
+## 🌙 晚上：第一个 C# 程序（1.5 小时）
+
+### 步骤 10：新建 C# 控制台项目
+
+
 
 1. 打开 cmd，进入仓库根目录：
-```bash
+
+
+
+```
 cd D:\projects\xuexi\code\game-ai-demos
 ```
+
 也可以进入这个文件夹
 
-清空上方地址栏 
-输入cmd回车
-dotnet new console   - n 文件夹名#创建一个新的文件项目
-cd 文件夹名#进入文件夹 
-code   .#用VScode打开文件夹
-Ctrl+s#保存
-dotnet run输出
-2. 创建新项目：
-```bash
+清空上方地址栏
+
+输入 cmd 回车
+
+dotnet new console   - n 文件夹名 #创建一个新的文件项目
+
+cd 文件夹名 #进入文件夹
+
+code   .# 用 VScode 打开文件夹
+
+Ctrl+s# 保存
+
+dotnet run 输出
+
+2\. 创建新项目：
+
+
+
+```
 dotnet new console -n HelloWord
 ```
-3. 进入项目文件夹：
-```bash
+
+
+
+1. 进入项目文件夹：
+
+
+
+```
 cd HelloWord
 ```
-4. 运行看看默认效果：
-```bash
+
+
+
+1. 运行看看默认效果：
+
+
+
+```
 dotnet run
 ```
+
 会输出 `Hello, World!`
 
-> 新建项目会自动生成一行默认代码 `Console.WriteLine("Hello, World!");`，这是模板自带的，可以全部删掉重写。
+> 新建项目会自动生成一行默认代码 
+>
+> `Console.WriteLine("Hello, World!");`
+>
+> ，这是模板自带的，可以全部删掉重写。
 
----
 
-### 步骤11：用 VS Code 打开项目写代码
+
+***
+
+### 步骤 11：用 VS Code 打开项目写代码
+
+
 
 1. 打开 VS Code
+
 2. 文件 → 打开文件夹 → 选择 `D:\projects\xuexi\code\game-ai-demos\HelloWord`
+
 3. 如果弹出「是否信任此文件夹」，点「是，我信任此作者」
+
 4. 左侧点开 `Program.cs`，这就是你写代码的文件
+
 5. 练习变量声明，把代码改成：
-```csharp
+
+
+
+```
 string name = "小明";
 int age = 20;
 double height = 1.75;
@@ -175,145 +312,266 @@ Console.WriteLine("我今年" + age + "岁");
 Console.WriteLine("我的身高是" + height + "米");
 Console.ReadKey();
 ```
-6. 按 `Ctrl + S` 保存
-7. 在 cmd 里输入 `dotnet run` 运行，看输出结果
+
+
+
+1. 按 `Ctrl + S` 保存
+
+2. 在 cmd 里输入 `dotnet run` 运行，看输出结果
 
 **项目文件说明：**
-- `Program.cs` = 你写代码的地方（唯一需要编辑的）
-- `HelloWord.csproj` = 项目配置（自动生成，不用管）
-- `.vscode/` = VS Code 配置（自动生成）
-- `bin/` = 编译后的程序（运行后才生成，不用管）
-- `obj/` = 编译临时文件（不用管）
 
----
 
-### 步骤12：把代码推送到 GitHub
+
+* `Program.cs` = 你写代码的地方（唯一需要编辑的）
+
+* `HelloWord.csproj` = 项目配置（自动生成，不用管）
+
+* `.vscode/` = VS Code 配置（自动生成）
+
+* `bin/` = 编译后的程序（运行后才生成，不用管）
+
+* `obj/` = 编译临时文件（不用管）
+
+
+
+***
+
+### 步骤 12：把代码推送到 GitHub
+
+
 
 1. **退回仓库根目录**（重要！不能在 HelloWord 文件夹里执行 git）：
-```bash
+
+
+
+```
 cd ..
 ```
-2. 查看状态：
-```bash
+
+
+
+1. 查看状态：
+
+
+
+```
 git status
 ```
-3. 添加文件：
-```bash
+
+
+
+1. 添加文件：
+
+
+
+```
 git add .
 ```
-4. 提交：
-```bash
+
+
+
+1. 提交：
+
+
+
+```
 git commit -m "添加第一个C#控制台程序"
 ```
-5. 推送：
-```bash
+
+
+
+1. 推送：
+
+
+
+```
 git push
 ```
-6. 第一次 push 会弹出 GitHub 登录窗口，用浏览器授权登录即可
-7. 推送成功后，刷新 GitHub 网页就能看到代码了
+
+
+
+1. 第一次 push 会弹出 GitHub 登录窗口，用浏览器授权登录即可
+
+2. 推送成功后，刷新 GitHub 网页就能看到代码了
 
 **Git 三步曲记住：**
-- `git add .` = 选中文件
-- `git commit -m "备注"` = 本地存档
-- `git push` = 上传到云端
+
+
+
+* `git add .` = 选中文件
+
+* `git commit -m "备注"` = 本地存档
+
+* `git push` = 上传到云端
 
 **铁律：git 命令必须在仓库根目录（game-ai-demos）执行，不能进到子项目文件夹里！**
 
----
+
+
+***
 
 # 📅 D2（第二天）：Unity 入门 + 第一个可移动物体
 
-## ☀️ 上午：Unity 界面认识（3小时）
+## ☀️ 上午：Unity 界面认识（3 小时）
 
-### 步骤1：打开 Unity 新建 3D 项目
+### 步骤 1：打开 Unity 新建 3D 项目
+
+
 
 1. 双击桌面的「Tuanjie Hub」打开
+
 2. 点左侧「项目」→ 右上角「新建项目」
+
 3. 模板选「3D」
+
 4. 项目名：`FirstScene`
+
 5. 位置选：`D:\projects\xuexi\code\game-ai-demos\`（放在仓库里方便推送）
-6. 点「创建」，等待加载（第一次可能1-2分钟）
 
----
+6. 点「创建」，等待加载（第一次可能 1-2 分钟）
 
-### 步骤2：认识六大界面区域
 
-| 区域 | 位置 | 作用 |
-|------|------|------|
-| 层级面板（Hierarchy） | 左上角 | 列出场景里所有游戏物体 |
-| 检查器（Inspector） | 右边 | 显示选中物体的属性和组件 |
-| 场景视图（Scene） | 中间 | 编辑用的3D工作台 |
-| 游戏视图（Game） | 中间 | 玩家实际看到的画面 |
-| 项目面板（Project） | 左下角 | 资源仓库，管理所有文件 |
-| 控制台（Console） | 左下角 | 报错和打印输出 |
+
+***
+
+### 步骤 2：认识六大界面区域
+
+
+
+| 区域              | 位置  | 作用           |
+| --------------- | --- | ------------ |
+| 层级面板（Hierarchy） | 左上角 | 列出场景里所有游戏物体  |
+| 检查器（Inspector）  | 右边  | 显示选中物体的属性和组件 |
+| 场景视图（Scene）     | 中间  | 编辑用的 3D 工作台  |
+| 游戏视图（Game）      | 中间  | 玩家实际看到的画面    |
+| 项目面板（Project）   | 左下角 | 资源仓库，管理所有文件  |
+| 控制台（Console）    | 左下角 | 报错和打印输出      |
 
 **场景视图操作：**
-- 按住鼠标右键拖动 = 旋转视角
-- 滚轮滚动 = 放大缩小
-- 按住鼠标中键拖动 = 平移视角
 
----
 
-### 步骤3：理解核心概念
+
+* 按住鼠标右键拖动 = 旋转视角
+
+* 滚轮滚动 = 放大缩小
+
+* 按住鼠标中键拖动 = 平移视角
+
+
+
+***
+
+### 步骤 3：理解核心概念
 
 **GameObject（游戏物体）：**
-- 场景里的每一个东西都是 GameObject（相机、灯光、玩家、地面）
-- 本身是空容器，功能由挂在身上的组件决定
+
+
+
+* 场景里的每一个东西都是 GameObject（相机、灯光、玩家、地面）
+
+* 本身是空容器，功能由挂在身上的组件决定
 
 **Component（组件）：**
-- 每个组件负责一个功能
-- 每个物体必有 `Transform` 组件
-- 相机有 `Camera` 组件，灯光有 `Light` 组件
-- 检查器底部点「添加组件」可以加更多功能
+
+
+
+* 每个组件负责一个功能
+
+* 每个物体必有 `Transform` 组件
+
+* 相机有 `Camera` 组件，灯光有 `Light` 组件
+
+* 检查器底部点「添加组件」可以加更多功能
 
 **Transform（变换组件）：**
-- 控制物体的位置（Position）、旋转（Rotation）、缩放（Scale）
-- 选中物体后场景里出现彩色箭头：
-  - 🔴 红色 = X轴（左右）
-  - 🟢 绿色 = Y轴（上下）
-  - 🔵 蓝色 = Z轴（前后）
-- 拖动箭头就能移动物体
 
----
 
-### 步骤4：创建/删除/重命名物体练习
+
+* 控制物体的位置（Position）、旋转（Rotation）、缩放（Scale）
+
+* 选中物体后场景里出现彩色箭头：
+
+
+  * 🔴 红色 = X 轴（左右）
+
+  * 🟢 绿色 = Y 轴（上下）
+
+  * 🔵 蓝色 = Z 轴（前后）
+
+* 拖动箭头就能移动物体
+
+
+
+***
+
+### 步骤 4：创建 / 删除 / 重命名物体练习
+
+
 
 1. 层级面板空白处右键 → 3D 对象 → 立方体（Cube）
+
 2. 双击 Cube 重命名为 `Player`
+
 3. 在检查器里把位置 Y 改成 `1`
+
 4. 用鼠标拖动彩色箭头移动方块
+
 5. 想删除物体：选中后按键盘 Delete 键（这个练习不用删，留着下午用）
 
----
 
-## 🌤️ 下午：搭第一个小场景 + 移动脚本（3小时）
 
-### 步骤5：创建地面（Plane）
+***
+
+## 🌤️ 下午：搭第一个小场景 + 移动脚本（3 小时）
+
+### 步骤 5：创建地面（Plane）
+
+
 
 1. 层级面板空白处右键 → 3D 对象 → 平面（Plane）
+
 2. 检查器里位置 Y 保持 `0`
+
 3. 平面默认很大，足够用
 
----
 
-### 步骤6：调整相机视角
+
+***
+
+### 步骤 6：调整相机视角
+
+
 
 1. 层级面板选中 `Main Camera`
+
 2. 检查器 Transform 设置：
-   - 位置：X=`0`，Y=`6`，Z=`-8`
-   - 旋转：X=`30`，Y=`0`，Z=`0`
-3. 切到「游戏」标签，看看画面是不是俯视角度，能看到地面和方块
 
----
+* 位置：X=`0`，Y=`6`，Z=`-8`
 
-### 步骤7：创建 C# 移动脚本
+* 旋转：X=`30`，Y=`0`，Z=`0`
+
+1. 切到「游戏」标签，看看画面是不是俯视角度，能看到地面和方块
+
+
+
+***
+
+### 步骤 7：创建 C# 移动脚本
+
+
 
 1. 项目面板空白处右键 → 创建 → C# 脚本
-2. 命名：`PlayerMove`（P和M大写）
+
+2. 命名：`PlayerMove`（P 和 M 大写）
+
 3. 双击脚本，用 VS Code 打开
+
 4. 把默认代码全部删掉，粘贴下面这段：
 
-```csharp
+
+
+```
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
@@ -331,57 +589,104 @@ public class PlayerMove : MonoBehaviour
 }
 ```
 
-5. 按 `Ctrl + S` 保存
+
+
+1. 按 `Ctrl + S` 保存
 
 **代码解释：**
-- `moveSpeed` = 移动速度变量，可以在检查器里调整
-- `Update()` = 每帧自动执行（一秒约60次）
-- `Input.GetAxis("Horizontal")` = 检测 A/D 键
-- `Input.GetAxis("Vertical")` = 检测 W/S 键
-- `transform.Translate()` = 让物体移动
-- `Time.deltaTime` = 让速度不受电脑帧率影响
 
----
 
-### 步骤8：把脚本挂到 Player 上
+
+* `moveSpeed` = 移动速度变量，可以在检查器里调整
+
+* `Update()` = 每帧自动执行（一秒约 60 次）
+
+* `Input.GetAxis("Horizontal")` = 检测 A/D 键
+
+* `Input.GetAxis("Vertical")` = 检测 W/S 键
+
+* `transform.Translate()` = 让物体移动
+
+* `Time.deltaTime` = 让速度不受电脑帧率影响
+
+
+
+***
+
+### 步骤 8：把脚本挂到 Player 上
+
+
 
 1. 回到 Unity 编辑器
+
 2. 从项目面板里按住 `PlayerMove` 脚本，拖到层级面板的 `Player` 物体上，松开
+
 3. 选中 Player，看检查器最下面，应该多出 `Player Move (脚本)` 组件
+
 4. 如果不小心拖了两次出现两个组件，点组件右上角三个点 → 移除组件，删掉多余的
 
----
 
-### 步骤9：运行测试
+
+***
+
+### 步骤 9：运行测试
+
+
 
 1. 切到「游戏」视图
+
 2. 点顶部中间的 ▶️ 播放按钮
+
 3. 按键盘 **W/A/S/D**：
-   - W = 往前
-   - S = 往后
-   - A = 往左
-   - D = 往右
-4. 看看方块是不是跟着移动了
-5. 再点一次 ▶️ 停止运行
 
----
+* W = 往前
 
-### 步骤10：调整移动速度
+* S = 往后
+
+* A = 往左
+
+* D = 往右
+
+1. 看看方块是不是跟着移动了
+
+2. 再点一次 ▶️ 停止运行
+
+
+
+***
+
+### 步骤 10：调整移动速度
+
+
 
 1. 停止运行状态下（必须停止，不然改的不保存）
+
 2. 选中 Player，检查器里找到 `Move Speed`
+
 3. 把数值从 3 改成 8，运行试试更快
+
 4. 测试完改回 3 或你觉得舒服的速度
 
----
 
-### 步骤11：配置 .gitignore 并推送 Unity 项目
+
+***
+
+### 步骤 11：配置 .gitignore 并推送 Unity 项目
 
 **创建 .gitignore 文件：**
+
+
+
 1. 用 VS Code 打开仓库文件夹 `game-ai-demos`
+
 2. 左侧空白处右键 → 新建文件
+
 3. 文件名输入 `.gitignore`（前面有个点，没有后缀）
+
 4. 粘贴下面内容：
+
+
+
 ```
 [Ll]ibrary/
 [Tt]emp/
@@ -409,45 +714,80 @@ public class PlayerMove : MonoBehaviour
 bin/
 *.csproj.user
 ```
-5. Ctrl+S 保存
+
+
+
+1. Ctrl+S 保存
 
 **推送：**
+
+
+
 1. 打开 cmd，进入仓库根目录：
-```bash
+
+
+
+```
 cd D:\projects\xuexi\code\game-ai-demos
 ```
-2. 查看状态（确认 Library/Temp 被忽略了）：
-```bash
+
+
+
+1. 查看状态（确认 Library/Temp 被忽略了）：
+
+
+
+```
 git status
 ```
-3. 添加、提交、推送：
-```bash
+
+
+
+1. 添加、提交、推送：
+
+
+
+```
 git add .
 git commit -m "添加第一个Unity场景和WASD移动脚本"
 git push
 ```
 
----
 
-## 🌙 晚上：复习 + 笔记（1.5小时）
 
-### 步骤12：整理学习笔记
+***
+
+## 🌙 晚上：复习 + 笔记（1.5 小时）
+
+### 步骤 12：整理学习笔记
+
+
 
 1. 在仓库根目录新建 `notes` 文件夹
+
 2. 把学习笔记放到 `notes` 文件夹里
+
 3. 提交推送：
-```bash
+
+
+
+```
 git add notes/
 git commit -m "添加学习笔记"
 git push
 ```
 
----
+
+
+***
 
 # 📌 常用命令速查表
 
 ## C# / .NET
-```bash
+
+
+
+```
 dotnet new console -n 项目名   # 新建控制台项目
 dotnet run                      # 运行程序
 dotnet build                    # 编译
@@ -455,7 +795,10 @@ dotnet --version                # 查看版本
 ```
 
 ## Git
-```bash
+
+
+
+```
 git clone 仓库地址              # 克隆仓库
 git status                      # 查看状态
 git add .                       # 添加全部
@@ -466,82 +809,129 @@ git config --global user.name "名字"   # 配置用户名（一次）
 git config --global user.email "邮箱"  # 配置邮箱（一次）
 ```
 
----
+
+
+***
 
 # ⚠️ 常见问题
 
-1. **`dotnet` 不是内部或外部命令**
-   → 没装 .NET SDK 或环境变量没配，参考 D1 步骤5
 
-2. **`fatal: not a git repository`**
+
+1. `dotnet`**&#x20;不是内部或外部命令**
+
+   → 没装 .NET SDK 或环境变量没配，参考 D1 步骤 5
+
+2. `fatal: not a git repository`
+
    → 在子文件夹里执行 git 了，退回到仓库根目录再执行
 
 3. **双击 .exe 一闪而过**
+
    → 程序太短执行完就退出，用 `dotnet run` 运行，或代码末尾加 `Console.ReadKey()`
 
 4. **.dll 用 Word 打开是乱码**
+
    → .dll 是电脑用的二进制文件，不是给人看的，不要打开
 
 5. **GitHub 首页文件夹右侧提交消息变了**
+
    → 那是显示该文件夹最后一次改动的提交，不是修改历史，点「提交」按钮看完整历史
 
 6. **Unity 运行时改参数不保存**
+
    → 必须在停止状态下改参数才会保存
 
 7. **脚本挂了两次**
+
    → 检查器里点组件右上角三个点 → 移除组件，删掉多余的
 
----
+
+
+***
 
 # 第三日学习笔记
+
 ## Unity 核心概念
 
 ### 1. GameObject（游戏对象）
-- 游戏里的一切「东西」都是 GameObject：玩家、敌人、子弹、地图、摄像机、灯光、UI
-- 本身是空壳，什么都干不了，所有功能都靠挂组件
-- 代码里用 `gameObject` 表示当前脚本所在的物体
+
+
+
+* 游戏里的一切「东西」都是 GameObject：玩家、敌人、子弹、地图、摄像机、灯光、UI
+
+* 本身是空壳，什么都干不了，所有功能都靠挂组件
+
+* 代码里用 `gameObject` 表示当前脚本所在的物体
 
 ### 2. Component（组件）
-- 挂在 GameObject 上的「功能模块」，给物体赋予能力
-- 一个物体可以挂多个组件，组合出各种功能
-- 常见组件：
-  - Mesh Renderer：让物体可见
-  - Rigidbody：受重力、能被碰撞
-  - Collider：能碰到东西、能被打中
-  - Animator：播放动画
-  - 自定义脚本（比如 PlayerMove.cs）：自己写的逻辑
-- 在 Inspector 里点 Add Component 添加
+
+
+
+* 挂在 GameObject 上的「功能模块」，给物体赋予能力
+
+* 一个物体可以挂多个组件，组合出各种功能
+
+* 常见组件：
+
+
+  * Mesh Renderer：让物体可见
+
+  * Rigidbody：受重力、能被碰撞
+
+  * Collider：能碰到东西、能被打中
+
+  * Animator：播放动画
+
+  * 自定义脚本（比如 PlayerMove.cs）：自己写的逻辑
+
+* 在 Inspector 里点 Add Component 添加
 
 ### 3. Transform（变换组件）
-- 每个 GameObject 天生自带，删不掉
-- 管三件事：
-  - Position（位置）：物体在哪
-  - Rotation（旋转）：物体面朝哪
-  - Scale（缩放）：物体多大
-- 代码里用 `transform` 直接访问
-- 移动物体：`transform.Translate(方向 * 速度 * Time.deltaTime)`
+
+
+
+* 每个 GameObject 天生自带，删不掉
+
+* 管三件事：
+
+
+  * Position（位置）：物体在哪
+
+  * Rotation（旋转）：物体面朝哪
+
+  * Scale（缩放）：物体多大
+
+* 代码里用 `transform` 直接访问
+
+* 移动物体：`transform.Translate(方向 * 速度 * Time.deltaTime)`
 
 ### 三者关系
+
 GameObject 是容器（演员），Component 是功能（道具和技能），Transform 是最基础的组件（管位置、旋转、缩放）。
 
+# 📅 D4（第四天）：C# 变量 / 类型 / 运算符 + Unity Transform 实操
 
-# 📅 D4（第四天）：C# 变量/类型/运算符 + Unity Transform 实操
+## ☀️ 上午：C# 基础①（3 小时）
 
-## ☀️ 上午：C# 基础①（3小时）
+### 步骤 1：变量的声明、赋值与命名规则
 
-### 步骤1：变量的声明、赋值与命名规则
-
-**什么是变量：** 程序里的"小盒子"，用来存数据，每个盒子有名字和类型。
+**什么是变量：** 程序里的 "小盒子"，用来存数据，每个盒子有名字和类型。
 
 **声明语法：**
-```csharp
+
+
+
+```
 // 类型 变量名;
 int score;          // 声明整数变量
 string playerName;  // 声明字符串变量
 ```
 
 **赋值：**
-```csharp
+
+
+
+```
 int score;       // 声明
 score = 100;     // 赋值
 int score = 100; // 声明+赋值合并（最常用）
@@ -549,85 +939,132 @@ score = 85;      // 重新赋值，覆盖旧值
 ```
 
 **命名规则：**
-- 只能用字母、数字、下划线
-- 不能以数字开头
-- 不能用C#关键字（int、class、void等）
-- 区分大小写（Score和score是两个变量）
+
+
+
+* 只能用字母、数字、下划线
+
+* 不能以数字开头
+
+* 不能用 C# 关键字（int、class、void 等）
+
+* 区分大小写（Score 和 score 是两个变量）
 
 **命名习惯：** 局部变量用小驼峰（camelCase），第一个单词小写，后面首字母大写
-- ✅ 正确：`playerName`、`moveSpeed`、`isGameOver`
-- ❌ 不推荐：`playername`、`PlayerName`、`player_name`
 
----
 
-### 步骤2：6种基本数据类型
 
-| 类型 | 存什么 | 例子 | 后缀 | 用途 |
-|------|--------|------|------|------|
-| int | 整数 | `int a = 5;` | 无 | 分数、等级、人数 |
-| float | 小数 | `float b = 3.14f;` | 必须加f | Unity里的位置、速度 |
-| double | 高精度小数 | `double c = 3.14159;` | 无 | 科学计算、金融 |
-| bool | 真/假 | `bool d = true;` | 无 | 开关、判断条件 |
-| string | 一串文字 | `string e = "你好";` | 双引号 | 名字、对话文本 |
-| char | 单个字符 | `char f = 'A';` | 单引号 | 性别、等级评定 |
+* ✅ 正确：`playerName`、`moveSpeed`、`isGameOver`
+
+* ❌ 不推荐：`playername`、`PlayerName`、`player_name`
+
+
+
+***
+
+### 步骤 2：6 种基本数据类型
+
+
+
+| 类型     | 存什么   | 例子                    | 后缀    | 用途            |
+| ------ | ----- | --------------------- | ----- | ------------- |
+| int    | 整数    | `int a = 5;`          | 无     | 分数、等级、人数      |
+| float  | 小数    | `float b = 3.14f;`    | 必须加 f | Unity 里的位置、速度 |
+| double | 高精度小数 | `double c = 3.14159;` | 无     | 科学计算、金融       |
+| bool   | 真 / 假 | `bool d = true;`      | 无     | 开关、判断条件       |
+| string | 一串文字  | `string e = "你好";`    | 双引号   | 名字、对话文本       |
+| char   | 单个字符  | `char f = 'A';`       | 单引号   | 性别、等级评定       |
 
 **注意：**
-- float 数字后面必须加 `f`，否则报错
-- string 用双引号，char 用单引号且只能一个字符
-- 整数除法会砍掉小数：`5 / 2 = 2`（不是2.5）
-- 想要小数结果，至少一个数是小数：`5.0 / 2 = 2.5`
+
+
+
+* float 数字后面必须加 `f`，否则报错
+
+* string 用双引号，char 用单引号且只能一个字符
+
+* 整数除法会砍掉小数：`5 / 2 = 2`（不是 2.5）
+
+* 想要小数结果，至少一个数是小数：`5.0 / 2 = 2.5`
 
 **类型转换：**
-- 小类型→大类型自动转：`int → float → double`
-- 大类型→小类型需强制转换：`int d = (int)3.14f;`（结果是3，小数被砍）
 
----
 
-### 步骤3：运算符
+
+* 小类型→大类型自动转：`int → float → double`
+
+* 大类型→小类型需强制转换：`int d = (int)3.14f;`（结果是 3，小数被砍）
+
+
+
+***
+
+### 步骤 3：运算符
 
 **算术运算符：**
-| 符号 | 作用 | 例子 | 结果 |
-|------|------|------|------|
-| + | 加 | `5 + 3` | 8 |
-| - | 减 | `5 - 3` | 2 |
-| * | 乘 | `5 * 3` | 15 |
-| / | 除 | `5 / 2` | 2（整数砍小数） |
-| % | 取余 | `5 % 2` | 1 |
 
-**比较运算符（结果是bool）：**
-| 符号 | 作用 | 例子 | 结果 |
-|------|------|------|------|
-| == | 等于 | `5 == 5` | true |
-| != | 不等于 | `5 != 3` | true |
-| > | 大于 | `5 > 3` | true |
-| < | 小于 | `5 < 3` | false |
-| >= | 大于等于 | `5 >= 5` | true |
+
+
+| 符号 | 作用 | 例子      | 结果       |
+| -- | -- | ------- | -------- |
+| +  | 加  | `5 + 3` | 8        |
+| -  | 减  | `5 - 3` | 2        |
+| \* | 乘  | `5 * 3` | 15       |
+| /  | 除  | `5 / 2` | 2（整数砍小数） |
+| %  | 取余 | `5 % 2` | 1        |
+
+**比较运算符（结果是 bool）：**
+
+
+
+| 符号 | 作用   | 例子       | 结果    |
+| -- | ---- | -------- | ----- |
+| == | 等于   | `5 == 5` | true  |
+| != | 不等于  | `5 != 3` | true  |
+| >  | 大于   | `5 > 3`  | true  |
+| <  | 小于   | `5 < 3`  | false |
+| >= | 大于等于 | `5 >= 5` | true  |
 | <= | 小于等于 | `5 <= 3` | false |
 
-**⚠️ 超级重要：`=` vs `==`**
-- `=` 是赋值：`x = 5;`（把5放进x）
-- `==` 是比较：`x == 5`（判断x是不是5，结果true/false）
+**⚠️ 超级重要：**`=`**&#x20;vs&#x20;**`==`
+
+
+
+* `=` 是赋值：`x = 5;`（把 5 放进 x）
+
+* `==` 是比较：`x == 5`（判断 x 是不是 5，结果 true/false）
 
 **逻辑运算符：**
-| 符号 | 作用 | 口诀 | 例子 | 结果 |
-|------|------|------|------|------|
-| && | 与（并且） | 全真才真，一假就假 | `true && false` | false |
-| \|\| | 或（或者） | 一真就真，全假才假 | `true \|\| false` | true |
-| ! | 非（取反） | true变false，false变true | `!true` | false |
 
----
 
-### 步骤4：综合练习 - 输入两数计算和差积商余
+
+| 符号   | 作用    | 口诀                        | 例子                | 结果    |
+| ---- | ----- | ------------------------- | ----------------- | ----- |
+| &&   | 与（并且） | 全真才真，一假就假                 | `true && false`   | false |
+| \|\| | 或（或者） | 一真就真，全假才假                 | `true \|\| false` | true  |
+| !    | 非（取反） | true 变 false，false 变 true | `!true`           | false |
+
+
+
+***
+
+### 步骤 4：综合练习 - 输入两数计算和差积商余
 
 **控制台输入：**
-```csharp
+
+
+
+```
 Console.Write("请输入第一个数：");
 string input = Console.ReadLine();  // 读取用户输入的一行文字
 int num = int.Parse(input);         // 把文字转成整数
 ```
 
 **完整代码：**
-```csharp
+
+
+
+```
 using System;
 
 class Program
@@ -652,27 +1089,44 @@ class Program
 ```
 
 **⚠️ 常见坑：**
-- `Console.WriteLine("和：" + num1 + num2)` 不加括号会变成字符串拼接
-- 正确写法：`Console.WriteLine("和：" + (num1 + num2))`
 
----
 
-## 🌤️ 下午：Unity Transform 实操（3小时）
 
-### 步骤1：打开项目，复习场景搭建
+* `Console.WriteLine("和：" + num1 + num2)` 不加括号会变成字符串拼接
+
+* 正确写法：`Console.WriteLine("和：" + (num1 + num2))`
+
+
+
+***
+
+## 🌤️ 下午：Unity Transform 实操（3 小时）
+
+### 步骤 1：打开项目，复习场景搭建
+
+
 
 1. 打开 Unity Hub，点击项目打开
+
 2. 右键 Hierarchy → 3D Object → Cube 创建立方体
-3. 选中Cube，Inspector面板最上方是 Transform 组件
+
+3. 选中 Cube，Inspector 面板最上方是 Transform 组件
+
 4. Transform 三个属性：Position（位置）、Rotation（旋转）、Scale（缩放）
-5. 快捷键：W=移动工具，E=旋转工具，R=缩放工具
 
----
+5. 快捷键：W = 移动工具，E = 旋转工具，R = 缩放工具
 
-### 步骤2：代码设置物体位置 + 每帧匀速移动
 
-**Unity脚本基本结构：**
-```csharp
+
+***
+
+### 步骤 2：代码设置物体位置 + 每帧匀速移动
+
+**Unity 脚本基本结构：**
+
+
+
+```
 using UnityEngine;
 
 public class MoveCube : MonoBehaviour
@@ -694,24 +1148,42 @@ public class MoveCube : MonoBehaviour
 ```
 
 **关键概念：**
-- `MonoBehaviour`：Unity脚本基类，必须继承
-- `Start()`：游戏开始第一帧执行一次，用于初始化
-- `Update()`：每帧执行（约每秒60次），用于持续逻辑
-- `transform`：代表物体的Transform组件
-- `transform.position`：物体的位置（Vector3类型）
-- `transform.Translate(方向)`：让物体相对当前位置移动
-- `Vector3.forward`：正前方（Z轴正方向）
-- `Time.deltaTime`：上一帧到这一帧的时间（秒），乘了之后速度不受帧率影响
 
-**⚠️ 为什么乘Time.deltaTime：**
-- 不乘：每帧移动固定距离，帧率高跑得快，帧率低跑得慢
-- 乘了：速度×时间=距离，表示"每秒移动多少米"，所有设备速度一致
 
----
 
-### 步骤3：物体绕Y轴旋转
+* `MonoBehaviour`：Unity 脚本基类，必须继承
 
-```csharp
+* `Start()`：游戏开始第一帧执行一次，用于初始化
+
+* `Update()`：每帧执行（约每秒 60 次），用于持续逻辑
+
+* `transform`：代表物体的 Transform 组件
+
+* `transform.position`：物体的位置（Vector3 类型）
+
+* `transform.Translate(方向)`：让物体相对当前位置移动
+
+* `Vector3.forward`：正前方（Z 轴正方向）
+
+* `Time.deltaTime`：上一帧到这一帧的时间（秒），乘了之后速度不受帧率影响
+
+**⚠️ 为什么乘 Time.deltaTime：**
+
+
+
+* 不乘：每帧移动固定距离，帧率高跑得快，帧率低跑得慢
+
+* 乘了：速度 × 时间 = 距离，表示 "每秒移动多少米"，所有设备速度一致
+
+
+
+***
+
+### 步骤 3：物体绕 Y 轴旋转
+
+
+
+```
 using UnityEngine;
 
 public class RotateCube : MonoBehaviour
@@ -727,15 +1199,24 @@ public class RotateCube : MonoBehaviour
 ```
 
 **三个轴的效果：**
-- `new Vector3(50, 0, 0)`：绕X轴转（翻跟头）
-- `new Vector3(0, 50, 0)`：绕Y轴转（转圈，最常用）
-- `new Vector3(0, 0, 50)`：绕Z轴转（钟表指针）
 
----
 
-### 步骤4：WASD键盘控制位移
 
-```csharp
+* `new Vector3(50, 0, 0)`：绕 X 轴转（翻跟头）
+
+* `new Vector3(0, 50, 0)`：绕 Y 轴转（转圈，最常用）
+
+* `new Vector3(0, 0, 50)`：绕 Z 轴转（钟表指针）
+
+
+
+***
+
+### 步骤 4：WASD 键盘控制位移
+
+
+
+```
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -765,25 +1246,40 @@ public class PlayerController : MonoBehaviour
 ```
 
 **关键概念：**
-- `if (条件) { 代码 }`：条件成立时执行
-- `Input.GetKey(KeyCode.W)`：检测W键是否被按住，返回bool
-- 常用键：KeyCode.W/A/S/D
+
+
+
+* `if (条件) { 代码 }`：条件成立时执行
+
+* `Input.GetKey(KeyCode.W)`：检测 W 键是否被按住，返回 bool
+
+* 常用键：KeyCode.W/A/S/D
 
 **⚠️ 运行不移动的常见原因：**
+
+
+
 1. 脚本没挂到物体上
-2. 运行后没点击Game视图获取焦点
-3. Move Speed在Inspector里被改成0了
-4. 其他脚本冲突（比如MoveCube速度设太快）
 
----
+2. 运行后没点击 Game 视图获取焦点
 
-## 🌙 晚上：2个小练习（1.5小时）
+3. Move Speed 在 Inspector 里被改成 0 了
 
-### 步骤1：判断一个数是奇数还是偶数
+4. 其他脚本冲突（比如 MoveCube 速度设太快）
 
-**原理：** 除以2，余数0是偶数，余数1是奇数
 
-```csharp
+
+***
+
+## 🌙 晚上：2 个小练习（1.5 小时）
+
+### 步骤 1：判断一个数是奇数还是偶数
+
+**原理：** 除以 2，余数 0 是偶数，余数 1 是奇数
+
+
+
+```
 using System;
 
 class Program
@@ -808,7 +1304,10 @@ class Program
 ```
 
 **if...else 结构：**
-```csharp
+
+
+
+```
 if (条件)
 {
     // 条件成立执行
@@ -819,13 +1318,17 @@ else
 }
 ```
 
----
 
-### 步骤2：摄氏温度转华氏温度
+
+***
+
+### 步骤 2：摄氏温度转华氏温度
 
 **公式：** F = C × 9/5 + 32
 
-```csharp
+
+
+```
 using System;
 
 class Program
@@ -843,40 +1346,63 @@ class Program
 
 **⚠️ 注意：** `9.0 / 5` 必须有一个是小数，否则 `9 / 5 = 1`（整数除法砍小数）
 
----
 
-### 步骤3：Git 提交 + 打卡
 
-```bash
+***
+
+### 步骤 3：Git 提交 + 打卡
+
+
+
+```
 git add DailyPractice/
 git commit -m "D4晚上：判断奇偶+温度转换练习"
 git push
 ```
 
-更新 `notes/checkin.md`，勾选D4完成，写学习总结。
+更新 `notes/checkin.md`，勾选 D4 完成，写学习总结。
 
----
+
+
+***
 
 ## 📌 D4 核心要点总结
 
-1. **C#变量：** 声明要指定类型，赋值用=，float加f
-2. **6种类型：** int/float/double/bool/string/char，各有用途
-3. **运算符：** 算术/比较/逻辑，注意`=`和`==`的区别
-4. **Unity脚本：** Start()执行一次，Update()每帧执行
-5. **移动：** transform.Translate(方向 × 速度 × Time.deltaTime)
-6. **旋转：** transform.Rotate(旋转角度 × Time.deltaTime)
+
+
+1. **C# 变量：** 声明要指定类型，赋值用 =，float 加 f
+
+2. **6 种类型：** int/float/double/bool/string/char，各有用途
+
+3. **运算符：** 算术 / 比较 / 逻辑，注意`=`和`==`的区别
+
+4. **Unity 脚本：** Start () 执行一次，Update () 每帧执行
+
+5. **移动：** transform.Translate (方向 × 速度 × Time.deltaTime)
+
+6. **旋转：** transform.Rotate (旋转角度 × Time.deltaTime)
+
 7. **键盘控制：** if (Input.GetKey(KeyCode.W)) + Translate
+
 8. **if...else：** 条件判断，奇偶判断、温度转换都用到
 
 ## D5 学习笔记（2026-09-08）
 
 ### 一、C# 条件语句
 
-#### 1. if / else if / else（多条件分支）
-- if：第一个条件；else if：中间条件，可写多个；else：全部不满足时兜底
-- 从上往下判断，命中一个就跳出，后面不再判断
-- 范围判断（>=、<）只能用if，switch做不到
-```csharp
+#### 1. if /else if /else（多条件分支）
+
+
+
+* if：第一个条件；else if：中间条件，可写多个；else：全部不满足时兜底
+
+* 从上往下判断，命中一个就跳出，后面不再判断
+
+* 范围判断（>=、<）只能用 if，switch 做不到
+
+
+
+```
 if (score >= 90) { Console.WriteLine("优秀"); }
 else if (score >= 60) { Console.WriteLine("及格"); }  // 走到这说明<90
 else { Console.WriteLine("不及格"); }
@@ -884,8 +1410,13 @@ else { Console.WriteLine("不及格"); }
 
 #### 2. switch（固定值匹配）
 
-- 只能判断"变量等于哪个固定值"，适合星期、菜单、状态
-- case后必须跟break；default相当于else
+
+
+* 只能判断 "变量等于哪个固定值"，适合星期、菜单、状态
+
+* case 后必须跟 break；default 相当于 else
+
+
 
 ```
 switch (day)
@@ -896,9 +1427,13 @@ switch (day)
 }
 ```
 
-#### 3. 三元运算符（if-else简写，二选一赋值）
+#### 3. 三元运算符（if-else 简写，二选一赋值）
 
-- 语法：`条件 ? 成立的值 : 不成立的值`
+
+
+* 语法：`条件 ? 成立的值 : 不成立的值`
+
+
 
 ```
 string result = num % 2 == 0 ? "偶数" : "奇数";
@@ -909,20 +1444,33 @@ int max = a > b ? a : b;   // 取较大值
 
 #### 1. for（知道循环次数时用）
 
-- 结构：for(初始化; 条件; 更新){}，执行顺序：初始化1次→判断→执行→更新→再判断
-- i++ 是 i=i+1；i-- 是 i=i-1；i+=2 是每次加2
+
+
+* 结构：for (初始化；条件；更新){}，执行顺序：初始化 1 次→判断→执行→更新→再判断
+
+* i++ 是 i=i+1；i-- 是 i=i-1；i+=2 是每次加 2
+
+
 
 ```
 for (int i = 1; i <= 10; i++) { Console.Write(i + " "); }
 ```
 
-- 累加器求和：int sum=0; 循环里 sum=sum+i;
-- 计数器数个数：int count=0; 满足条件时 count++;
+
+
+* 累加器求和：int sum=0; 循环里 sum=sum+i;
+
+* 计数器数个数：int count=0; 满足条件时 count++;
 
 #### 2. while（不知道次数、只知道停止条件时用）
 
-- 循环变量写在外面，更新(i++)必须写在循环体里，否则死循环
-- 死循环时按 Ctrl+C 停止
+
+
+* 循环变量写在外面，更新 (i++) 必须写在循环体里，否则死循环
+
+* 死循环时按 Ctrl+C 停止
+
+
 
 ```
 int i = 1;
@@ -931,7 +1479,11 @@ while (i <= 10) { Console.Write(i + " "); i++; }
 
 #### 3. do-while（先执行一次，再判断）
 
-- 无论条件是否成立，循环体至少执行1次；末尾while(条件)后有分号
+
+
+* 无论条件是否成立，循环体至少执行 1 次；末尾 while (条件) 后有分号
+
+
 
 ```
 do { 输入密码; } while (pwd != 888);
@@ -939,13 +1491,21 @@ do { 输入密码; } while (pwd != 888);
 
 #### 4. break 和 continue
 
-- break：立刻结束整个循环（找到目标就停）
-- continue：只跳过本次，继续下一次（跳过不想要的）
-- 对比1-10遇到7：break输出123456；continue输出123456 8 9 10
+
+
+* break：立刻结束整个循环（找到目标就停）
+
+* continue：只跳过本次，继续下一次（跳过不想要的）
+
+* 对比 1-10 遇到 7：break 输出 123456；continue 输出 123456 8 9 10
 
 #### 5. 嵌套循环（外层管行，内层管列）
 
-- 外层走1步，内层走完一整圈；内层结束后换行
+
+
+* 外层走 1 步，内层走完一整圈；内层结束后换行
+
+
 
 ```
 // 九九乘法表
@@ -957,11 +1517,17 @@ for (int i = 1; i <= 9; i++)
 }
 ```
 
-### 三、综合实战：密码登录（最多3次）
+### 三、综合实战：密码登录（最多 3 次）
 
-- while循环反复输入 + 计数器记次数 + if判对错 + break跳出
-- 关键：用 bool isSuccess 标志位区分"输对退出"还是"次数用完"
-- 教训：不能用 times==0 判断结果（第3次才输对时times也是0，会误判）
+
+
+* while 循环反复输入 + 计数器记次数 + if 判对错 + break 跳出
+
+* 关键：用 bool isSuccess 标志位区分 "输对退出" 还是 "次数用完"
+
+* 教训：不能用 times==0 判断结果（第 3 次才输对时 times 也是 0，会误判）
+
+
 
 ```
 string correct = "123456";
@@ -981,24 +1547,41 @@ Console.WriteLine(isSuccess ? "欢迎" : "锁定");
 
 #### 1. Rigidbody（刚体）与 Collider（碰撞体）
 
-- transform.Translate 只是改坐标，无重力无碰撞，会穿过物体
-- Rigidbody：物理身体，让物体受重力、受力、有碰撞反应（需手动Add Component添加）
-- Collider：碰撞轮廓，Cube/Plane基础物体自带，不用手动加
-- 只有Collider没Rigidbody=不动的墙（地面）；有Rigidbody才会掉、会被推动
+
+
+* transform.Translate 只是改坐标，无重力无碰撞，会穿过物体
+
+* Rigidbody：物理身体，让物体受重力、受力、有碰撞反应（需手动 Add Component 添加）
+
+* Collider：碰撞轮廓，Cube/Plane 基础物体自带，不用手动加
+
+* 只有 Collider 没 Rigidbody = 不动的墙（地面）；有 Rigidbody 才会掉、会被推动
 
 #### 2. Rigidbody 常用参数
 
-- Mass质量(kg)：自由落体快慢与质量无关
-- Use Gravity使用重力：勾上才往下掉
-- Is Kinematic运动学：勾上后物理引擎不推动它，只能用transform控制
-- Constraints约束：Freeze Rotation勾X/Z可防止角色移动时翻倒（玩家要保持直立）
+
+
+* Mass 质量 (kg)：自由落体快慢与质量无关
+
+* Use Gravity 使用重力：勾上才往下掉
+
+* Is Kinematic 运动学：勾上后物理引擎不推动它，只能用 transform 控制
+
+* Constraints 约束：Freeze Rotation 勾 X/Z 可防止角色移动时翻倒（玩家要保持直立）
 
 #### 3. velocity 物理移动（WASD）
 
-- GetComponent()：在Start里取出同物体上的刚体存进rb
-- 物理代码写 FixedUpdate（固定物理帧），不写Update
-- Input.GetKey 按住持续触发；rb.velocity设速度
-- 必须保留 rb.velocity.y，否则重力被每帧清零，掉不下去
+
+
+* GetComponent ()：在 Start 里取出同物体上的刚体存进 rb
+
+* 物理代码写 FixedUpdate（固定物理帧），不写 Update
+
+* Input.GetKey 按住持续触发；rb.velocity 设速度
+
+* 必须保留 rb.velocity.y，否则重力被每帧清零，掉不下去
+
+
 
 ```
 public float moveSpeed = 5f;
@@ -1015,12 +1598,19 @@ void FixedUpdate()
 }
 ```
 
-- Vector3(x,y,z)对应红X左右、绿Y上下、蓝Z前后；正数沿箭头、负数反向
+
+
+* Vector3 (x,y,z) 对应红 X 左右、绿 Y 上下、蓝 Z 前后；正数沿箭头、负数反向
 
 #### 4. AddForce 跳跃
 
-- AddForce(方向*力, ForceMode.Impulse)：Impulse瞬间爆发，适合跳跃
-- 跳跃用 Input.GetKeyDown（按下瞬间一次），放Update里防止漏按
+
+
+* AddForce (方向 \* 力，ForceMode.Impulse)：Impulse 瞬间爆发，适合跳跃
+
+* 跳跃用 Input.GetKeyDown（按下瞬间一次），放 Update 里防止漏按
+
+
 
 ```
 public float jumpForce = 5f;
@@ -1033,9 +1623,15 @@ void Update()
 
 #### 5. 落地检测（防止空中无限跳）
 
-- bool isGrounded记录是否在地面
-- OnCollisionEnter碰到的瞬间=true；OnCollisionExit离开的瞬间=false
-- 跳跃条件加 && isGrounded，只有地面能跳
+
+
+* bool isGrounded 记录是否在地面
+
+* OnCollisionEnter 碰到的瞬间 = true；OnCollisionExit 离开的瞬间 = false
+
+* 跳跃条件加 && isGrounded，只有地面能跳
+
+
 
 ```
 private bool isGrounded = false;
@@ -1049,17 +1645,29 @@ void OnCollisionExit(Collision c) { isGrounded = false; }
 
 #### 6. 物理地形测试结论
 
-- 斜坡：方块平底+摩擦大，缓坡会停住；球体易滚下；坡越陡下滑力越大
-- 开不上坡的原因：坡太陡/速度太小/坡脚有断面；解决：坡15-20°、速度调大、坡底插进地面
-- 冻结旋转不影响上坡，玩家本就该保持直立
-- 撞台阶被Collider挡住不穿透；冲出悬空边缘会坠落
-- 真正贴任意坡面移动要用到射线+法线投影/CharacterController，后续学
+
+
+* 斜坡：方块平底 + 摩擦大，缓坡会停住；球体易滚下；坡越陡下滑力越大
+
+* 开不上坡的原因：坡太陡 / 速度太小 / 坡脚有断面；解决：坡 15-20°、速度调大、坡底插进地面
+
+* 冻结旋转不影响上坡，玩家本就该保持直立
+
+* 撞台阶被 Collider 挡住不穿透；冲出悬空边缘会坠落
+
+* 真正贴任意坡面移动要用到射线 + 法线投影 / CharacterController，后续学
 
 ### 五、晚间练习：猜数字
 
-- Random random=new Random(); int answer=random.Next(1,101);
-- Next(最小,最大+1)：上限不包含，Next(1,101)才取得到100
-- while(true)死循环+猜中break，count记次数
+
+
+* Random random=new Random(); int answer=random.Next(1,101);
+
+* Next (最小，最大 + 1)：上限不包含，Next (1,101) 才取得到 100
+
+* while (true) 死循环 + 猜中 break，count 记次数
+
+
 
 ```
 Random r = new Random();
@@ -1075,115 +1683,213 @@ while (true) {
 
 ### 六、今日易错点
 
-1. while循环体里忘写i++导致死循环 → Ctrl+C
-2. switch每个case后忘break
-3. velocity的y写成0导致物体不掉
-4. 跳跃用GetKey会飞天，必须GetKeyDown
-5. 空中能二段跳 → 用isGrounded落地检测
-6. Is Kinematic勾着时velocity/AddForce都无效
-7. random.Next(1,100)最大只到99，要写101
 
-## D6（2026-09-09）数组·方法·冒泡 + Unity预制体与平滑输入
+
+1. while 循环体里忘写 i++ 导致死循环 → Ctrl+C
+
+2. switch 每个 case 后忘 break
+
+3. velocity 的 y 写成 0 导致物体不掉
+
+4. 跳跃用 GetKey 会飞天，必须 GetKeyDown
+
+5. 空中能二段跳 → 用 isGrounded 落地检测
+
+6. Is Kinematic 勾着时 velocity/AddForce 都无效
+
+7. random.Next (1,100) 最大只到 99，要写 101
+
+## D6（2026-09-09）数组・方法・冒泡 + Unity 预制体与平滑输入
 
 ### 一、C# 数组
-- 三种声明：int[] a=new int[5]; / int[] b=new int[]{80,90}; / int[] c={1,2,3};
-- 下标从0开始，最后一个=Length-1；遍历条件用 i<Length（写成<=会越界 IndexOutOfRangeException）
-- foreach(int x in 数组)：只读遍历，拿不到下标、不能改元素
-- 用户输入存数组：先 new int[n] 开空格 → for里 scores[i]=int.Parse(Console.ReadLine())
-- string.Join("分隔符", 数组)：把数组拼成一串文字方便打印
+
+
+
+* 三种声明：int \[] a=new int \[5]; /int \[] b=new int \[]{80,90}; /int \[] c={1,2,3};
+
+* 下标从 0 开始，最后一个 = Length-1；遍历条件用 i\<Length（写成 <= 会越界 IndexOutOfRangeException）
+
+* foreach (int x in 数组)：只读遍历，拿不到下标、不能改元素
+
+* 用户输入存数组：先 new int \[n] 开空格 → for 里 scores \[i]=int.Parse (Console.ReadLine ())
+
+* string.Join ("分隔符", 数组)：把数组拼成一串文字方便打印
 
 ### 二、C# 方法
-- 四件套：方法名+参数+返回值+逻辑；写在Main外、class内，要加 static
-- return 一执行方法立刻结束；开头先拦非法数据叫"卫语句"
-- 坑：int是值类型，传进方法的是副本，方法里交换a/b改不到外面数组（以后学ref解决）
+
+
+
+* 四件套：方法名 + 参数 + 返回值 + 逻辑；写在 Main 外、class 内，要加 static
+
+* return 一执行方法立刻结束；开头先拦非法数据叫 "卫语句"
+
+* 坑：int 是值类型，传进方法的是副本，方法里交换 a/b 改不到外面数组（以后学 ref 解决）
 
 ### 三、冒泡排序（第一个算法）
-- 思路：相邻两个比较，左边比右边大就交换，每轮把最大的"冒"到最右
-- 结构：外层走 Length-1 轮；内层 j<Length-1-i；用temp三行交换
-- 用到 j+1 时 j 必须小于 Length-1，否则越界
 
-### 四、Max(int[] arr) 打擂台
-- int max=arr[0];（初始用第一个，不能用0，否则全负数会错）
-- 从 i=1 遍历，arr[i]>max 就更新，最后 return max
+
+
+* 思路：相邻两个比较，左边比右边大就交换，每轮把最大的 "冒" 到最右
+
+* 结构：外层走 Length-1 轮；内层 j\<Length-1-i；用 temp 三行交换
+
+* 用到 j+1 时 j 必须小于 Length-1，否则越界
+
+### 四、Max (int \[] arr) 打擂台
+
+
+
+* int max=arr \[0];（初始用第一个，不能用 0，否则全负数会错）
+
+* 从 i=1 遍历，arr \[i]>max 就更新，最后 return max
 
 ### 五、Unity 预制体 Prefab
-- 把做好的物体拖进Project窗口=存成模板（图标/名字变蓝），可无限复制
-- public GameObject xxx; → 检查器出现槽 → 把预制体拖进去（没拖会报 NullReferenceException）
-- 给"预制体文件"加组件=它生成的所有副本都带这个组件
+
+
+
+* 把做好的物体拖进 Project 窗口 = 存成模板（图标 / 名字变蓝），可无限复制
+
+* public GameObject xxx; → 检查器出现槽 → 把预制体拖进去（没拖会报 NullReferenceException）
+
+* 给 "预制体文件" 加组件 = 它生成的所有副本都带这个组件
 
 ### 六、Instantiate 生成物体
-- Instantiate(物体, 位置, 旋转)；Quaternion.identity=不旋转
-- 要用变量接住生成结果才能继续控制：GameObject ball=Instantiate(...)
-- 批量生成：for循环 + 位置随 i 变化（否则全叠在一起）
+
+
+
+* Instantiate (物体，位置，旋转)；Quaternion.identity = 不旋转
+
+* 要用变量接住生成结果才能继续控制：GameObject ball=Instantiate (...)
+
+* 批量生成：for 循环 + 位置随 i 变化（否则全叠在一起）
 
 ### 七、输入与发射器
-- Input.GetAxis("Horizontal")管左右x、("Vertical")管前后z，返回-1~1平滑值，一行替代4个if
-- GetKey=按住一直触发；GetKeyDown=按下那一帧触发一次
-- Debug.Log=打印到Unity Console（等同C#的Console.WriteLine）
-- 发射器：按空格 Instantiate球 → 取刚体 → rb.velocity=transform.forward*速度
-- transform.position=自己的位置；transform.forward=自己的正前方（会随旋转变）
+
+
+
+* Input.GetAxis ("Horizontal") 管左右 x、("Vertical") 管前后 z，返回 - 1\~1 平滑值，一行替代 4 个 if
+
+* GetKey = 按住一直触发；GetKeyDown = 按下那一帧触发一次
+
+* Debug.Log = 打印到 Unity Console（等同 C# 的 Console.WriteLine）
+
+* 发射器：按空格 Instantiate 球 → 取刚体 → rb.velocity=transform.forward \* 速度
+
+* transform.position = 自己的位置；transform.forward = 自己的正前方（会随旋转变）
 
 ### 八、今日易错清单
-1. 循环用 j+1 却写 j<Length → 越界
+
+
+
+1. 循环用 j+1 却写 j\<Length → 越界
+
 2. 把值类型交换封进普通方法 → 改不到原数组
-3. Max初始值写0 → 全负数组出错，要用arr[0]
-4. public槽忘拖预制体 → 空引用
-5. GetKey/GetKeyDown混用 → 按住会疯狂生成
 
-## D7 学习笔记（9/10 周四 · 第1周复盘日）
-> 今日定位：不学大量新内容，把D4-D6串成体系、补漏洞、修bug、做周总结
+3. Max 初始值写 0 → 全负数组出错，要用 arr \[0]
 
-### 一、C# 查漏补缺（系统版见 notes/CSharp_Basics.md）
+4. public 槽忘拖预制体 → 空引用
+
+5. GetKey/GetKeyDown 混用 → 按住会疯狂生成
+
+## D7 学习笔记（9/10 周四・第 1 周复盘日）
+
+> 今日定位：不学大量新内容，把 D4-D6 串成体系、补漏洞、修 bug、做周总结
+
+### 一、C# 查漏补缺（系统版见 notes/CSharp\_Basics.md）
+
 今天亲手写例子时纠正的点：
-1. for循环里 i 是"下标"、arr[i] 才是"元素值"：打印 i 出序号0123，打印 arr[i] 才出数组内容
-2. Console.ReadLine()/WriteLine() 前面的 Console. 不能丢
-3. 值类型传方法是"副本"：Change(int x){x=100;} 改不到外面的 n（n 仍是1）
-4. string.Join("分隔符", 数组) 是两个参数、用逗号；误写成 " "+数组 只剩一个参数，会报 CS0121 二义性
-5. 冒泡排序能独立默写：外层 Length-1 轮、内层 Length-1-i、temp 三行交换
-6. 打擂台：擂主初始用 arr[0]，不能用0（全负数会错）
 
-### 二、Unity：整合三功能 + 修碰撞bug（今天重点）
+
+
+1. for 循环里 i 是 "下标"、arr \[i] 才是 "元素值"：打印 i 出序号 0123，打印 arr \[i] 才出数组内容
+
+2. Console.ReadLine ()/WriteLine () 前面的 Console. 不能丢
+
+3. 值类型传方法是 "副本"：Change (int x){x=100;} 改不到外面的 n（n 仍是 1）
+
+4. string.Join ("分隔符", 数组) 是两个参数、用逗号；误写成 " "+ 数组 只剩一个参数，会报 CS0121 二义性
+
+5. 冒泡排序能独立默写：外层 Length-1 轮、内层 Length-1-i、temp 三行交换
+
+6. 打擂台：擂主初始用 arr \[0]，不能用 0（全负数会错）
+
+### 二、Unity：整合三功能 + 修碰撞 bug（今天重点）
+
+
+
 1. 控制整理：
-   - 玩家只保留 PlayerPhysicsMove（刚体移动+跳跃），禁用 AxisMove
-     （Translate直接改坐标 和 刚体velocity 同时开会互相打架）
-   - 发射键由空格改成 J，把空格专门留给跳跃
-2. ⭐bug：玩家被自己发射的球撞到后就不能跳了
-   - 根因：落地开关 isGrounded 没区分碰撞对象；球离开玩家时 OnCollisionExit
-     误把 isGrounded 置成 false，可脚其实还踩在地上
-   - 解决：先给地面加标签 Tag=Ground，碰撞方法里只认地面：
-     void OnCollisionEnter(Collision other){
-         if (other.gameObject.CompareTag("Ground")) isGrounded = true;
-     }
-     void OnCollisionExit(Collision other){
-         if (other.gameObject.CompareTag("Ground")) isGrounded = false;
-     }
-   - 场景里有多个碰撞体时，OnCollision里必须用Tag/名字
-     判断"撞到的到底是谁"，否则状态会互相干扰（落地/命中/吃道具都靠它）
+
+* 玩家只保留 PlayerPhysicsMove（刚体移动 + 跳跃），禁用 AxisMove
+
+  （Translate 直接改坐标 和 刚体 velocity 同时开会互相打架）
+
+* 发射键由空格改成 J，把空格专门留给跳跃
+
+1. ⭐bug：玩家被自己发射的球撞到后就不能跳了
+
+* 根因：落地开关 isGrounded 没区分碰撞对象；球离开玩家时 OnCollisionExit
+
+  误把 isGrounded 置成 false，可脚其实还踩在地上
+
+* 解决：先给地面加标签 Tag=Ground，碰撞方法里只认地面：
+
+  void OnCollisionEnter (Collision other){
+
+  if (other.gameObject.CompareTag ("Ground")) isGrounded = true;
+
+  }
+
+  void OnCollisionExit (Collision other){
+
+  if (other.gameObject.CompareTag ("Ground")) isGrounded = false;
+
+  }
+
+* 场景里有多个碰撞体时，OnCollision 里必须用 Tag / 名字
+
+  判断 "撞到的到底是谁"，否则状态会互相干扰（落地 / 命中 / 吃道具都靠它）
 
 ### 三、工程与产出
-- 三功能成品：WASD刚体移动 + 空格跳跃 + J发射预制体，全部能跑
-- 录屏存档（Win自带录屏调不出，最终手机拍屏）
-- 新增 notes/CSharp_Basics.md（系统笔记）、notes/week1.md（周总结）
-- 当天代码与笔记 git 提交推送
+
+
+
+* 三功能成品：WASD 刚体移动 + 空格跳跃 + J 发射预制体，全部能跑
+
+* 录屏存档（Win 自带录屏调不出，最终手机拍屏）
+
+* 新增 notes/CSharp\_Basics.md（系统笔记）、notes/week1.md（周总结）
+
+* 当天代码与笔记 git 提交推送
 
 ## 📅 D8（2026-09-11 周五）：C# 面向对象入门 + Unity 碰撞事件与刚体
 
----
+
+
+***
 
 ## 🌞 上午：C# 面向对象（类、对象、构造函数、this）
 
-### 步骤1：类和对象
-- **一句大白话**：类(class)是「图纸」，对象是按图纸造出来的「实物」，`new` 就是「按图纸造一个」。
-- **和 Unity 对应着记**（🔰 不用死记，用多就通）：
+### 步骤 1：类和对象
 
-| C# 概念 | Unity 里对应 |
-|---|---|
-| 类 class（图纸） | 预制体 Prefab |
-| 对象/实例（实物） | 场景里飞出去的一颗颗子弹 |
-| new（造对象） | Instantiate（生成预制体） |
 
-### 步骤2：字段、方法、构造函数、this
-```csharp
+
+* **一句大白话**：类 (class) 是「图纸」，对象是按图纸造出来的「实物」，`new` 就是「按图纸造一个」。
+
+* **和 Unity 对应着记**（🔰 不用死记，用多就通）：
+
+
+
+| C# 概念       | Unity 里对应          |
+| ----------- | ------------------ |
+| 类 class（图纸） | 预制体 Prefab         |
+| 对象 / 实例（实物） | 场景里飞出去的一颗颗子弹       |
+| new（造对象）    | Instantiate（生成预制体） |
+
+### 步骤 2：字段、方法、构造函数、this
+
+
+
+```
 class Player
 {
     public string name;    // 字段：名字（public=公开，类外面也能用）
@@ -1211,37 +1917,64 @@ class Player
     }
 }
 ```
+
 Main 里使用：
-```csharp
+
+
+
+```
 Player p1 = new Player("小明", 100, 10); // 按图纸造对象1
 Player p2 = new Player("小红", 100, 15); // 造对象2，各自有独立的血量
 p1.Attack(p2);                           // 小明攻击小红
 ```
 
 ### ⚠️ 注意（上午踩的坑）
-- **类成员前面不写 public/private，默认是 private（私有）**：只有自己类内部能用，类外面(Main)访问会报 CS0122。要在外面读 `对象.字段`，字段必须加 `public`。
-- 构造函数必须**和类同名、不写返回类型（连 void 都不写）**。
-- `this` 只在「字段和参数同名」时用来区分，不会就先照着写。
 
----
+
+
+* **类成员前面不写 public/private，默认是 private（私有）**：只有自己类内部能用，类外面 (Main) 访问会报 CS0122。要在外面读 `对象.字段`，字段必须加 `public`。
+
+* 构造函数必须**和类同名、不写返回类型（连 void 都不写）**。
+
+* `this` 只在「字段和参数同名」时用来区分，不会就先照着写。
+
+
+
+***
 
 ## 🌤 下午：Unity 碰撞事件 + 刚体参数
 
-### 步骤1：认识 OnCollisionEnter（碰撞开始事件）
-- **大白话**：当物体「刚碰到」另一个物体的**那一帧**，Unity 自动调用一次，不用我们手动调（和 Start/Update 一样是固定名字，不能拼错）。
-- ⚠️ **现在就要记**：Enter 只在接触的那一帧执行**一次**，一直顶住不会狂刷；退开再撞才再触发一次。
+### 步骤 1：认识 OnCollisionEnter（碰撞开始事件）
 
-### 步骤2：碰撞事件能触发的 3 个条件（⚠️现在就要记）
+
+
+* **大白话**：当物体「刚碰到」另一个物体的**那一帧**，Unity 自动调用一次，不用我们手动调（和 Start/Update 一样是固定名字，不能拼错）。
+
+* ⚠️ **现在就要记**：Enter 只在接触的那一帧执行**一次**，一直顶住不会狂刷；退开再撞才再触发一次。
+
+### 步骤 2：碰撞事件能触发的 3 个条件（⚠️现在就要记）
+
+
+
 1. 两个物体**都要有碰撞体 Collider**
+
 2. **至少一方带刚体 Rigidbody**（玩家有）
+
 3. 两个碰撞体**都不能勾 Is Trigger**（勾了变触发器，得用 OnTriggerEnter，以后学）
 
-### 步骤3：用 Tag 标签 + CompareTag 区分撞到谁
-- Tag=给物体贴的「分类名」，比用名字判断更规范（名字可乱改、Tag 是统一分类）。
-- 操作：选中红方块 → 顶部 Tag → Add Tag 新建 `Trap` → 再把红方块 Tag 选为 Trap。
+### 步骤 3：用 Tag 标签 + CompareTag 区分撞到谁
 
-### 步骤4：PlayerHealth 完整代码（碰陷阱掉血）
-```csharp
+
+
+* Tag = 给物体贴的「分类名」，比用名字判断更规范（名字可乱改、Tag 是统一分类）。
+
+* 操作：选中红方块 → 顶部 Tag → Add Tag 新建 `Trap` → 再把红方块 Tag 选为 Trap。
+
+### 步骤 4：PlayerHealth 完整代码（碰陷阱掉血）
+
+
+
+```
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -1262,88 +1995,148 @@ public class PlayerHealth : MonoBehaviour
     }
 }
 ```
+
 ### ⚠️ 注意
-- `CompareTag("Trap")` 引号里的词必须和 Tag **大小写完全一致**，写成 "trap" 永远匹配不上。
-- 一个物体可挂多个脚本：PlayerPhysicsMove 管移动、PlayerHealth 管掉血，各管各的。
 
-### 步骤5：刚体 Mass（质量）/ Drag（阻力）手感
-| 移动方式 | 受 Mass/Drag 影响吗 | 特点 / 用途 |
-|---|---|---|
-| `rb.velocity = ...` | **基本不受影响** | 直接命令速度，手感稳定 → 角色移动常用 |
-| `rb.AddForce(...)` | **受影响** | 施加力，越重越难推、Drag 越大越被拖慢 → 跳跃/爆炸/撞飞 |
 
-- 实验结论：Mass 从 1 改成 10，WASD（velocity）照样跑，但**跳跃（AddForce 冲量）几乎跳不起来**——因为「速度变化=力÷质量」，重10倍就要10倍的力。
-- 体验完还原：Mass=1、Drag=0。
 
----
+* `CompareTag("Trap")` 引号里的词必须和 Tag **大小写完全一致**，写成 "trap" 永远匹配不上。
+
+* 一个物体可挂多个脚本：PlayerPhysicsMove 管移动、PlayerHealth 管掉血，各管各的。
+
+### 步骤 5：刚体 Mass（质量）/ Drag（阻力）手感
+
+
+
+| 移动方式                | 受 Mass/Drag 影响吗 | 特点 / 用途                              |
+| ------------------- | --------------- | ------------------------------------ |
+| `rb.velocity = ...` | **基本不受影响**      | 直接命令速度，手感稳定 → 角色移动常用                 |
+| `rb.AddForce(...)`  | **受影响**         | 施加力，越重越难推、Drag 越大越被拖慢 → 跳跃 / 爆炸 / 撞飞 |
+
+
+
+* 实验结论：Mass 从 1 改成 10，WASD（velocity）照样跑，但**跳跃（AddForce 冲量）几乎跳不起来**—— 因为「速度变化 = 力 ÷ 质量」，重 10 倍就要 10 倍的力。
+
+* 体验完还原：Mass=1、Drag=0。
+
+
+
+***
 
 ## 🌙 晚上：独立写 Enemy 类 + 回合制对打
 
-### 实现思路（拆步骤，治"没思路"）
-1. 写 Enemy 类：字段 name/hp/attack（都 public）+ 构造函数(this) + TakeDamage
+### 实现思路（拆步骤，治 "没思路"）
+
+
+
+1. 写 Enemy 类：字段 name/hp/attack（都 public）+ 构造函数 (this) + TakeDamage
+
 2. `Attack(对方)` 把对方对象当参数，调对方的 TakeDamage
+
 3. Main 里 new 一个玩家、一个敌人
+
 4. `while` 循环轮流对打，**先手打完立刻判对方死没死，死了立刻 break，不让尸体反击**
 
 ### ⚠️ 注意（今晚的逻辑重点）
-- 正确顺序：玩家打 → **立刻判敌人死没死(死就break)** → 敌人才反击 → 再判玩家死没死。
-- 反例（错误）：两个人都打完再统一判断 → 会出现"敌人都死了还反击一下"，甚至同归於尽时胜负判反。
+
+
+
+* 正确顺序：玩家打 → **立刻判敌人死没死 (死就 break)** → 敌人才反击 → 再判玩家死没死。
+
+* 反例（错误）：两个人都打完再统一判断 → 会出现 "敌人都死了还反击一下"，甚至同归於尽时胜负判反。
 
 ### 🛠 排错经验：Unity 进 Safe Mode 报 Internal build system error
-- 现象：进安全模式、报 `BuildProgram exited with code -532462766`，且**没有 CS 开头的脚本错误**。
-- 结论：不是代码错，是 Unity 编译缓存/构建进程崩了。
-- 解决顺序：① 完全关 Unity 和 Hub → ② 删项目里的 `Library、Temp、obj` 缓存（**Assets 绝不能删**）→ ③ 重启电脑让它重新导入。空项目也崩=环境问题，不是某个项目的问题。
+
+
+
+* 现象：进安全模式、报 `BuildProgram exited with code -532462766`，且**没有 CS 开头的脚本错误**。
+
+* 结论：不是代码错，是 Unity 编译缓存 / 构建进程崩了。
+
+* 解决顺序：① 完全关 Unity 和 Hub → ② 删项目里的 `Library、Temp、obj` 缓存（**Assets 绝不能删**）→ ③ 重启电脑让它重新导入。空项目也崩 = 环境问题，不是某个项目的问题。
 
 # 📅 D9 学习笔记（2026-09-12 周六）：C# 继承与多态 + Unity 射线地面检测 / 平滑移动
 
----
+
+
+***
 
 ## 🌞 上午：C# 继承（面向对象核心）
 
-> 大白话：继承 = 子类白捡父类的字段和方法，解决"多个类有重复代码"的问题。父类也叫基类，子类也叫派生类。
+> 大白话：继承 = 子类白捡父类的字段和方法，解决 "多个类有重复代码" 的问题。父类也叫基类，子类也叫派生类。
 
-### 步骤1：继承的基本语法 `class 子类 : 父类`
-- 写法：`class Player : Character`，Player（玩家）就自动拥有 Character（角色）里的字段和方法。
-- ⚠️ 现在就要记：**构造函数不会被继承**，子类要自己写构造（用 base 转交，见步骤2）。
-- 父类一旦自己写了带参数的构造，编译器就不再送"无参构造"，所以空的子类可能报错，需要用 base。
+### 步骤 1：继承的基本语法 `class 子类 : 父类`
 
-### 步骤2：base —— 子类构造把参数上交父类
-```csharp
+
+
+* 写法：`class Player : Character`，Player（玩家）就自动拥有 Character（角色）里的字段和方法。
+
+* ⚠️ 现在就要记：**构造函数不会被继承**，子类要自己写构造（用 base 转交，见步骤 2）。
+
+* 父类一旦自己写了带参数的构造，编译器就不再送 "无参构造"，所以空的子类可能报错，需要用 base。
+
+### 步骤 2：base —— 子类构造把参数上交父类
+
+
+
+```
 // 子类构造后面加 : base(参数)，把参数转交给父类构造去初始化
 public Player(string name, int hp, int attack) : base(name, hp, attack)
 {
     // 方法体可以是空的，因为初始化都交给父类构造做了
 }
 ```
-- `base(...)` 用在构造函数后 = 调父类构造；
-- `base.Move()` 用在重写方法内部 = 调父类那个被重写的原版方法。
 
-### 步骤3：virtual / override —— 子类改写父类方法
-- 父类方法加 **`virtual`**（虚方法）= 允许被子类重写，给一个默认版本；
-- 子类写同名同参方法加 **`override`** = 用自己的版本替换。
-- ⚠️ 现在就要记：**方法签名（方法名 + 参数 + 返回类型）必须和父类完全一致**，只把 virtual 换成 override；**方法体 {} 里面随便改、随便加代码**。
-- 两种重写风格：
 
-| 风格 | 写法 | 效果 |
-|---|---|---|
-| 完全替换 | 不写 base.Move()，只写自己的代码 | 父类版本不要了，全用子类的（今天用的） |
-| 扩展增强 | 先写 base.Move(); 再追加自己的代码 | 先跑父类逻辑，再追加子类逻辑 |
 
-- 🔰 IDE 输入 override 会自动生成重写骨架（里面自带一句 base.Move();），这是语法模板不是 AI 补全，可以用；完全替换时把那句 base.Move(); 删掉即可。
+* `base(...)` 用在构造函数后 = 调父类构造；
 
-### 步骤4：protected —— 继承配套的访问修饰符
+* `base.Move()` 用在重写方法内部 = 调父类那个被重写的原版方法。
 
-| 修饰符 | 本类内部 | 子类内部 | 类外（Main / 对象.字段） |
-|---|---|---|---|
-| `public` 公开 | ✅ | ✅ | ✅ 谁都能访问 |
-| `protected` 受保护 | ✅ | ✅ | ❌ 访问不到 |
-| `private` 私有（不写默认它） | ✅ | ❌ | ❌ |
+### 步骤 3：virtual /override —— 子类改写父类方法
 
-- ⚠️ 现在就要记：**protected = 本类 + 子类可见，类外不可见**。字段一般用 protected/private 保护起来，外部只能通过 public 方法（如 TakeDamage）间接改，这叫"封装"。
-- 注意：protected 管的是"字段访问权限"，**不影响能不能 new 父类**；想禁止 new 父类要用 `abstract`（以后学）。
+
+
+* 父类方法加 `virtual`（虚方法）= 允许被子类重写，给一个默认版本；
+
+* 子类写同名同参方法加 `override` = 用自己的版本替换。
+
+* ⚠️ 现在就要记：**方法签名（方法名 + 参数 + 返回类型）必须和父类完全一致**，只把 virtual 换成 override；**方法体 {} 里面随便改、随便加代码**。
+
+* 两种重写风格：
+
+
+
+| 风格   | 写法                        | 效果                  |
+| ---- | ------------------------- | ------------------- |
+| 完全替换 | 不写 base.Move ()，只写自己的代码   | 父类版本不要了，全用子类的（今天用的） |
+| 扩展增强 | 先写 base.Move (); 再追加自己的代码 | 先跑父类逻辑，再追加子类逻辑      |
+
+
+
+* 🔰 IDE 输入 override 会自动生成重写骨架（里面自带一句 base.Move ();），这是语法模板不是 AI 补全，可以用；完全替换时把那句 base.Move (); 删掉即可。
+
+### 步骤 4：protected —— 继承配套的访问修饰符
+
+
+
+| 修饰符                 | 本类内部 | 子类内部 | 类外（Main / 对象。字段） |
+| ------------------- | ---- | ---- | ---------------- |
+| `public` 公开         | ✅    | ✅    | ✅ 谁都能访问          |
+| `protected` 受保护     | ✅    | ✅    | ❌ 访问不到           |
+| `private` 私有（不写默认它） | ✅    | ❌    | ❌                |
+
+
+
+* ⚠️ 现在就要记：**protected = 本类 + 子类可见，类外不可见**。字段一般用 protected/private 保护起来，外部只能通过 public 方法（如 TakeDamage）间接改，这叫 "封装"。
+
+* 注意：protected 管的是 "字段访问权限"，**不影响能不能 new 父类**；想禁止 new 父类要用 `abstract`（以后学）。
 
 ### 上午完整代码（Character 父类 + Player/Enemy 子类）
-```csharp
+
+
+
+```
 using System;
 
 class Character // 父类：抽出公共部分
@@ -1399,6 +2192,9 @@ class Enemy : Character
 ```
 
 ### 继承关系图（晚上自己能手画出来）
+
+
+
 ```
             Character（父类）
    protected: name / hp / attack
@@ -1413,51 +2209,88 @@ class Enemy : Character
    → WASD走路      → 巡逻过来
 ```
 
----
+
+
+***
 
 ## 🌤 下午：Unity 角色控制器升级（射线地面检测 + 平滑移动）
 
-### 步骤1：Physics.Raycast 射线地面检测（今天核心）
-- 大白话：从一个点朝一个方向发一条看不见的线，碰到碰撞体(Collider)就返回 true，还能知道碰到谁、多远。
-- 地面检测思路：**每帧从玩家脚下向正下方打一条短线**，碰到地面=站地上(能跳)，没碰到=在空中(禁跳)。
-- 🔰 API 写法（照抄、用多就熟）：
-```csharp
+### 步骤 1：Physics.Raycast 射线地面检测（今天核心）
+
+
+
+* 大白话：从一个点朝一个方向发一条看不见的线，碰到碰撞体 (Collider) 就返回 true，还能知道碰到谁、多远。
+
+* 地面检测思路：**每帧从玩家脚下向正下方打一条短线**，碰到地面 = 站地上 (能跳)，没碰到 = 在空中 (禁跳)。
+
+* 🔰 API 写法（照抄、用多就熟）：
+
+
+
+```
 // Physics.Raycast(起点, 方向, 长度)，返回 bool
 isGrounded = Physics.Raycast(transform.position, Vector3.down, groundDistance);
 // Debug.DrawRay(起点, 方向*长度, 颜色)：只在 Scene 视图画线，调试用，发布不显示
 Debug.DrawRay(transform.position, Vector3.down * groundDistance, Color.red);
 ```
-- 参数说明：`transform.position`=玩家中心(起点)；`Vector3.down`=正下方；`groundDistance`=射线多长。
-- ⚠️ 现在就要记：射线放在 Update 里**每帧检测是正常且必须的**（实时知道在地上还是空中）；但 `Debug.Log` 不要每帧打印，否则 Console 会被刷成 999+（还会把别的日志淹没，今天扣血日志就是这样被"藏"起来的）。
 
-### 步骤2：用射线接管 isGrounded，删掉碰撞回调
-- 旧做法（D7）：OnCollisionEnter/Exit + CompareTag("Ground") 被动改 isGrounded。
-- 新做法：Update 里每帧用射线结果直接给 isGrounded 赋值，**把 OnCollisionEnter/Exit 两个方法整个删掉**（两套同时改 isGrounded 会打架）。
-- 效果：站地能跳、**空中狂按空格不会二段跳**、落地恢复能跳。
-- 调 `Ground Distance`：落地却跳不起来=射线太短(调大)；空中还能连跳=射线太长插进地里(调小)。
 
-### 步骤3：Vector3 的本质（今天的困惑点）
-- ⚠️ 现在就要记：**Vector3 不是"位置专用"，它就是装了 x/y/z 三个 float 的盒子**。位置、速度、方向、旋转、缩放、力都用它，具体含义看它存在哪个属性里：
 
-| 写法 | 这个 Vector3 表示 |
-|---|---|
-| transform.position | 位置坐标（在哪） |
-| rb.velocity | 速度（每秒在 x/y/z 各移动多少米） |
-| Vector3.up / down / forward | 方向 |
-| transform.eulerAngles | 旋转角度 |
-| AddForce 里的 Vector3 | 力 |
+* 参数说明：`transform.position`= 玩家中心 (起点)；`Vector3.down`= 正下方；`groundDistance`= 射线多长。
 
-### 步骤4：平滑移动（加速度，不再瞬间满速/瞬间停死）
-- 旧做法 `rb.velocity = 目标速度`：瞬间满速、松手瞬间停，很生硬。
-- 新做法：速度**每帧朝目标靠近一小步**，产生加速起步、滑行减速的手感。
-- 🔰 `Mathf.MoveTowards(当前值, 目标值, 每步最大变化量)`：返回朝目标靠近、但每步不超过最大变化量的值，到目标就停、不会冲过头。
-- ⚠️ 现在就要记（Unity 固定套路）：**不能直接 `rb.velocity.x = ...`，要先把速度拷进临时变量 v、改 v、再 `rb.velocity = v;` 整体写回**。
-- **只平滑水平 x、z，竖直 y 保持 `rb.velocity.y` 不动**，否则会破坏重力和跳跃。
-- `每帧最大变化量 = 加速度 × Time.fixedDeltaTime`（FixedUpdate 里用 fixedDeltaTime，保证不同帧率手感一致）。
-- 踩坑：加速度太小(如10)时，每帧加的速度被地面"静摩擦"抵消，速度攒不起来、看着像不动；**调大加速度（实测 15 能跑起来）**即可。以后做正式角色可给 Collider 配零摩擦物理材质。
+* ⚠️ 现在就要记：射线放在 Update 里**每帧检测是正常且必须的**（实时知道在地上还是空中）；但 `Debug.Log` 不要每帧打印，否则 Console 会被刷成 999+（还会把别的日志淹没，今天扣血日志就是这样被 "藏" 起来的）。
+
+### 步骤 2：用射线接管 isGrounded，删掉碰撞回调
+
+
+
+* 旧做法（D7）：OnCollisionEnter/Exit + CompareTag ("Ground") 被动改 isGrounded。
+
+* 新做法：Update 里每帧用射线结果直接给 isGrounded 赋值，**把 OnCollisionEnter/Exit 两个方法整个删掉**（两套同时改 isGrounded 会打架）。
+
+* 效果：站地能跳、**空中狂按空格不会二段跳**、落地恢复能跳。
+
+* 调 `Ground Distance`：落地却跳不起来 = 射线太短 (调大)；空中还能连跳 = 射线太长插进地里 (调小)。
+
+### 步骤 3：Vector3 的本质（今天的困惑点）
+
+
+
+* ⚠️ 现在就要记：**Vector3 不是 "位置专用"，它就是装了 x/y/z 三个 float 的盒子**。位置、速度、方向、旋转、缩放、力都用它，具体含义看它存在哪个属性里：
+
+
+
+| 写法                          | 这个 Vector3 表示        |
+| --------------------------- | -------------------- |
+| transform.position          | 位置坐标（在哪）             |
+| rb.velocity                 | 速度（每秒在 x/y/z 各移动多少米） |
+| Vector3.up / down / forward | 方向                   |
+| transform.eulerAngles       | 旋转角度                 |
+| AddForce 里的 Vector3         | 力                    |
+
+### 步骤 4：平滑移动（加速度，不再瞬间满速 / 瞬间停死）
+
+
+
+* 旧做法 `rb.velocity = 目标速度`：瞬间满速、松手瞬间停，很生硬。
+
+* 新做法：速度**每帧朝目标靠近一小步**，产生加速起步、滑行减速的手感。
+
+* 🔰 `Mathf.MoveTowards(当前值, 目标值, 每步最大变化量)`：返回朝目标靠近、但每步不超过最大变化量的值，到目标就停、不会冲过头。
+
+* ⚠️ 现在就要记（Unity 固定套路）：**不能直接&#x20;**`rb.velocity.x = ...`**，要先把速度拷进临时变量 v、改 v、再&#x20;**`rb.velocity = v;`**&#x20;整体写回**。
+
+* **只平滑水平 x、z，竖直 y 保持&#x20;**`rb.velocity.y`**&#x20;不动**，否则会破坏重力和跳跃。
+
+* `每帧最大变化量 = 加速度 × Time.fixedDeltaTime`（FixedUpdate 里用 fixedDeltaTime，保证不同帧率手感一致）。
+
+* 踩坑：加速度太小 (如 10) 时，每帧加的速度被地面 "静摩擦" 抵消，速度攒不起来、看着像不动；\*\* 调大加速度（实测 15 能跑起来）\*\* 即可。以后做正式角色可给 Collider 配零摩擦物理材质。
 
 ### 下午最终脚本 PlayerPhysicsMove.cs
-```csharp
+
+
+
+```
 using UnityEngine;
 
 public class PlayerPhysicsMove : MonoBehaviour
@@ -1506,19 +2339,27 @@ public class PlayerPhysicsMove : MonoBehaviour
 ```
 
 ### 最终手感参数（实测）
-| 参数 | 值 |
-|---|---|
-| Move Speed | 8 |
-| Move Acceleration | 15 |
-| Jump Force | 5 |
-| Ground Distance | 0.55 |
 
----
+
+
+| 参数                | 值    |
+| ----------------- | ---- |
+| Move Speed        | 8    |
+| Move Acceleration | 15   |
+| Jump Force        | 5    |
+| Ground Distance   | 0.55 |
+
+
+
+***
 
 ## 🌙 晚上：Animal 练习 + 多态雏形
 
-### 步骤1：Animal 父类 + Dog/Cat 重写（和上午同构，独立默写出来的）
-```csharp
+### 步骤 1：Animal 父类 + Dog/Cat 重写（和上午同构，独立默写出来的）
+
+
+
+```
 class Animal
 {
     protected string name;
@@ -1537,9 +2378,15 @@ class Cat : Animal
 }
 ```
 
-### 步骤2：多态（今天面向对象最重要的结论）
-- ⚠️ 现在就要记：**父类类型的变量可以装子类对象**（狗是动物、猫是动物）；调用 virtual/override 方法时，**以 new 出来的"真实对象"为准**执行对应重写版本，不看变量声明类型。
-```csharp
+### 步骤 2：多态（今天面向对象最重要的结论）
+
+
+
+* ⚠️ 现在就要记：**父类类型的变量可以装子类对象**（狗是动物、猫是动物）；调用 virtual/override 方法时，**以 new 出来的 "真实对象" 为准**执行对应重写版本，不看变量声明类型。
+
+
+
+```
 Animal a1 = new Dog("旺财"); // 声明是 Animal，实际是 Dog
 Animal a2 = new Cat("咪咪");
 a1.Speak(); // 汪汪汪（以真实对象 Dog 为准）
@@ -1549,41 +2396,68 @@ a2.Speak(); // 喵喵喵
 Animal[] zoo = { new Dog("旺财"), new Cat("咪咪"), new Dog("大黄") };
 foreach (Animal a in zoo) { a.Speak(); } // 不用 if 判断是狗是猫
 ```
-- 好处：以后新增一种动物（如 Cow），只要写子类 + override Speak，再塞进数组，**foreach 那段一个字都不用改**（对扩展开放）。游戏里统一管理一堆敌人/怪物/子弹都靠它。
 
-### 步骤3：认识 C# 12 主构造函数简写（看懂即可，初学仍写完整版）
-- `class Dog(string name) : Animal(name) { }` 是主构造函数简写，等价于：
-```csharp
+
+
+* 好处：以后新增一种动物（如 Cow），只要写子类 + override Speak，再塞进数组，**foreach 那段一个字都不用改**（对扩展开放）。游戏里统一管理一堆敌人 / 怪物 / 子弹都靠它。
+
+### 步骤 3：认识 C# 12 主构造函数简写（看懂即可，初学仍写完整版）
+
+
+
+* `class Dog(string name) : Animal(name) { }` 是主构造函数简写，等价于：
+
+
+
+```
 class Dog : Animal {
     public Dog(string name) : base(name) { }
 }
 ```
-- 现阶段练习仍写完整版，把构造/base 的基础打牢，简写以后看得懂、想用再用。
 
----
+
+
+* 现阶段练习仍写完整版，把构造 /base 的基础打牢，简写以后看得懂、想用再用。
+
+
+
+***
 
 ## ⚠️ 今日踩坑 & 环境备忘
-1. **Unity 编译报 `Win32Exception: BeeLocalCacheTool.exe` / "应用程序控制策略已阻止此文件" / Internal build system error -532462766**：
-   根因是团结引擎装在 `C:\Program Files\Tuanjie` 下，编译小工具需要管理员权限。解决：**右键 TuanjieHub → 以管理员身份运行**；并在 属性→兼容性→勾"以管理员身份运行此程序"一劳永逸。删 Library/Temp/obj 缓存、重启只是临时缓解。
-2. **Console 被 Debug.Log 刷成 999+**：射线每帧打印导致，还会淹没扣血等日志。调试看明白后把每帧的 Log 删掉/注释，DrawRay 保留（不进 Console）。
-3. **改 rb.velocity 的分量必须先拷到临时变量 v，再整体赋回**，不能直接 rb.velocity.x = ...
-4. **平滑移动只动 x、z，y 保持 rb.velocity.y**，否则重力和跳跃会坏。
 
+
+
+1. **Unity 编译报&#x20;**`Win32Exception: BeeLocalCacheTool.exe`**&#x20;/ "应用程序控制策略已阻止此文件" / Internal build system error -532462766**：
+
+   根因是团结引擎装在 `C:\Program Files\Tuanjie` 下，编译小工具需要管理员权限。解决：**右键 TuanjieHub → 以管理员身份运行**；并在 属性→兼容性→勾 "以管理员身份运行此程序" 一劳永逸。删 Library/Temp/obj 缓存、重启只是临时缓解。
+
+2. **Console 被 Debug.Log 刷成 999+**：射线每帧打印导致，还会淹没扣血等日志。调试看明白后把每帧的 Log 删掉 / 注释，DrawRay 保留（不进 Console）。
+
+3. **改 rb.velocity 的分量必须先拷到临时变量 v，再整体赋回**，不能直接 rb.velocity.x = ...
+
+4. **平滑移动只动 x、z，y 保持 rb.velocity.y**，否则重力和跳跃会坏。
 
 # 📅 D10（9/13 周日）：多态深入 + Unity 触发器吃金币 + UI 分数
 
 ## 🌞 上午：多态深入（Polymorphism）
 
-### 步骤1：声明类型 vs 实际类型——方法到底调谁的
+### 步骤 1：声明类型 vs 实际类型 —— 方法到底调谁的
 
-**大白话**：一句 `Shape s = new Circle("小圆");` 里，等号左边的类型叫"声明类型"，右边 new 出来的真实对象叫"实际类型"。
+**大白话**：一句 `Shape s = new Circle("小圆");` 里，等号左边的类型叫 "声明类型"，右边 new 出来的真实对象叫 "实际类型"。
 
 **两条铁律（⚠️ 现在就要记）**
-- 能不能点出某个成员（编译阶段）→ 看**声明类型（左边）**：父类引用只能访问父类定义过的成员，子类特有点不出来。
-- 重写的虚方法执行哪个版本（运行阶段）→ 看**实际类型（new 的是谁）**：new 子类就执行子类的 override 版本。
-- 口诀：**能不能调看左边，虚方法执行谁看 new。**
 
-```csharp
+
+
+* 能不能点出某个成员（编译阶段）→ 看**声明类型（左边）**：父类引用只能访问父类定义过的成员，子类特有点不出来。
+
+* 重写的虚方法执行哪个版本（运行阶段）→ 看**实际类型（new 的是谁）**：new 子类就执行子类的 override 版本。
+
+* 口诀：**能不能调看左边，虚方法执行谁看 new。**
+
+
+
+```
 Shape s = new Circle("小圆");   // 声明类型 Shape，实际类型 Circle
 s.Show();    // ✅ Show 父类有；执行 Circle 的重写版 → "小圆 是圆形"
 // s.Roll(); // ❌ 报错：Roll 是 Circle 特有，父类 Shape 里没有，父类引用看不到
@@ -1591,25 +2465,34 @@ Circle c = new Circle("小圆2"); // 用子类类型声明
 c.Roll();    // ✅ 子类声明能点出自己特有的方法
 ```
 
-### 步骤2：abstract 抽象类与抽象方法
+### 步骤 2：abstract 抽象类与抽象方法
 
-**大白话**：virtual 是父类给默认做法、子类可改可不改；abstract 是父类只立规矩"子类必须会这个动作"，但不写怎么做，强制每个子类自己实现。
+**大白话**：virtual 是父类给默认做法、子类可改可不改；abstract 是父类只立规矩 "子类必须会这个动作"，但不写怎么做，强制每个子类自己实现。
 
 **四条规则（⚠️ 现在就要记）**
 
+
+
 1. 抽象方法**没有方法体，以分号结尾**：`public abstract void Attack();`
+
 2. 类里只要有抽象方法，这个类必须加 `abstract`
+
 3. 抽象类**不能直接 new**（new 抽象类报错），只能被继承
+
 4. 子类必须用 `override` 实现所有抽象方法，少一个就报错
 
 **virtual vs abstract 对比表**
 
-|  | virtual 虚方法 | abstract 抽象方法 |
-| --- | --- | --- |
-| 父类方法体 | 有默认实现 `{}` | 没有，只有一个 `;` |
-| 子类要不要重写 | 可选 | **必须**重写 |
-| 类的修饰 | 普通类就行 | 必须 `abstract class` |
-| 能不能 new | 能 | **不能 new** |
+
+
+|         | virtual 虚方法 | abstract 抽象方法       |
+| ------- | ----------- | ------------------- |
+| 父类方法体   | 有默认实现 `{}`  | 没有，只有一个 `;`         |
+| 子类要不要重写 | 可选          | **必须**重写            |
+| 类的修饰    | 普通类就行       | 必须 `abstract class` |
+| 能不能 new | 能           | **不能 new**          |
+
+
 
 ```
 abstract class Shape
@@ -1628,12 +2511,13 @@ class Circle : Shape
 }
 ```
 
-> 
-> 补充：抽象类里普通字段、构造函数、普通方法照样能写；只有抽象方法那部分"只定规矩不写实现"。
+> 补充：抽象类里普通字段、构造函数、普通方法照样能写；只有抽象方法那部分 "只定规矩不写实现"。
 
-### 步骤3：is / as 类型判断与转换
+### 步骤 3：is /as 类型判断与转换
 
 **大白话**：拿到一个父类引用，想调子类特有方法前，要先判断它到底是哪个子类、再转换。
+
+
 
 ```
 if (s is Circle c)   // s 是 Circle 吗？是→转成 Circle 交给变量 c（推荐写法，一步到位）
@@ -1649,19 +2533,23 @@ Circle c3 = (Circle)s;    // 直接强转：类型不符会抛异常崩溃，没
 
 **三种方式对比（⚠️ 现在就要记）**
 
-| 写法 | 类型不符时 |
-| --- | --- |
-| `(Circle)s` 强转 | 直接抛异常、崩溃 |
-| `s as Circle` | 返回 null，要判空 |
+
+
+| 写法              | 类型不符时               |
+| --------------- | ------------------- |
+| `(Circle)s` 强转  | 直接抛异常、崩溃            |
+| `s as Circle`   | 返回 null，要判空         |
 | `s is Circle c` | 返回 false，不进 if（最推荐） |
 
 **设计原则**：所有子类都有、只是做法不同的动作（Show/Attack）→ 用**多态**；只有某个子类特有的动作（只有圆会滚、只有狗会咬）→ 才用 **is/as**。
 
-### 步骤4：List 泛型集合 + Character 综合
+### 步骤 4：List 泛型集合 + Character 综合
 
 **大白话**：数组长度固定，List 长度可变，能随时 Add 加元素，游戏里刷怪、加角色都用它。
 
 **核心用法（⚠️ 现在就要记）**
+
+
 
 ```
 using System.Collections.Generic;   // List 所在命名空间，必须加
@@ -1679,14 +2567,18 @@ list[0].Attack();
 
 **数组 vs List 对比**
 
-|  | 数组 `[]` | `List<T>` |
-| --- | --- | --- |
-| 长度 | 固定 | 可变（Add/Remove） |
-| 个数 | `.Length` | `.Count` |
-| 加元素 | 不能 | `.Add(元素)` |
-| 命名空间 | 不用 | 要 using Collections.Generic |
+
+
+|      | 数组 `[]`   | `List<T>`                   |
+| ---- | --------- | --------------------------- |
+| 长度   | 固定        | 可变（Add/Remove）              |
+| 个数   | `.Length` | `.Count`                    |
+| 加元素  | 不能        | `.Add(元素)`                  |
+| 命名空间 | 不用        | 要 using Collections.Generic |
 
 **综合例子（抽象父类 + 子类重写 + List 统一多态调用）**
+
+
 
 ```
 abstract class Character
@@ -1717,7 +2609,9 @@ class Enemy : Character
 // foreach (Character c in list) { c.Attack(); c.TakeDamage(10); }
 ```
 
-**抽象类动态创建（刷怪雏形，⚠️）**：抽象类不能 new 自己（`new Animal()` 报错），但子类随便 new 多少个；运行时按用户输入的"种类"用 if/switch 决定 new 谁，再用父类引用接住 Add。
+**抽象类动态创建（刷怪雏形，⚠️）**：抽象类不能 new 自己（`new Animal()` 报错），但子类随便 new 多少个；运行时按用户输入的 "种类" 用 if/switch 决定 new 谁，再用父类引用接住 Add。
+
+
 
 ```
 Animal a;
@@ -1727,39 +2621,52 @@ else a = new Cow(nm);
 list.Add(a);
 ```
 
-> 
-> 🔰 List 的 RemoveAt/Remove（删除）、AddRange（批量加）以后做刷怪/对象池时专门学，现在不用深究。
+> 🔰 List 的 RemoveAt/Remove（删除）、AddRange（批量加）以后做刷怪 / 对象池时专门学，现在不用深究。
 
 ## 🌤 下午：Unity 触发器 Trigger + 吃金币 + UI 分数
 
-### 步骤1：Collider（碰撞体）vs Trigger（触发器）——面试高频
+### 步骤 1：Collider（碰撞体）vs Trigger（触发器）—— 面试高频
 
-**大白话**：碰撞体组件上的 Is Trigger 勾不勾，决定它是"会挡人的墙"还是"只感应不挡路的区域"。
+**大白话**：碰撞体组件上的 Is Trigger 勾不勾，决定它是 "会挡人的墙" 还是 "只感应不挡路的区域"。
 
-|  | Collider（不勾 Is Trigger） | Trigger（勾 Is Trigger） |
-| --- | --- | --- |
-| 物理碰撞 | 有：挡住、弹开、能站上面 | 没有：物体直接穿过 |
+
+
+|      | Collider（不勾 Is Trigger）    | Trigger（勾 Is Trigger）        |
+| ---- | -------------------------- | ---------------------------- |
+| 物理碰撞 | 有：挡住、弹开、能站上面               | 没有：物体直接穿过                    |
 | 回调函数 | OnCollisionEnter/Stay/Exit | **OnTriggerEnter/Stay/Exit** |
-| 函数参数 | Collision collision | Collider other |
-| 用途 | 地面、墙、斜坡 | 吃金币、捡道具、进门、区域检测 |
+| 函数参数 | Collision collision        | Collider other               |
+| 用途   | 地面、墙、斜坡                    | 吃金币、捡道具、进门、区域检测              |
 
 **Trigger 事件触发的 3 个条件（⚠️ 现在就要记，缺一不可）**
 
+
+
 1. 两个物体都要有 Collider；
+
 2. 其中一方（金币）勾上 Is Trigger；
+
 3. 双方至少有一个挂 Rigidbody（玩家有刚体即可）。
 
-### 步骤2：创建金币并设为触发器
+### 步骤 2：创建金币并设为触发器
+
+
 
 1. Hierarchy 右键 → 3D Object → Cylinder，命名 `Coin`；
+
 2. Transform：Scale `(1,0.2,1)` 压扁，拖到玩家前方贴地；
+
 3. Project 右键 → Create → Material 建金黄色材质 `CoinMaterial`，拖到金币上；
+
 4. 金币的 Capsule Collider **勾上 Is Trigger**，金币**不加刚体**；
+
 5. 让金币竖直立着转：Rotation `(90,0,0)`，Rotate 脚本里加 `Space.World` 绕世界竖直轴转。
 
 **局部轴 vs 世界轴（⚠️）**：物体被手动旋转后，局部轴会歪；`transform.Rotate(..., Space.World)` 强制绕世界轴转。纯色对称圆盘绕自己中心对称轴自转肉眼看不出，要让它竖直绕 Y 轴转才明显。
 
-### 步骤3：Coin 脚本——碰到玩家加分并销毁（挂在金币上）
+### 步骤 3：Coin 脚本 —— 碰到玩家加分并销毁（挂在金币上）
+
+
 
 ```
 using UnityEngine;
@@ -1781,18 +2688,27 @@ public class Coin : MonoBehaviour
 }
 ```
 
-- 玩家要先在 Inspector 顶部 Tag 下拉设成 `Player`；
-- 复制金币：Hierarchy 选中金币按 `Ctrl+D`，static 分数会跨金币累计。
 
-### 步骤4：Canvas + Text 显示分数文字
+
+* 玩家要先在 Inspector 顶部 Tag 下拉设成 `Player`；
+
+* 复制金币：Hierarchy 选中金币按 `Ctrl+D`，static 分数会跨金币累计。
+
+### 步骤 4：Canvas + Text 显示分数文字
+
+
 
 1. Hierarchy 右键 → UI → **旧版 → 文本（Text，Legacy，别用 TextMeshPro）**，自动生成 Canvas + EventSystem；
+
 2. 选中 Text，Rect Transform 锚点定到**左上角**（锚点预设里直接点左上格，再手动填 Pos X=150、Pos Y=-60、宽 300、高 80）；
-3. Text 组件：内容 `分数：0`、字号 40、颜色白/黄、水平和垂直 Overflow 都设 `Overflow`。
+
+3. Text 组件：内容 `分数：0`、字号 40、颜色白 / 黄、水平和垂直 Overflow 都设 `Overflow`。
 
 **⚠️ 文字看不见的两个坑**：①文本框宽高必须大于字号，否则字被裁；②位置靠锚点定，左上锚点时 Pos Y 填负数才往下。
 
-### 步骤5：ScoreUI 脚本——让文字实时刷新（挂在 Text 物体上）
+### 步骤 5：ScoreUI 脚本 —— 让文字实时刷新（挂在 Text 物体上）
+
+
 
 ```
 using UnityEngine;
@@ -1814,45 +2730,68 @@ public class ScoreUI : MonoBehaviour
 }
 ```
 
-**核心理解（⚠️ 现在就要记）**：组件就是一个装着"属性（数据）+方法（功能）"的对象；**Inspector 面板里每一栏 = 代码里的一个属性**，`组件.属性 = 值` 等价于运行时在面板改那一栏。改屏幕文字用 `Text组件.text = "字符串"`；访问静态变量用 `类名.变量名`（Coin.score）。
+**核心理解（⚠️ 现在就要记）**：组件就是一个装着 "属性（数据）+ 方法（功能）" 的对象；**Inspector 面板里每一栏 = 代码里的一个属性**，`组件.属性 = 值` 等价于运行时在面板改那一栏。改屏幕文字用 `Text组件.text = "字符串"`；访问静态变量用 `类名.变量名`（Coin.score）。
 
 ## 🌙 晚上：练习 + 环境 + 规范
 
 ### 动物多态脱稿练习（abstract + List + is 综合）
 
-- abstract Animal（抽象 Speak）→ Dog/Cat/Cow 各自 override；用 List 装、foreach 统一 Speak；
-- Dog/Cat 各有特有 attack()、Cow 没有 → 用 `if(a is Dog d) d.Attack();` 区分（通用靠多态、特有靠 is）。
+
+
+* abstract Animal（抽象 Speak）→ Dog/Cat/Cow 各自 override；用 List 装、foreach 统一 Speak；
+
+* Dog/Cat 各有特有 attack ()、Cow 没有 → 用 `if(a is Dog d) d.Attack();` 区分（通用靠多态、特有靠 is）。
 
 ### 环境排错：智能应用控制（Smart App Control）拦截编译产物
 
-- 现象：dotnet run 报 `FileLoadException … 应用程序控制策略已阻止此文件 (0x800711C7)`，加 Defender 白名单、管理员运行都没用；
-- 原因：Win11 智能应用控制拦"无签名、无信誉的本地新编译 dll"，它不认排除项、管理员也绕不过；
-- 解决：Windows 安全中心 → 应用和浏览器控制 → 智能应用控制 → **关闭**（注意：关闭后想再开需重置系统；开发机建议关，仍有 Defender 等防护）→ 重启。
+
+
+* 现象：dotnet run 报 `FileLoadException … 应用程序控制策略已阻止此文件 (0x800711C7)`，加 Defender 白名单、管理员运行都没用；
+
+* 原因：Win11 智能应用控制拦 "无签名、无信誉的本地新编译 dll"，它不认排除项、管理员也绕不过；
+
+* 解决：Windows 安全中心 → 应用和浏览器控制 → 智能应用控制 → **关闭**（注意：关闭后想再开需重置系统；开发机建议关，仍有 Defender 等防护）→ 重启。
 
 ### 命名规范（⚠️ 现在就要记）
 
-- 类名、方法名、属性名 → **大驼峰 PascalCase**：Attack、TakeDamage、Speak；
-- 变量名、参数名 → **小驼峰 camelCase**：playerName、moveSpeed、循环变量用 dog/cat 而非单字母。
+
+
+* 类名、方法名、属性名 → **大驼峰 PascalCase**：Attack、TakeDamage、Speak；
+
+* 变量名、参数名 → **小驼峰 camelCase**：playerName、moveSpeed、循环变量用 dog/cat 而非单字母。
 
 # 📅 D11 学习笔记：接口 interface + Unity 接口重构 + 炸弹群伤
 
 ## 🌞 上午：C# 接口（interface）
 
-### 步骤1：什么是接口、怎么定义
-接口 = 一份"能力约定/合同"：规定"谁实现我，就必须有这些方法"，但**不写方法具体怎么做**。
-```csharp
+### 步骤 1：什么是接口、怎么定义
+
+接口 = 一份 "能力约定 / 合同"：规定 "谁实现我，就必须有这些方法"，但**不写方法具体怎么做**。
+
+
+
+```
 interface IMovable
 {
     void Move();   // 只有方法签名，没有方法体 { }，以分号结尾
 }
 ```
-- 接口名习惯以 **I** 开头（IMovable、IDamageable）；
-- 接口方法**不写 public、不写 abstract**；
-- 接口里**不能写字段（数据）、不能写构造函数**。
 
-### 步骤2：类实现接口
+
+
+* 接口名习惯以 **I** 开头（IMovable、IDamageable）；
+
+* 接口方法**不写 public、不写 abstract**；
+
+* 接口里**不能写字段（数据）、不能写构造函数**。
+
+### 步骤 2：类实现接口
+
 类名后用冒号 `:接口名`，并**必须**把接口里的方法全部实现（方法要 public、签名一致）。
-```csharp
+
+
+
+```
 class Player : IMovable
 {
     public void Move()   // 少写或签名不一致会报"未实现接口成员"
@@ -1862,9 +2801,13 @@ class Player : IMovable
 }
 ```
 
-### 步骤3：一个类实现多个接口
+### 步骤 3：一个类实现多个接口
+
 多个接口用**逗号**隔开；如果同时继承父类，**父类必须写在冒号后第一位**。
-```csharp
+
+
+
+```
 class Player : IMovable, IDamageable   // 控制台类：直接逗号列接口
 {
     public void Move() { }
@@ -1874,9 +2817,13 @@ class Player : IMovable, IDamageable   // 控制台类：直接逗号列接口
 public class PlayerPhysicsMove : MonoBehaviour, IMovable { }
 ```
 
-### 步骤4：接口多态（接口也是一种"类型"）
-接口可以当数组/List 的元素类型，把"毫无继承关系、但都实现了同一接口"的对象装在一起统一调用。
-```csharp
+### 步骤 4：接口多态（接口也是一种 "类型"）
+
+接口可以当数组 / List 的元素类型，把 "毫无继承关系、但都实现了同一接口" 的对象装在一起统一调用。
+
+
+
+```
 IMovable[] movers = { new Player(), new Enemy(), new Car() };
 foreach (IMovable m in movers)
 {
@@ -1884,39 +2831,56 @@ foreach (IMovable m in movers)
 }
 ```
 
-### 步骤5：接口 vs 抽象类（⚠️ 面试高频，必背）
-| 对比项 | 抽象类 abstract class | 接口 interface |
-|---|---|---|
-| 含义 | is-a，"是什么"（狗是动物） | can-do，"能做什么"（能受伤/能移动） |
-| 方法实现 | 可有普通实现方法 + 抽象方法 | 默认只有方法签名、无实现 |
-| 字段/构造函数 | 可以有 | 不能有 |
-| 数量 | 只能继承**一个**父类 | 能实现**多个**接口（逗号隔开） |
-| 抽象方法写法 | 要加 abstract | 不写 public/abstract |
+### 步骤 5：接口 vs 抽象类（⚠️ 面试高频，必背）
 
-**选择口诀：做法相同、想复用同一段代码 → 用父类/抽象类；做法不同、但想被统一调用 → 用接口。**
 
----
+
+| 对比项       | 抽象类 abstract class | 接口 interface             |
+| --------- | ------------------ | ------------------------ |
+| 含义        | is-a，"是什么"（狗是动物）   | can-do，"能做什么"（能受伤 / 能移动） |
+| 方法实现      | 可有普通实现方法 + 抽象方法    | 默认只有方法签名、无实现             |
+| 字段 / 构造函数 | 可以有                | 不能有                      |
+| 数量        | 只能继承**一个**父类       | 能实现**多个**接口（逗号隔开）        |
+| 抽象方法写法    | 要加 abstract        | 不写 public/abstract       |
+
+**选择口诀：做法相同、想复用同一段代码 → 用父类 / 抽象类；做法不同、但想被统一调用 → 用接口。**
+
+
+
+***
 
 ## 🌤 下午：Unity 用接口重构 + 血量 UI
 
-### 步骤6：定义两个接口并重构玩家脚本
+### 步骤 6：定义两个接口并重构玩家脚本
+
 接口文件**不继承 MonoBehaviour、不是组件、不能往物体上挂**，一个接口一个文件。
-```csharp
+
+
+
+```
 // IMovable.cs
 public interface IMovable { void Move(); }
 // IDamageable.cs
 public interface IDamageable { void TakeDamage(int damage); }
 ```
+
 把原来写在 FixedUpdate 里的水平移动整段搬进 `Move()`，物理帧只负责调用：
-```csharp
+
+
+
+```
 public class PlayerPhysicsMove : MonoBehaviour, IMovable
 {
     public void Move() { /* WASD→速度 的整段移动逻辑放这 */ }
     void FixedUpdate() { Move(); }
 }
 ```
+
 受伤逻辑封进 IDamageable：
-```csharp
+
+
+
+```
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
     public int hp = 100;                 // 属于角色自己的数据，不用 static
@@ -1928,9 +2892,13 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 }
 ```
 
-### 步骤7：用 public 组件引用做血量 UI（拖槽）
-`public 其他脚本类 变量;` = 在 Inspector 开一个可拖的"引用槽"，拖物体就是连线。
-```csharp
+### 步骤 7：用 public 组件引用做血量 UI（拖槽）
+
+`public 其他脚本类 变量;` = 在 Inspector 开一个可拖的 "引用槽"，拖物体就是连线。
+
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 public class HpUI : MonoBehaviour
@@ -1941,23 +2909,40 @@ public class HpUI : MonoBehaviour
     void Update() { hpText.text = "血量：" + player.hp; }
 }
 ```
-- 拖之前是 null，不拖直接用会报**空引用异常**；
-- 拖的是物体，槽类型是某脚本，Unity 自动取该物体上的对应组件。
 
-### 步骤8：static 和"拖引用"怎么选
-- **全局唯一、跨物体累计**的数据（金币总分 Coin.score、击杀数）→ 用 `static`，直接 `类名.字段` 访问，不用拖；
-- **属于某个具体物体/角色**的数据（血量 hp、速度 moveSpeed）→ 用 public 拖引用，多个角色各连各的不会串。
 
----
 
-## 🔥 加深：炸弹群伤 List<IDamageable>
+* 拖之前是 null，不拖直接用会报**空引用异常**；
 
-### 步骤9：爆炸范围的两个关键认知
-1. **模型大小看 Scale，碰撞/触发范围看 Collider 的 Radius，两者独立**：想做"小炸弹、大判定"，Scale 保持小，把 SphereCollider 的 Radius 调大并勾 Is Trigger（Scene 视图绿色线框=范围）；
+* 拖的是物体，槽类型是某脚本，Unity 自动取该物体上的对应组件。
+
+### 步骤 8：static 和 "拖引用" 怎么选
+
+
+
+* **全局唯一、跨物体累计**的数据（金币总分 Coin.score、击杀数）→ 用 `static`，直接 `类名.字段` 访问，不用拖；
+
+* **属于某个具体物体 / 角色**的数据（血量 hp、速度 moveSpeed）→ 用 public 拖引用，多个角色各连各的不会串。
+
+
+
+***
+
+## 🔥 加深：炸弹群伤 List
+
+### 步骤 9：爆炸范围的两个关键认知
+
+
+
+1. **模型大小看 Scale，碰撞 / 触发范围看 Collider 的 Radius，两者独立**：想做 "小炸弹、大判定"，Scale 保持小，把 SphereCollider 的 Radius 调大并勾 Is Trigger（Scene 视图绿色线框 = 范围）；
+
 2. **固定的触发区域要自己挂 Rigidbody 并勾 Is Kinematic**（运动学：不掉落、不移动，但拥有刚体身份，这样无刚体的木箱进范围也能被检测到）。
 
-### 步骤10：用接口名单统一群伤
-```csharp
+### 步骤 10：用接口名单统一群伤
+
+
+
+```
 using UnityEngine;
 using System.Collections.Generic;
 public class Bomb : MonoBehaviour
@@ -1987,15 +2972,22 @@ public class Bomb : MonoBehaviour
     }
 }
 ```
-**解耦**：Bomb 里没有出现 PlayerHealth、BoxHealth 任何具体类名，只认 IDamageable；以后新增"敌人/油桶"，只要实现 IDamageable，Bomb 一个字不改就能炸到。
 
----
+**解耦**：Bomb 里没有出现 PlayerHealth、BoxHealth 任何具体类名，只认 IDamageable；以后新增 "敌人 / 油桶"，只要实现 IDamageable，Bomb 一个字不改就能炸到。
+
+
+
+***
 
 ## 🌙 晚上：IInteractable + 接口方法返回 bool
 
-### 步骤11：接口方法也能带返回值
+### 步骤 11：接口方法也能带返回值
+
 接口签名写什么返回类型，实现方法就 return 什么；调用方用变量接住再判断。
-```csharp
+
+
+
+```
 interface IInteractable { bool Interact(); }   // 返回 true=成功 false=失败
 
 class Chest : IInteractable
@@ -2015,32 +3007,51 @@ foreach (IInteractable item in list)
 }
 ```
 
----
+
+
+***
 
 ## ⚠️ D11 易错点汇总
+
+
+
 1. 接口方法只有签名、分号结尾、无 `{}`、不写 public/abstract；
-2. 实现接口的方法必须 public 且签名一致，漏一个就报"未实现接口"；
+
+2. 实现接口的方法必须 public 且签名一致，漏一个就报 "未实现接口"；
+
 3. 父类 + 接口同时写时，父类必须在冒号后第一位：`: MonoBehaviour, 接口`；
+
 4. 一个类只能继承一个父类，但能实现多个接口；
-5. **类的 `{}` 里只能直接放字段/方法；if、Console.WriteLine、return 等执行语句必须写在方法 `{}` 内**；
+
+5. **类的&#x20;**`{}`**&#x20;里只能直接放字段 / 方法；if、Console.WriteLine、return 等执行语句必须写在方法&#x20;**`{}`**&#x20;内**；
+
 6. List 取元素用 `变量名[下标]`，不是 `类型名[下标]`；下标从 0 开始；
+
 7. `GetComponent<接口>()` 合法，找不到返回 null，用前必须判空；
+
 8. Scale（视觉）和 Collider Radius（判定范围）独立；固定触发器挂 Rigidbody 勾 Is Kinematic；
-9. 一个物体只有一个某类型组件：两个字段都 GetComponent<Text>() 会指向同一文本框互相覆盖，要多行显示就建多个 Text 物体；
+
+9. 一个物体只有一个某类型组件：两个字段都 GetComponent() 会指向同一文本框互相覆盖，要多行显示就建多个 Text 物体；
+
 10. public 引用槽不拖就是 null，调用会空引用报错。
 
-# 📅 D12（2026-09-15 周二）面向对象大综合：封装/继承/多态/接口 + 工厂模式 + Unity 组件化
+# 📅 D12（2026-09-15 周二）面向对象大综合：封装 / 继承 / 多态 / 接口 + 工厂模式 + Unity 组件化
 
-> 今日主线：把 OOP 四件套整合成一个完整角色系统；下午把 Unity 角色按"单一职责"拆成移动、血量、UI 组件，并把 UI 从每帧轮询改成"变化时才刷新"。
+> 今日主线：把 OOP 四件套整合成一个完整角色系统；下午把 Unity 角色按 "单一职责" 拆成移动、血量、UI 组件，并把 UI 从每帧轮询改成 "变化时才刷新"。
 
----
+
+
+***
 
 ## 🌞 上午：C# 面向对象四件套 + 回合对战 + 工厂模式
 
-### 步骤1：封装——private 字段 + public 属性（受控访问）
-**大白话**：字段用 private 藏起来，外面不能直接改；通过 public 属性这个"窗口"读，想改只能走方法，保证数据不被改坏（如血量不为负）。
+### 步骤 1：封装 ——private 字段 + public 属性（受控访问）
 
-```csharp
+**大白话**：字段用 private 藏起来，外面不能直接改；通过 public 属性这个 "窗口" 读，想改只能走方法，保证数据不被改坏（如血量不为负）。
+
+
+
+```
 class Character
 {
     private int hp;            // 私有字段：只有类内部能直接碰，外面看不见
@@ -2064,13 +3075,20 @@ class Character
     }
 }
 ```
-- `get`：读；`set`：写，set 里用 `value` 代表新值；只写 get = 只读属性。
-- 对比：public 字段=裸奔谁都能改；只读属性=只能看；get+set（可加判断）=门卫受控改。
 
-### 步骤2：接口 IDamageable——"能受伤"的契约
-**大白话**：接口只规定"必须有哪个方法"，只有签名没有方法体、以分号结尾、不写 public；谁实现它谁就必须交出这个方法。
 
-```csharp
+
+* `get`：读；`set`：写，set 里用 `value` 代表新值；只写 get = 只读属性。
+
+* 对比：public 字段 = 裸奔谁都能改；只读属性 = 只能看；get+set（可加判断）= 门卫受控改。
+
+### 步骤 2：接口 IDamageable——"能受伤" 的契约
+
+**大白话**：接口只规定 "必须有哪个方法"，只有签名没有方法体、以分号结尾、不写 public；谁实现它谁就必须交出这个方法。
+
+
+
+```
 interface IDamageable
 {
     void TakeDamage(int damage);   // 只有签名 + 分号，不写实现、不写 public
@@ -2082,10 +3100,13 @@ class Character : IDamageable      // Character 实现接口，必须写出 Take
 }
 ```
 
-### 步骤3：继承 + 多态——基类与子类
-**大白话**：子类 `: 基类` 自动继承字段/属性/方法（含基类已实现的接口），`base(...)` 把参数交给父类构造；父类方法标 virtual、子类用 override 各自重写，调用时 new 的是谁就执行谁的版本。
+### 步骤 3：继承 + 多态 —— 基类与子类
 
-```csharp
+**大白话**：子类 `: 基类` 自动继承字段 / 属性 / 方法（含基类已实现的接口），`base(...)` 把参数交给父类构造；父类方法标 virtual、子类用 override 各自重写，调用时 new 的是谁就执行谁的版本。
+
+
+
+```
 // 父类：攻击方法标 virtual，表示"可以被子类重写"
 public virtual void Attack(Character target)
 {
@@ -2116,15 +3137,24 @@ class Enemy : Character
     }
 }
 ```
-- ⚠️**多态铁律**：必须"父类引用 + 子类对象"，右边 new 一定要写全新子类名：
-  `Character p = new Player("勇者",100);`（对）
-  不能写 `Character p = new("勇者",100);`，它会被补成 new 基类 Character，override 全部失效。
-- 接口实现随继承传递：Character 实现了 IDamageable，子类即使不写 :IDamageable 也自动"是"IDamageable。
 
-### 步骤4：回合制对战——while + 攻击后立刻判血
+
+
+* ⚠️**多态铁律**：必须 "父类引用 + 子类对象"，右边 new 一定要写全新子类名：
+
+  `Character p = new Player("勇者",100);`（对）
+
+  不能写 `Character p = new("勇者",100);`，它会被补成 new 基类 Character，override 全部失效。
+
+* 接口实现随继承传递：Character 实现了 IDamageable，子类即使不写 :IDamageable 也自动 "是"IDamageable。
+
+### 步骤 4：回合制对战 ——while + 攻击后立刻判血
+
 **大白话**：玩家先攻 → 立刻判敌人是否阵亡（防止死人还手）→ 没死才轮到敌人反击 → 再判玩家，循环直到一方血量为 0 用 break 跳出。
 
-```csharp
+
+
+```
 Character p = new Player("勇者", 100);
 Character e = new Enemy("史莱姆", 50);
 
@@ -2145,10 +3175,13 @@ while (true)
 }
 ```
 
-### 步骤5：简单工厂 CharacterFactory——集中管理"创建对象"
-**大白话**：把"根据类型 new 谁"的逻辑集中到一个工厂类；传字符串给它，它返回对应角色。返回类型写父类 Character（多态），调用方不用关心具体造了谁。
+### 步骤 5：简单工厂 CharacterFactory—— 集中管理 "创建对象"
 
-```csharp
+**大白话**：把 "根据类型 new 谁" 的逻辑集中到一个工厂类；传字符串给它，它返回对应角色。返回类型写父类 Character（多态），调用方不用关心具体造了谁。
+
+
+
+```
 class CharacterFactory
 {
     // 返回类型是父类 Character，方法内部 return 各种子类对象
@@ -2165,8 +3198,12 @@ class CharacterFactory
     }
 }
 ```
-Main 里使用（⚠️ 判空要判"创建结果"，不是判字符串）：
-```csharp
+
+Main 里使用（⚠️ 判空要判 "创建结果"，不是判字符串）：
+
+
+
+```
 CharacterFactory factory = new CharacterFactory();  // 类是图纸，先 new 出工厂对象才能用
 string[] types = { "player", "enemy", "boss", "enemy", "player" };
 List<Character> list = new List<Character>();
@@ -2185,28 +3222,48 @@ foreach (Character role in list)            // 统一用父类类型操作
     Console.WriteLine(role.Name + " 血量：" + role.Hp);
 }
 ```
-- warning CS8603"可能返回 null 引用"是警告不是错误；调用处已判空即可忽略，彻底消除要学可空类型 `Character?`（以后学）。
 
----
+
+
+* warning CS8603"可能返回 null 引用" 是警告不是错误；调用处已判空即可忽略，彻底消除要学可空类型 `Character?`（以后学）。
+
+
+
+***
 
 ## 🌤 下午：Unity 角色组件化 + UI 事件触发
 
-### 步骤6：单一职责——一个脚本只干一件事
-**大白话**：把角色拆成互相独立的组件，各管各的、互不掺杂：
-| 组件 | 只负责 | 不负责 |
-|---|---|---|
-| PlayerPhysicsMove（=PlayerController） | WASD 移动、射线地面检测、空格跳跃 | 血量 |
-| PlayerHealth（=Health） | hp 数据、TakeDamage 受伤、碰 Trap | 移动 |
-| HpUI / Score | 只负责把数据显示到 Text | 算移动、改数据 |
-- ⚠️ 不要随便重命名脚本：Unity 中"文件名 = 类名"，改名会让物体上的组件引用、拖好的槽断开。结构对了名字可以以后再规范。
+### 步骤 6：单一职责 —— 一个脚本只干一件事
 
-### 步骤7：UI 从「轮询」改成「事件触发」
+**大白话**：把角色拆成互相独立的组件，各管各的、互不掺杂：
+
+
+
+| 组件                                   | 只负责                        | 不负责     |
+| ------------------------------------ | -------------------------- | ------- |
+| PlayerPhysicsMove（=PlayerController） | WASD 移动、射线地面检测、空格跳跃        | 血量      |
+| PlayerHealth（=Health）                | hp 数据、TakeDamage 受伤、碰 Trap | 移动      |
+| HpUI / Score                         | 只负责把数据显示到 Text             | 算移动、改数据 |
+
+
+
+* ⚠️ 不要随便重命名脚本：Unity 中 "文件名 = 类名"，改名会让物体上的组件引用、拖好的槽断开。结构对了名字可以以后再规范。
+
+### 步骤 7：UI 从「轮询」改成「事件触发」
+
 **大白话**：
-- 轮询（旧）：写在 Update 里，每帧都刷一次，数据没变也刷，浪费；
-- 事件触发（新）：平时不动，数据变化的那一刻（掉血/吃金币）主动调 UI 方法刷新一次。
+
+
+
+* 轮询（旧）：写在 Update 里，每帧都刷一次，数据没变也刷，浪费；
+
+* 事件触发（新）：平时不动，数据变化的那一刻（掉血 / 吃金币）主动调 UI 方法刷新一次。
 
 HpUI（删掉 Update，改成带参 public 方法，不再拖玩家）：
-```csharp
+
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -2225,8 +3282,12 @@ public class HpUI : MonoBehaviour
     }
 }
 ```
+
 PlayerHealth（受伤后主动通知 UI，Start 里先刷一次显示初始值）：
-```csharp
+
+
+
+```
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
     public int hp = 100;
@@ -2245,37 +3306,59 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     }
 }
 ```
-- 分数同理：Coin 吃金币时调 `scores.ReportScore(score)` 主动推给分数 UI（举一反三，同一个套路）。
-- 现在 Health 直接认识 UI 类有一点耦合；更解耦的标准写法是 C# event 事件（委托），以后专门学。
 
----
+
+
+* 分数同理：Coin 吃金币时调 `scores.ReportScore(score)` 主动推给分数 UI（举一反三，同一个套路）。
+
+* 现在 Health 直接认识 UI 类有一点耦合；更解耦的标准写法是 C# event 事件（委托），以后专门学。
+
+
+
+***
 
 ## 🌙 晚上：OOP 四件套对比表（C# 毕业考核心）
 
-| | 封装 | 继承 | 多态 | 接口 |
-|---|---|---|---|---|
-| 一句话 | 藏数据、受控改 | 复用父类(is-a) | 同调用、不同表现 | 定能力契约(can-do) |
-| 核心语法 | private 字段 + public 属性(get/set/value) | `: 父类`、`base()` | `virtual` / `override` | `interface`、冒号实现 |
-| 解决问题 | 数据不被改坏 | 少写重复代码 | 统一管理不同子类 | 解耦、可实现多个 |
-| 数量限制 | — | 只能继承 1 个父类 | — | 能实现多个接口 |
 
-**四件套协作流程**：Character 用封装藏 name/hp → 实现 IDamageable 承诺能受伤 → Player/Enemy/Boss 继承它并 override 出不同攻击（多态）→ Main/工厂统一用父类 Character 接收和操作，运行时各走各的版本。
+
+|      | 封装                                     | 继承              | 多态                     | 接口               |
+| ---- | -------------------------------------- | --------------- | ---------------------- | ---------------- |
+| 一句话  | 藏数据、受控改                                | 复用父类 (is-a)     | 同调用、不同表现               | 定能力契约 (can-do)   |
+| 核心语法 | private 字段 + public 属性 (get/set/value) | `: 父类`、`base()` | `virtual` / `override` | `interface`、冒号实现 |
+| 解决问题 | 数据不被改坏                                 | 少写重复代码          | 统一管理不同子类               | 解耦、可实现多个         |
+| 数量限制 | —                                      | 只能继承 1 个父类      | —                      | 能实现多个接口          |
+
+**四件套协作流程**：Character 用封装藏 name/hp → 实现 IDamageable 承诺能受伤 → Player/Enemy/Boss 继承它并 override 出不同攻击（多态）→ Main / 工厂统一用父类 Character 接收和操作，运行时各走各的版本。
 
 ### ⚠️ 今日易错点清单
+
+
+
 1. 多态时右边必须 `new 具体子类`，写 `new(...)` 会被补成基类导致 override 失效。
+
 2. 接口方法只有签名、分号结尾、不写 public、不写方法体。
+
 3. 接口实现会随继承传递：父类实现了，子类白捡。
-4. 回合对战：攻击后要立刻判对方血量再决定是否反击，避免"死人还手"。
+
+4. 回合对战：攻击后要立刻判对方血量再决定是否反击，避免 "死人还手"。
+
 5. 工厂判空判的是 `Create()` 的返回对象，不是输入字符串；先接结果再判 `!= null`。
-6. 类是图纸要先 new 出对象才能调普通方法；static 才用"类名.方法"直接调。
+
+6. 类是图纸要先 new 出对象才能调普通方法；static 才用 "类名。方法" 直接调。
+
 7. Unity 文件名必须等于类名；using 别手滑选错（SocialPlatforms.Impl 里有官方 Score 会和自己的类撞名）。
+
 8. UI 事件触发别忘了在 Start 里先刷新一次初始值。
 
 好，开始今晚收尾。D13 内容多，笔记我分两块给你（上午 C#、下午 Unity），你逐块复制进 StudyNotes.md。先给上午：
 
----
 
-```markdown
+
+***
+
+
+
+````
 # 📅 D13 学习笔记（C# 查漏补缺 static/属性/enum/namespace + Unity 可玩小关）
 
 ## 🌞 上午：C# 查漏补缺
@@ -2296,23 +3379,30 @@ class Character
 
 // 使用：直接 类名.静态字段，不需要对象
 Console.WriteLine(Character.Count);
-```
+````
 
-| | 实例成员（无 static） | 静态成员（static） |
-|---|---|---|
-| 属于谁 | 对象 | 类 |
-| 份数 | 每个对象一份 | 全程序一份 |
-| 怎么访问 | 对象名.成员 | 类名.成员（不用 new） |
-| 例子 | name、hp | Console.WriteLine、Character.Count |
+
+
+|      | 实例成员（无 static） | 静态成员（static）                      |
+| ---- | -------------- | --------------------------------- |
+| 属于谁  | 对象             | 类                                 |
+| 份数   | 每个对象一份         | 全程序一份                             |
+| 怎么访问 | 对象名。成员         | 类名。成员（不用 new）                     |
+| 例子   | name、hp        | Console.WriteLine、Character.Count |
 
 **⚠️易错点**：静态方法里不能直接访问实例字段（静态方法没有具体对象，不知道用谁的数据）。
 
----
 
-### 步骤2：属性深入（private set / 计算属性）
-**大白话**：属性是字段的"门卫"，控制外部能不能读、能不能改。
 
-```csharp
+***
+
+### 步骤 2：属性深入（private set / 计算属性）
+
+**大白话**：属性是字段的 "门卫"，控制外部能不能读、能不能改。
+
+
+
+```
 // ① private set 自动属性：一行替代"私有字段+只读属性"
 //    外部只能读、不能乱改；类内部可以改
 public int Hp { get; private set; }
@@ -2330,20 +3420,27 @@ public Character(int hp)
 }
 ```
 
-| 写法 | 外部能读？ | 外部能改？ | 用途 |
-|---|---|---|---|
-| public int Hp;（裸字段） | 能 | 能，随便改 | 不安全，少用 |
-| public int Hp { get; private set; } | 能 | 不能（内部能） | 只读血量 |
-| 只写 get（计算属性） | 能 | 不能 | IsDead 这种现算的标志 |
+
+
+| 写法                                  | 外部能读？ | 外部能改？   | 用途             |
+| ----------------------------------- | ----- | ------- | -------------- |
+| public int Hp;（裸字段）                 | 能     | 能，随便改   | 不安全，少用         |
+| public int Hp { get; private set; } | 能     | 不能（内部能） | 只读血量           |
+| 只写 get（计算属性）                        | 能     | 不能      | IsDead 这种现算的标志 |
 
 **⚠️易错点**：bool 类型属性命名用 Is/Has 开头（IsDead、HasKey）；get/set 里别漏写 return 或赋值。
 
----
 
-### 步骤3：enum 枚举 + 游戏状态机
-**大白话**：enum 是自己定义的"只能取固定几个值"的类型，比用字符串防拼错、比用数字直观。和 switch 是绝配。
 
-```csharp
+***
+
+### 步骤 3：enum 枚举 + 游戏状态机
+
+**大白话**：enum 是自己定义的 "只能取固定几个值" 的类型，比用字符串防拼错、比用数字直观。和 switch 是绝配。
+
+
+
+```
 // 枚举：和 class 平级，写在 class 大括号外面
 enum GameState
 {
@@ -2375,28 +3472,45 @@ while (running)
 }
 ```
 
-**状态机运转**：state 记录当前在哪个"房间" → 每圈 switch 看 state 进对应房间 → 按键只改 state → 下一圈 switch 按新 state 切画面。
+**状态机运转**：state 记录当前在哪个 "房间" → 每圈 switch 看 state 进对应房间 → 按键只改 state → 下一圈 switch 按新 state 切画面。
 
 **⚠️易错点（重点坑）**：
-- 每个 case 末尾必须 `break;`，否则会穿透到下一个 case；
-- **break 只结束 switch/case，跳不出外面的 while**；想结束循环要用 `bool running` 标志（running=false）或 return。
 
----
 
-### 步骤4：namespace 命名空间（了解即可）
+
+* 每个 case 末尾必须 `break;`，否则会穿透到下一个 case；
+
+* **break 只结束 switch/case，跳不出外面的 while**；想结束循环要用 `bool running` 标志（running=false）或 return。
+
+
+
+***
+
+### 步骤 4：namespace 命名空间（了解即可）
+
 **大白话**：给代码分类、防止类名撞车（自己写的 Score 和 Unity 官方的 Score 撞名就是命名空间冲突）。
 
-- `using System;` → 才能直接用 Console；
-- `using System.Collections.Generic;` → 才能用 List；
-- `using UnityEngine;` → 才能用 MonoBehaviour；
-- 不 using 就得写全名：`System.Console.WriteLine()`。
-- 现阶段不用给自己的代码包 namespace，看得懂即可。
+
+
+* `using System;` → 才能直接用 Console；
+
+* `using System.Collections.Generic;` → 才能用 List；
+
+* `using UnityEngine;` → 才能用 MonoBehaviour；
+
+* 不 using 就得写全名：`System.Console.WriteLine()`。
+
+* 现阶段不用给自己的代码包 namespace，看得懂即可。
 
 下午 Unity 部分，复制进笔记：
 
----
 
-```markdown
+
+***
+
+
+
+````
 ## 🌤 下午：Unity 可玩小关 + GameManager 单例
 
 ### 步骤1：触发检测复习（OnTriggerEnter）
@@ -2410,25 +3524,38 @@ void OnTriggerEnter(Collider other)   // other = 撞进来的对方的碰撞体
         Destroy(gameObject);          // 销毁挂脚本的物体自己（金币）
     }
 }
-```
+````
 
-| | 触发器（勾 Is Trigger，能穿过） | 实体碰撞（不勾，被挡住） |
-|---|---|---|
-| 进入时调用 | OnTriggerEnter | OnCollisionEnter |
-| 参数类型 | **Collider** | **Collision** |
+
+
+|       | 触发器（勾 Is Trigger，能穿过） | 实体碰撞（不勾，被挡住）     |
+| ----- | --------------------- | ---------------- |
+| 进入时调用 | OnTriggerEnter        | OnCollisionEnter |
+| 参数类型  | **Collider**          | **Collision**    |
 
 **⚠️易错点**：
-- 方法名和参数必须配对，OnCollisionEnter 的参数是 Collision，写错就报 "parameter has to be of type Collision"；
-- 触发三条件：两物体都有 Collider + 触发物勾 Is Trigger + 至少一方有 Rigidbody；
-- 内置标签是大写 `Player`，写小写 player 会报 "Tag is not defined"；
-- `other.CompareTag(...)` 和 `other.gameObject.CompareTag(...)` 等价（组件自带 CompareTag），但销毁整个物体必须 `Destroy(other.gameObject)`，写 Destroy(other) 只删碰撞体组件。
 
----
 
-### 步骤2：摄像机跟随 CameraFollow
-**大白话**：每帧把镜头位置设成"玩家位置 + 固定偏移"，再让镜头看着玩家，玩家走到哪镜头跟到哪。
 
-```csharp
+* 方法名和参数必须配对，OnCollisionEnter 的参数是 Collision，写错就报 "parameter has to be of type Collision"；
+
+* 触发三条件：两物体都有 Collider + 触发物勾 Is Trigger + 至少一方有 Rigidbody；
+
+* 内置标签是大写 `Player`，写小写 player 会报 "Tag is not defined"；
+
+* `other.CompareTag(...)` 和 `other.gameObject.CompareTag(...)` 等价（组件自带 CompareTag），但销毁整个物体必须 `Destroy(other.gameObject)`，写 Destroy (other) 只删碰撞体组件。
+
+
+
+***
+
+### 步骤 2：摄像机跟随 CameraFollow
+
+**大白话**：每帧把镜头位置设成 "玩家位置 + 固定偏移"，再让镜头看着玩家，玩家走到哪镜头跟到哪。
+
+
+
+```
 public class CameraFollow : MonoBehaviour
 {
     public Transform player;        // 拖玩家（只用位置，所以字段类型用 Transform）
@@ -2441,26 +3568,39 @@ public class CameraFollow : MonoBehaviour
     }
 }
 ```
+
 **要点**：脚本挂 Main Camera；offset 的 Y 管高低、Z 管远近，运行时边改边调。
 
----
 
-### 步骤3：胜利 UI 与 SetActive
+
+***
+
+### 步骤 3：胜利 UI 与 SetActive
+
 **大白话**：物体名左边的小勾 = 是否激活；代码用 SetActive 控制显隐。
 
-```csharp
+
+
+```
 winText.SetActive(true);    // 显示（勾上）
 winText.SetActive(false);   // 隐藏（取消勾）
 ```
-胜利文字先在编辑器取消勾选（开局隐藏），通关时代码再 SetActive(true)。
+
+胜利文字先在编辑器取消勾选（开局隐藏），通关时代码再 SetActive (true)。
+
 **⚠️易错点**：复制别的 UI 物体会连带复制它身上的脚本，记得 Remove Component 删掉多余脚本。
 
----
 
-### 步骤4：GameManager 单例（今天重点）
-**大白话**：游戏里放一个"总经理"，统一管分数、状态、UI；别的脚本不自己管全局数据，有事通过门牌 `GameManager.Instance` 找它。
 
-```csharp
+***
+
+### 步骤 4：GameManager 单例（今天重点）
+
+**大白话**：游戏里放一个 "总经理"，统一管分数、状态、UI；别的脚本不自己管全局数据，有事通过门牌 `GameManager.Instance` 找它。
+
+
+
+```
 public enum GameState { Playing, Win }   // 状态枚举，写在 class 外面
 
 public class GameManager : MonoBehaviour
@@ -2491,24 +3631,39 @@ public class GameManager : MonoBehaviour
     }
 }
 ```
+
 **别的脚本怎么用**：
-```csharp
+
+
+
+```
 GameManager.Instance.AddScore(1);   // 金币里：加分交给总管
 GameManager.Instance.WinGame();     // 终点门里：胜利交给总管
 ```
-**职责分离**：金币只负责"通知吃到了"、终点门只负责"通知到了"，分数/状态/UI 全在 GameManager 里。以后加暂停、失败、重开都往总管里加。
+
+**职责分离**：金币只负责 "通知吃到了"、终点门只负责 "通知到了"，分数 / 状态 / UI 全在 GameManager 里。以后加暂停、失败、重开都往总管里加。
 
 **⚠️易错点**：
-- GameManager 脚本挂在一个空物体上（Create Empty）；
-- 静态成员用"类名.成员"访问：GameManager.Instance；
-- 分数 UI、胜利文字的引用只拖到 GameManager 上，金币/终点门不再拖 UI。
 
----
 
-### 步骤5：胜利后锁玩家（enum 状态 + 卫语句）
-**大白话**：在移动、跳跃方法开头放个"保安"，一旦状态是 Win 就提前 return，后面操作代码不执行。
 
-```csharp
+* GameManager 脚本挂在一个空物体上（Create Empty）；
+
+* 静态成员用 "类名。成员" 访问：GameManager.Instance；
+
+* 分数 UI、胜利文字的引用只拖到 GameManager 上，金币 / 终点门不再拖 UI。
+
+
+
+***
+
+### 步骤 5：胜利后锁玩家（enum 状态 + 卫语句）
+
+**大白话**：在移动、跳跃方法开头放个 "保安"，一旦状态是 Win 就提前 return，后面操作代码不执行。
+
+
+
+```
 void FixedUpdate()
 {
     // 卫语句：胜利了就直接结束本次方法，移动代码不执行
@@ -2520,38 +3675,62 @@ void FixedUpdate()
 }
 // 处理跳跃的 Update 开头也加一段一样的
 ```
-**原理**：return 只结束"这一次"方法调用；Unity 每帧/每物理步都会重新调用，胜利后 state 一直是 Win，每次都在开头被挡回，玩家就一直动不了。
-**⚠️易错点**：
-- 判断语句必须写在方法 `{ }` 内部，不能写在类体里（类体只能放字段/方法）；
-- return 结束整个方法，break 只跳出 switch/循环，别混。
 
----
+**原理**：return 只结束 "这一次" 方法调用；Unity 每帧 / 每物理步都会重新调用，胜利后 state 一直是 Win，每次都在开头被挡回，玩家就一直动不了。
+
+**⚠️易错点**：
+
+
+
+* 判断语句必须写在方法 `{ }` 内部，不能写在类体里（类体只能放字段 / 方法）；
+
+* return 结束整个方法，break 只跳出 switch / 循环，别混。
+
+
+
+***
 
 ### 今日小关完整流程
+
 起点（镜头跟随）→ WASD 移动、空格跳障碍 → 吃金币（AddScore + 分数 UI）→ 穿过终点门（WinGame：弹胜利文字 + 状态切 Win）→ 卫语句锁操作。
 
+## 📅 D14（9/17 周四）W2 复盘日・面向对象四件套对比表
 
-## 📅 D14（9/17 周四）W2 复盘日 · 面向对象四件套对比表
 
-| 四件套 | 一句话大白话 | 关键字 / 怎么写 | 我 Day14_Exam 里的例子 |
-|---|---|---|---|
-| **封装** | 把数据和方法捆在一个类里，**对内藏好细节，对外只开允许的口子**。血条不能让别人随便改，想掉血只能走我规定的方法。"我的数据我做主" | `private` 藏字段；`public` 属性开口子；`{ get; private set; }` 外部只读、类内能写 | `public int Hp { get; private set; }`——外面能读 Hp，但改血只能调 `TakeDamage()`；`Name`、`Atk` 同理 |
-| **继承** | 子类**自动拥有**父类的字段和方法，不用重复抄代码，再扩展自己的东西。表达 is-a 关系（Player 是一种 Character） | `class 子类 : 父类`；子类构造函数后接 `base(参数)` 调父类构造；`protected` 父类子类可见、外部不可见 | `class Player : Character`；构造函数 `public Player(string name, int hp, int atk) : base(name, hp, atk) { }` |
-| **多态** | **同一个方法名，不同子类不同表现**。用父类类型装子类对象，调用时自动走子类版本。"同一指令，各有各的反应" | 父类方法标 `virtual`，子类方法标 `override`；三要素：**继承 + 重写 + 父类引用指向子类对象** | `Character p = new Player(...)`；`p.Attack(e)` 自动走 Player 的"挥砍"，`e.Attack(p)` 走 Enemy 的"扑咬" |
-| **接口** | 一份**能力契约**，只规定"必须能做什么"（方法签名），不管怎么做。实现它 = 贴上"我能受伤"的标签，调用方不用管你是谁。can-do 关系 | `interface IXxx { void Do(int x); }`（只签名、没方法体、不用写 public）；`class Character : IDamageable`；一个类可实现多个接口 | `interface IDamageable { void TakeDamage(int damage); }`，Character 实现它；D11 炸弹用 `List<IDamageable>` 把所有"能受伤的"统一炸一遍 |
+
+| 四件套    | 一句话大白话                                                                      | 关键字 / 怎么写                                                                                            | 我 Day14\_Exam 里的例子                                                                                                  |
+| ------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **封装** | 把数据和方法捆在一个类里，**对内藏好细节，对外只开允许的口子**。血条不能让别人随便改，想掉血只能走我规定的方法。"我的数据我做主"         | `private` 藏字段；`public` 属性开口子；`{ get; private set; }` 外部只读、类内能写                                       | `public int Hp { get; private set; }`—— 外面能读 Hp，但改血只能调 `TakeDamage()`；`Name`、`Atk` 同理                               |
+| **继承** | 子类**自动拥有**父类的字段和方法，不用重复抄代码，再扩展自己的东西。表达 is-a 关系（Player 是一种 Character）        | `class 子类 : 父类`；子类构造函数后接 `base(参数)` 调父类构造；`protected` 父类子类可见、外部不可见                                   | `class Player : Character`；构造函数 `public Player(string name, int hp, int atk) : base(name, hp, atk) { }`             |
+| **多态** | **同一个方法名，不同子类不同表现**。用父类类型装子类对象，调用时自动走子类版本。"同一指令，各有各的反应"                     | 父类方法标 `virtual`，子类方法标 `override`；三要素：**继承 + 重写 + 父类引用指向子类对象**                                        | `Character p = new Player(...)`；`p.Attack(e)` 自动走 Player 的 "挥砍"，`e.Attack(p)` 走 Enemy 的 "扑咬"                        |
+| **接口** | 一份**能力契约**，只规定 "必须能做什么"（方法签名），不管怎么做。实现它 = 贴上 "我能受伤" 的标签，调用方不用管你是谁。can-do 关系 | `interface IXxx { void Do(int x); }`（只签名、没方法体、不用写 public）；`class Character : IDamageable`；一个类可实现多个接口 | `interface IDamageable { void TakeDamage(int damage); }`，Character 实现它；D11 炸弹用 `List<IDamageable>` 把所有 "能受伤的" 统一炸一遍 |
 
 ### 接口 vs 抽象类（面试高频）
-- **继承**回答"是什么"（is-a，血缘），**接口**回答"能做什么"（can-do，能力）；
-- 一个类只能继承**一个**类，但能实现**多个**接口；
-- 接口只给约定（方法签名），实现细节全靠类自己；抽象类可以带部分已实现的成员。
-- 【以后专门学，现在不用深究】C# 8 以后接口也能写默认实现，现阶段按"接口只有签名"记。
+
+
+
+* **继承**回答 "是什么"（is-a，血缘），**接口**回答 "能做什么"（can-do，能力）；
+
+* 一个类只能继承**一个**类，但能实现**多个**接口；
+
+* 接口只给约定（方法签名），实现细节全靠类自己；抽象类可以带部分已实现的成员。
+
+* 【以后专门学，现在不用深究】C# 8 以后接口也能写默认实现，现阶段按 "接口只有签名" 记。
 
 ### ⚠️ 易错点（我自己踩过的）
+
+
+
 1. 多态右边必须 `new 具体子类`，不能 `new Character(...)`，否则没有重写效果；
+
 2. 子类想 `override`，父类那个方法必须先标 `virtual`，两个关键字成对出现；
+
 3. `private set` 不是完全只读：**类内部**（构造函数、TakeDamage）照样能赋值，只是类外面不能；
+
 4. 接口名习惯 `I` 开头（IDamageable），接口里的方法不写方法体、不写访问修饰符；
+
 5. 子类构造函数必须用 `base(...)` 把参数传给父类，否则父类那几个字段没人初始化；
+
 6. 命名 PascalCase：是 `Atk` 不是 `ATk`（今天刚改的）。
 
 # 📅 D15（9/19 周六）委托 delegate + 事件 event + Unity 事件驱动
@@ -2559,10 +3738,14 @@ void FixedUpdate()
 ## 🌞 上午：委托与事件（控制台）
 
 ### 1. 委托 delegate 是什么
-**大白话：把"要干的一件事"写成纸条交给别人，让他在合适的时候替你执行。** 本质：方法能像数据一样存进变量、传来传去。
-解决的问题：**解耦**。写类的人不知道以后要执行哪个方法，就留一个"动作插槽"，使用方事后决定插什么方法。
 
-```csharp
+**大白话：把 "要干的一件事" 写成纸条交给别人，让他在合适的时候替你执行。** 本质：方法能像数据一样存进变量、传来传去。
+
+解决的问题：**解耦**。写类的人不知道以后要执行哪个方法，就留一个 "动作插槽"，使用方事后决定插什么方法。
+
+
+
+```
 delegate void ClickAction();        // 委托型号：能装"无参、void"的方法
 class Button
 {
@@ -2576,29 +3759,49 @@ class Button
 ```
 
 ⚠️ 方法赋值给委托时**不加括号**：`n = SayHello`（交出方法）；`SayHello()` 是立刻执行。
-⚠️ 方法和委托**型号必须匹配**（参数个数/类型、返回值一致）。
+
+⚠️ 方法和委托**型号必须匹配**（参数个数 / 类型、返回值一致）。
 
 ### 2. 多播委托
-- `+=` 追加方法、`-=` 摘掉方法、`=` 替换（旧的全没）；
-- 一次调用，挂上的方法**按挂载顺序全部执行**；
-- 多播一般用 void 方法。
+
+
+
+* `+=` 追加方法、`-=` 摘掉方法、`=` 替换（旧的全没）；
+
+* 一次调用，挂上的方法**按挂载顺序全部执行**；
+
+* 多播一般用 void 方法。
 
 ### 3. 事件 event = 通知群
-- **发布者**：拥有事件，只有它能在类内部 `Invoke` 触发（群主才能拿喇叭）；
-- **订阅者**：只能 `+=` 进群、`-=` 退群，不能 `=` 覆盖、不能在外部直接调用；
-- 违规报错：CS0070（事件只能出现在 +=/-= 左边）、CS0079（事件只能在类内部调用）。
+
+
+
+* **发布者**：拥有事件，只有它能在类内部 `Invoke` 触发（群主才能拿喇叭）；
+
+* **订阅者**：只能 `+=` 进群、`-=` 退群，不能 `=` 覆盖、不能在外部直接调用；
+
+* 违规报错：CS0070（事件只能出现在 +=/-= 左边）、CS0079（事件只能在类内部调用）。
 
 ### 4. 内置委托 Action / Func
-| 写法 | 含义 |
-|---|---|
-| `Action` | 无参、无返回值的方法 |
-| `Action<int>` | 带一个 int 参数、无返回值 |
+
+
+
+| 写法                  | 含义                                   |
+| ------------------- | ------------------------------------ |
+| `Action`            | 无参、无返回值的方法                           |
+| `Action<int>`       | 带一个 int 参数、无返回值                      |
 | `Func<int,int,int>` | 两个 int 进、一个 int 出；**最后一个泛型是返回值**（待学） |
 
 ### 5. 事件四步套路（背下来）
+
+
+
 1. **建群**：`public event Action<int>? OnDamaged;`
+
 2. **进群**：`player.OnDamaged += ui.HpUI;`
+
 3. **喊话**：`OnDamaged?.Invoke(Hp);`
+
 4. **干活**：订阅方法里写各自要做的事。
 
 `?.Invoke()`：没人订阅时事件是 null，`?.` 保证不为 null 才调用。
@@ -2607,35 +3810,53 @@ class Button
 
 旧链路（焊死）：Coin → `GameManager.Instance.AddScore(1)` → `scoreUI.RefreshScore()`，金币认识管理员、管理员拽着 UI。
 
-新链路（发布/订阅）：
-- **GameManager（群主+管账）**：声明 `event Action<int> OnCoinCollected;`；Awake 里 `OnCoinCollected += AddScore`（管数据的自己先进群）；AddScore 只剩 `score += amount`；另写中继方法 `CollectCoin(int amount){ OnCoinCollected?.Invoke(amount); }`——外人没权 Invoke，通过公开方法请群主代喊。
-- **Coin（喊话的）**：OnTriggerEnter 里只写 `GameManager.Instance.CollectCoin(1); Destroy(gameObject);`，不再出现 AddScore。
-- **ScoreUI（订阅者）**：Start 里 `GameManager.Instance.OnCoinCollected += RefreshScore;`，方法体读 `GameManager.Instance.score`（总分在管理员那，事件参数是增量 1）；OnDestroy 里 `-=`。
-- **CoinSound（订阅者）**：Start 里 += 自己的方法，`Debug.Log("【音效】：叮！")` 占位；OnDestroy 里 -=。
+新链路（发布 / 订阅）：
 
-⚠️ Unity 事件：脚本要 `using System;`；声明**不带 `?`**（Unity 没开 nullable，带了报 CS8632），但 `?.Invoke()` 照写。
+
+
+* **GameManager（群主 + 管账）**：声明 `event Action<int> OnCoinCollected;`；Awake 里 `OnCoinCollected += AddScore`（管数据的自己先进群）；AddScore 只剩 `score += amount`；另写中继方法 `CollectCoin(int amount){ OnCoinCollected?.Invoke(amount); }`—— 外人没权 Invoke，通过公开方法请群主代喊。
+
+* **Coin（喊话的）**：OnTriggerEnter 里只写 `GameManager.Instance.CollectCoin(1); Destroy(gameObject);`，不再出现 AddScore。
+
+* **ScoreUI（订阅者）**：Start 里 `GameManager.Instance.OnCoinCollected += RefreshScore;`，方法体读 `GameManager.Instance.score`（总分在管理员那，事件参数是增量 1）；OnDestroy 里 `-=`。
+
+* **CoinSound（订阅者）**：Start 里 += 自己的方法，`Debug.Log("【音效】：叮！")` 占位；OnDestroy 里 -=。
+
+⚠️ Unity 事件：脚本要 `using System;`；声明**不带&#x20;**`?`（Unity 没开 nullable，带了报 CS8632），但 `?.Invoke()` 照写。
+
 ⚠️ **退订判据：谁活得短谁退。** 场景物体订阅常驻单例，切场景物体销毁、单例还在，必须 OnDestroy 里 `-=`，否则喊到已销毁对象报 MissingReferenceException；自己订阅自己的常驻单例同生共死，不用退。
 
-## 🌙 晚上：Day15_Quit（脱稿）
+## 🌙 晚上：Day15\_Quit（脱稿）
+
 Game.Run 里 `Console.ReadKey(true).Key` 读键，按 `ConsoleKey.Q` 触发 OnQuit，SaveSystem/UIManager/AudioManager 三个订阅者依次响应。
 
 ## ⚠️ 今日易错清单
-1. 方法当值传，不加括号；2. 委托/订阅方法型号要匹配；3. `=` 会覆盖一串订阅，追加用 `+=`；
-4. event 外部不能 Invoke，要在发布者类内触发（或中继方法）；5. 别在触发位置写成调用自己（无限递归→栈溢出，满屏 at 方法名）；
-6. Unity 声明事件不带 `?`、`?.Invoke` 不能省；7. Unity 用 Action 记得 using System；
-8. Start 订阅、OnDestroy 退订成对；9. 事件参数是"增量"，累计数据去数据管理者那读；
-10. 自动补全 using 看清楚再回车（误选过 SocialPlatforms.Impl、VisualScripting）。
+
+
+
+1. 方法当值传，不加括号；2. 委托 / 订阅方法型号要匹配；3. `=` 会覆盖一串订阅，追加用 `+=`；
+
+2. event 外部不能 Invoke，要在发布者类内触发（或中继方法）；5. 别在触发位置写成调用自己（无限递归→栈溢出，满屏 at 方法名）；
+
+3. Unity 声明事件不带 `?`、`?.Invoke` 不能省；7. Unity 用 Action 记得 using System；
+
+4. Start 订阅、OnDestroy 退订成对；9. 事件参数是 "增量"，累计数据去数据管理者那读；
+
+5. 自动补全 using 看清楚再回车（误选过 SocialPlatforms.Impl、VisualScripting）。
 
 # D16（9/21 周一，9/22 补收尾）：Lambda 表达式 + List 泛型集合 + Unity 批量生成管理
 
-## 🌞 上午 · C#：Lambda 与 List
+## 🌞 上午・C#：Lambda 与 List
 
 ### 1. Lambda 是干嘛的
-大白话：**一次性的匿名小方法**，专门用来"当场写一小段逻辑塞给别人"，常配 Func/Action 和 List 的查找排序，省得为一两行代码单独起名写个方法。
+
+大白话：**一次性的匿名小方法**，专门用来 "当场写一小段逻辑塞给别人"，常配 Func/Action 和 List 的查找排序，省得为一两行代码单独起名写个方法。
 
 四种形态：
 
-```csharp
+
+
+```
 Func<int, int> f1 = a => a + 5;              // 1个参数：可省括号
 Func<int, int, int> f2 = (a, b) => a + b;    // 多个参数：必须带括号
 Action f3 = () => Console.WriteLine("嗨");    // 无参数：空括号 () 不能省
@@ -2646,12 +3867,15 @@ Func<int, int> f4 = a =>                      // 多行方法体：必须加大�
 };
 ```
 
-口诀：**单参省括号，零参/多参带括号；单行隐式返回，多行加大括号并手写 return。**
+口诀：**单参省括号，零参 / 多参带括号；单行隐式返回，多行加大括号并手写 return。**
 
-### 2. List<T> 动态数组
+### 2. List 动态数组
+
 大白话：**会自动伸缩的数组**，不用提前定长度，Add 就长、Remove 就短。需要 `using System.Collections.Generic;`（Unity 模板自带，控制台隐式引用）。
 
-```csharp
+
+
+```
 List<string> bag = new List<string>{ "木剑", "红药水", "蓝药水" }; // 初始化器直接装
 bag.Add("金币");              // 末尾加一个
 bag.Remove("红药水");         // 按内容删第一个匹配，返回 bool；删不存在的不报错
@@ -2665,14 +3889,18 @@ foreach (string item in bag) { Console.WriteLine(item); }  // 遍历
 
 ### 3. 查找四件套（重点，别混）
 
-| 方法 | 参数 | 返回 | 大白话 |
-|---|---|---|---|
-| Contains | 具体值 | bool | 有没有**这个东西**（整体相等） |
-| Exists | Lambda 条件 | bool | 有没有**符合条件的** |
-| Find | Lambda 条件 | 元素，找不到 **null**（值类型返回0） | 拿符合条件的**第一个** |
-| FindAll | Lambda 条件 | **新 List** | 把符合条件的**全拿出来** |
 
-```csharp
+
+| 方法       | 参数        | 返回                       | 大白话               |
+| -------- | --------- | ------------------------ | ----------------- |
+| Contains | 具体值       | bool                     | 有没有**这个东西**（整体相等） |
+| Exists   | Lambda 条件 | bool                     | 有没有**符合条件的**      |
+| Find     | Lambda 条件 | 元素，找不到 **null**（值类型返回 0） | 拿符合条件的**第一个**     |
+| FindAll  | Lambda 条件 | **新 List**               | 把符合条件的**全拿出来**    |
+
+
+
+```
 string one = bag.Find(item => item.Contains("药水"));        // 第一个含"药水"的
 List<string> all = bag.FindAll(item => item.Contains("药水"));// 所有含"药水"的
 bool has = bag.Exists(item => item.Length > 2);              // 有没有字数>2的
@@ -2681,7 +3909,9 @@ bool has = bag.Exists(item => item.Length > 2);              // 有没有字数>
 
 ### 4. Sort 排序与 RemoveAll
 
-```csharp
+
+
+```
 List<int> nums = new List<int>{ 3, 1, 2 };
 nums.Sort();                  // 默认从小到大，直接改原列表（原地排序）
 nums.Sort((a, b) => a - b);   // 升序（和默认一样）
@@ -2691,15 +3921,23 @@ int del = nums.RemoveAll(x => x < 0);      // 按条件删一片，返回删掉�
 Console.WriteLine(string.Join(" ", nums)); // 把列表拼成一行字符串打印
 ```
 
-## 🌤 下午 · Unity：生成器模式 + 列表批量管理
+## 🌤 下午・Unity：生成器模式 + 列表批量管理
 
 ### 1. 生成器四步（金币、敌人通用套路）
+
+
+
 1. 空物体挂 Spawner 脚本，字段拖预制体 `public GameObject xxxPrefab;`
+
 2. Start 里 for 循环 `Instantiate(预制体, 位置, Quaternion.identity)` 批量造
+
 3. `XXX s = obj.GetComponent<XXX>();` 在**新生成的 obj 身上**取脚本
+
 4. `s.spawner = this;` 把自己（管理者）填进生成物的联系人栏，再 Add 进列表
 
-```csharp
+
+
+```
 for (int i = 0; i < 5; i++)
 {
     GameObject obj = Instantiate(enemyPrefab, new Vector3(i, 1f, 0), Quaternion.identity);
@@ -2710,18 +3948,30 @@ for (int i = 0; i < 5; i++)
 ```
 
 ### 2. 列表装 GameObject 还是装组件？（柜子与抽屉）
-GameObject 是柜子，脚本组件是抽屉。**判据：以后要从列表里拿元素干什么。**
-- 只做整体操作（生成/摆放/计数/销毁）→ `List<GameObject>`（金币）
-- 要读字段调方法（hp、Die）→ `List<Enemy>`（敌人），Add 的是 GetComponent 出来的组件
 
-对应地，从列表移除时：金币传 `gameObject`（脚本内置的"我挂的柜子"），敌人传 `this`（当前组件自己）。**列表装什么类型，Add/Remove 就给什么类型。**
+GameObject 是柜子，脚本组件是抽屉。**判据：以后要从列表里拿元素干什么。**
+
+
+
+* 只做整体操作（生成 / 摆放 / 计数 / 销毁）→ `List<GameObject>`（金币）
+
+* 要读字段调方法（hp、Die）→ `List<Enemy>`（敌人），Add 的是 GetComponent 出来的组件
+
+对应地，从列表移除时：金币传 `gameObject`（脚本内置的 "我挂的柜子"），敌人传 `this`（当前组件自己）。**列表装什么类型，Add/Remove 就给什么类型。**
 
 ### 3. 波次过关与群体技能
-- 敌人死亡：`Die()` 里血量减到 0 → `spawner.RemoveEnemy(this); Destroy(gameObject);`
-- 管理者的 RemoveEnemy：从列表移除 + 打印 Count，**Count == 0 调 `GameManager.Instance.WinGame()`** 过关
-- 群体技能（按 K 群灭）：**先 FindAll 出副本再 foreach**
 
-```csharp
+
+
+* 敌人死亡：`Die()` 里血量减到 0 → `spawner.RemoveEnemy(this); Destroy(gameObject);`
+
+* 管理者的 RemoveEnemy：从列表移除 + 打印 Count，**Count == 0 调&#x20;**`GameManager.Instance.WinGame()` 过关
+
+* 群体技能（按 K 群灭）：**先 FindAll 出副本再 foreach**
+
+
+
+```
 if (Input.GetKeyDown(KeyCode.K))
 {
     List<Enemy> targets = enemies.FindAll(e => e.hp > 0); // 独立的新列表
@@ -2731,41 +3981,60 @@ if (Input.GetKeyDown(KeyCode.K))
 
 ## 🌙 易错点 / 今日踩坑
 
-1. **GetComponent 漏写物体前缀**：`GetComponent<Coin>()` 等于 `this.GetComponent`，在生成器自己身上找，返回 null，下一行空引用使 Start 中断，结果只 Instantiate 出 1 个。找别人必须 `obj.GetComponent<>()`。
-2. **NullReferenceException**：用了本该装对象、实际却是 null 的引用（槽里没东西还去用它）。旧手摆金币没人填 spawner，一吃就炸。
-3. **边遍历边删集合会报错**（集合已被修改）：foreach 原列表时不能在循环里 Remove 原列表；先 FindAll 拿副本，遍历副本、修改原列表。
-4. **类体大括号内只能声明成员（字段/方法），不能写执行语句**；FindAll/foreach 必须放在方法体里，且要在触发时机（按 K）执行，不能写在 Start/Update 之间。
-5. List 用 **Count**、数组用 **Length**；Find 找不到是 **null** 不是 false，要 bool 用 Exists/Contains。
-6. 命名：first 不写 frist、RemoveEnemy 不写 RemoveEmeny；变量 camelCase、类/方法 PascalCase。
-7. 新建脚本删掉没用的垃圾 using（如 UnityEngine.SocialPlatforms.Impl）。
-8. 架构初识：Coin↔Spawner 是双向紧耦合（离开对方便空引用）；Enemy 只上报直属 Spawner、不认识 GameManager 是好的层级设计；D15 的 event 订阅才是松耦合（发布者不认识订阅者）。
 
+
+1. **GetComponent 漏写物体前缀**：`GetComponent<Coin>()` 等于 `this.GetComponent`，在生成器自己身上找，返回 null，下一行空引用使 Start 中断，结果只 Instantiate 出 1 个。找别人必须 `obj.GetComponent<>()`。
+
+2. **NullReferenceException**：用了本该装对象、实际却是 null 的引用（槽里没东西还去用它）。旧手摆金币没人填 spawner，一吃就炸。
+
+3. **边遍历边删集合会报错**（集合已被修改）：foreach 原列表时不能在循环里 Remove 原列表；先 FindAll 拿副本，遍历副本、修改原列表。
+
+4. **类体大括号内只能声明成员（字段 / 方法），不能写执行语句**；FindAll/foreach 必须放在方法体里，且要在触发时机（按 K）执行，不能写在 Start/Update 之间。
+
+5. List 用 **Count**、数组用 **Length**；Find 找不到是 **null** 不是 false，要 bool 用 Exists/Contains。
+
+6. 命名：first 不写 frist、RemoveEnemy 不写 RemoveEmeny；变量 camelCase、类 / 方法 PascalCase。
+
+7. 新建脚本删掉没用的垃圾 using（如 UnityEngine.SocialPlatforms.Impl）。
+
+8. 架构初识：Coin↔Spawner 是双向紧耦合（离开对方便空引用）；Enemy 只上报直属 Spawner、不认识 GameManager 是好的层级设计；D15 的 event 订阅才是松耦合（发布者不认识订阅者）。
 
 # 📅 D17（9/23 周三）：Dictionary 字典 + Unity Animator 动画状态机 + 配置表
 
-## 🌞 上午：Dictionary<K,V> 字典
+## 🌞 上午：Dictionary\<K,V> 字典
 
 ### 大白话
-List 是"编号抽屉"（按下标 0、1、2 找），字典是"贴标签抽屉"：给每个值起一个**键（Key）**，以后用键直接取，不用从头遍历。
-- 查字典复杂度 O(1)（一步到位），查 List 是 O(n)（挨个翻）；
-- 字典**无序、没有下标、不能 Sort**；
-- 使用前要 `using System.Collections.Generic;`。
+
+List 是 "编号抽屉"（按下标 0、1、2 找），字典是 "贴标签抽屉"：给每个值起一个**键（Key）**，以后用键直接取，不用从头遍历。
+
+
+
+* 查字典复杂度 O (1)（一步到位），查 List 是 O (n)（挨个翻）；
+
+* 字典**无序、没有下标、不能 Sort**；
+
+* 使用前要 `using System.Collections.Generic;`。
 
 ### 常用 API 对照表
 
-| 写法 | 作用 | 键不存在时 |
-|---|---|---|
-| `dict.Add(k, v)` | 添加 | 重复键抛 ArgumentException |
-| `dict[k]` 读 | 按键取值 | **抛 KeyNotFoundException（直接崩）** |
-| `dict[k] = v` | 赋值 | 存在则覆盖，不存在则新增 |
-| `dict.ContainsKey(k)` | 判断键在不在 | 返回 bool，不崩 |
-| `dict.TryGetValue(k, out v)` | 判断+取值一步 | 返回 false，v 为默认值 |
-| `dict.Remove(k)` | 删除 | 返回 bool |
-| `dict.Count` | 键值对数量 | — |
-| `foreach(var kv in dict)` | 遍历 | 用 `kv.Key` / `kv.Value` |
+
+
+| 写法                           | 作用        | 键不存在时                           |
+| ---------------------------- | --------- | ------------------------------- |
+| `dict.Add(k, v)`             | 添加        | 重复键抛 ArgumentException          |
+| `dict[k]` 读                  | 按键取值      | **抛 KeyNotFoundException（直接崩）** |
+| `dict[k] = v`                | 赋值        | 存在则覆盖，不存在则新增                    |
+| `dict.ContainsKey(k)`        | 判断键在不在    | 返回 bool，不崩                      |
+| `dict.TryGetValue(k, out v)` | 判断 + 取值一步 | 返回 false，v 为默认值                 |
+| `dict.Remove(k)`             | 删除        | 返回 bool                         |
+| `dict.Count`                 | 键值对数量     | —                               |
+| `foreach(var kv in dict)`    | 遍历        | 用 `kv.Key` / `kv.Value`         |
 
 标准查表姿势（查得到用、查不到兜底，不崩）：
-```csharp
+
+
+
+```
 if (config.TryGetValue("attack", out float attack))
     Console.WriteLine("攻击力：" + attack);
 else
@@ -2773,6 +4042,8 @@ else
 ```
 
 ### 背包堆叠计数器（最常用模式）
+
+
 
 ```
 Dictionary<string, int> bag = new Dictionary<string, int>();
@@ -2786,96 +4057,146 @@ void PickUp(string itemName)
 }
 ```
 
-### ⚠️ 值类型是"复印件"
+### ⚠️ 值类型是 "复印件"
 
 `int/float/bool/struct/enum` 传进方法或用 out 接出来，拿到的是**复印件**，改复印件不影响字典本体：
+
+
 
 ```
 bag.TryGetValue("药水", out int count);
 count++;   // ❌ 只改了复印件，字典里没变，必须 bag["药水"]++ 写回去
 ```
 
-引用类型（class、List、Dictionary、GameObject、MonoBehaviour）传的是"门牌号"，改的是同一份。
+引用类型（class、List、Dictionary、GameObject、MonoBehaviour）传的是 "门牌号"，改的是同一份。
 
----
+
+
+***
 
 ## 🌤 下午：Unity Animator 动画状态机
 
 ### 四个概念（KTV 比喻）
 
-| 概念 | 文件 | 大白话 | 比喻 |
-| --- | --- | --- | --- |
-| Animation Clip | `.anim` | 美术录好的一段动作（关键帧+自动插值） | 一盘 MV |
-| Animator Controller | `.controller` | 状态+过渡+条件的"规则本" | 点歌流程单 |
-| Animator 组件 | 挂在物体上 | 读控制器、负责播放的播放器 | 放映机 |
-| Parameter 参数 | 控制器里建 | 代码和状态机之间的开关（Bool/Trigger/Float/Int） | 遥控器信号 |
 
-- **Clip 回答"能播哪些动作"，Transition（箭头）回答"什么信号下从 A 切到 B"**；
-- 程序员的活：拿成品片段拖进画布 → 连状态线、建参数、写条件 → 代码 `SetBool` 拨开关 → 负责复位。建模绑骨 K 帧是美术的活。
-- AI 状态机是"脑子"（决定干什么），Animator 状态机是"身体"（播对应动作），套路一样。
+
+| 概念                  | 文件            | 大白话                                 | 比喻    |
+| ------------------- | ------------- | ----------------------------------- | ----- |
+| Animation Clip      | `.anim`       | 美术录好的一段动作（关键帧 + 自动插值）               | 一盘 MV |
+| Animator Controller | `.controller` | 状态 + 过渡 + 条件的 "规则本"                 | 点歌流程单 |
+| Animator 组件         | 挂在物体上         | 读控制器、负责播放的播放器                       | 放映机   |
+| Parameter 参数        | 控制器里建         | 代码和状态机之间的开关（Bool/Trigger/Float/Int） | 遥控器信号 |
+
+
+
+* **Clip 回答 "能播哪些动作"，Transition（箭头）回答 "什么信号下从 A 切到 B"**；
+
+* 程序员的活：拿成品片段拖进画布 → 连状态线、建参数、写条件 → 代码 `SetBool` 拨开关 → 负责复位。建模绑骨 K 帧是美术的活。
+
+* AI 状态机是 "脑子"（决定干什么），Animator 状态机是 "身体"（播对应动作），套路一样。
 
 ### 录片段要点
 
-- 流程：Project 右键创建 Animation（`.anim`）→ **拖进 Animator 画布成为状态**（不拖进去动画窗口选不到）→ 选中物体、动画窗口选片段、红点录制 → Add Property → 拖播放头、改 Inspector 值自动插菱形帧；
-- 时间轴格式是 **"秒:帧"，每秒 60 帧**：0:30 = 半秒，1:00 = 1 秒；播放头在刻度行**点哪跳哪**；
-- 循环动画首尾帧要相同才无缝；待机/移动勾 **Loop Time**，跳跃不勾；
-- 动画只动 Rotation/Scale，**不动 Position**，避免和 Rigidbody 物理移动打架。
+
+
+* 流程：Project 右键创建 Animation（`.anim`）→ **拖进 Animator 画布成为状态**（不拖进去动画窗口选不到）→ 选中物体、动画窗口选片段、红点录制 → Add Property → 拖播放头、改 Inspector 值自动插菱形帧；
+
+* 时间轴格式是 **"秒：帧"，每秒 60 帧**：0:30 = 半秒，1:00 = 1 秒；播放头在刻度行**点哪跳哪**；
+
+* 循环动画首尾帧要相同才无缝；待机 / 移动勾 **Loop Time**，跳跃不勾；
+
+* 动画只动 Rotation/Scale，**不动 Position**，避免和 Rigidbody 物理移动打架。
 
 ### 状态机连线（4 根）
 
-| 过渡 | 条件 | 特殊设置 |
-| --- | --- | --- |
-| Idle → Move | isMoving = true | 取消 Has Exit Time |
-| Move → Idle | isMoving = false | 取消 Has Exit Time |
-| Any State → Jump | isJumping = true | 取消 Has Exit Time、**取消"可以过渡到自己"**、Duration = 0 |
-| Jump → Idle | isJumping = false | 取消 Has Exit Time |
 
-- **Has Exit Time**：勾着=必须播完才切（连招用）；移动跳跃要即时响应，**取消**；
-- 一根过渡必须有 Exit Time 或至少一个 Condition，否则黄警"will be ignored"；
-- **Any State 包含 Jump 自己**，不取消"过渡到自身"，isJumping=true 期间会反复重进 Jump，动画抽搐跳不起来；
-- Any State 的意义：起跳可能发生在待机或移动中，一根线顶替两根。
+
+| 过渡               | 条件                | 特殊设置                                           |
+| ---------------- | ----------------- | ---------------------------------------------- |
+| Idle → Move      | isMoving = true   | 取消 Has Exit Time                               |
+| Move → Idle      | isMoving = false  | 取消 Has Exit Time                               |
+| Any State → Jump | isJumping = true  | 取消 Has Exit Time、**取消 "可以过渡到自己"**、Duration = 0 |
+| Jump → Idle      | isJumping = false | 取消 Has Exit Time                               |
+
+
+
+* **Has Exit Time**：勾着 = 必须播完才切（连招用）；移动跳跃要即时响应，**取消**；
+
+* 一根过渡必须有 Exit Time 或至少一个 Condition，否则黄警 "will be ignored"；
+
+* **Any State 包含 Jump 自己**，不取消 "过渡到自身"，isJumping=true 期间会反复重进 Jump，动画抽搐跳不起来；
+
+* Any State 的意义：起跳可能发生在待机或移动中，一根线顶替两根。
 
 ### 代码联动（PlayerPhysicsMove.cs）
 
 private Animator animator;   // 注意是 Animator 不是旧版 Animation
 
 void Start()
+
 {
-    rb = GetComponent<Rigidbody>();
-    animator = GetComponent<Animator>();
+
+rb = GetComponent();
+
+animator = GetComponent();
+
 }
 
-public void Move()
+public void Move ()
+
 {
-    float moveX = 0f, moveZ = 0f;
-    if (Input.GetKey(KeyCode.W)) moveZ = 1f;
-    // ……A/S/D 略
-    // ……速度计算略
-    // 数据已汇总进 moveX/moveZ，一处判断即可，别每个键 SetBool 一遍
-    animator.SetBool("isMoving", moveX != 0f || moveZ != 0f);
+
+float moveX = 0f, moveZ = 0f;
+
+if (Input.GetKey (KeyCode.W)) moveZ = 1f;
+
+// ……A/S/D 略
+
+// …… 速度计算略
+
+// 数据已汇总进 moveX/moveZ，一处判断即可，别每个键 SetBool 一遍
+
+animator.SetBool ("isMoving", moveX != 0f || moveZ != 0f);
+
 }
 
 void Update()
-{
-    isGrounded = Physics.Raycast(transform.position, Vector3.down, groundDistance);
-    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
-    // 不在地面 = 在跳，一句话统管起跳和落地
-    animator.SetBool("isJumping", !isGrounded);
+{
+
+isGrounded = Physics.Raycast(transform.position, Vector3.down, groundDistance);
+
+if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+
+rb.AddForce(Vector3.up \* jumpForce, ForceMode.Impulse);
+
+// 不在地面 = 在跳，一句话统管起跳和落地
+
+animator.SetBool ("isJumping", !isGrounded);
+
 }
 
-- 参数名字符串必须和画布里**一字不差**，拼错不报错但不切动画；
-- **bool 开关谁设 true 谁负责设回 false**（落地、胜利都要复位）；
-- Trigger 参数按一下自动复位（以后学），Float 配混合树（以后学）。
+
+
+* 参数名字符串必须和画布里**一字不差**，拼错不报错但不切动画；
+
+* **bool 开关谁设 true 谁负责设回 false**（落地、胜利都要复位）；
+
+* Trigger 参数按一下自动复位（以后学），Float 配混合树（以后学）。
 
 ### ⚠️ 踩坑
 
-- **Animator ≠ Animation**：Animator（新，吃 .controller 状态机，有 SetBool）；Animation（旧 Legacy，只播单个 .anim）。类型/组件/泛型三处都是 Animator；
-- 新建 .anim 后动画窗口没 Create 按钮/下拉点不动：片段没拖进画布成为状态；
-- 胜利后角色定格在 Move：FixedUpdate/Update 胜利 return 后没人拨 false，要在胜利分支里 SetBool 复位。
 
----
+
+* **Animator ≠ Animation**：Animator（新，吃 .controller 状态机，有 SetBool）；Animation（旧 Legacy，只播单个 .anim）。类型 / 组件 / 泛型三处都是 Animator；
+
+* 新建 .anim 后动画窗口没 Create 按钮 / 下拉点不动：片段没拖进画布成为状态；
+
+* 胜利后角色定格在 Move：FixedUpdate/Update 胜利 return 后没人拨 false，要在胜利分支里 SetBool 复位。
+
+
+
+***
 
 ## 🌙 晚上：配置表（技术 C）+ 按键映射（加深）
 
@@ -2884,6 +4205,8 @@ void Update()
 `moveSpeed=8f`、金币 `1` 散落各脚本，策划改数值要翻代码。把数值集中进一张表，代码按名字查，改数值不动逻辑。
 
 ### 静态类配置表 GameConfig.cs（Unity 里不用挂物体）
+
+
 
 ```
 using System.Collections.Generic;
@@ -2908,6 +4231,8 @@ static class GameConfig   // 静态类：不能 new、不继承 MonoBehaviour、
 
 使用：
 
+
+
 ```
 // 运行时在 Start 里覆盖（不要写字段初始化器，会被 Inspector 序列化值盖掉）
 moveSpeed = GameConfig.Get("moveSpeed");
@@ -2919,15 +4244,21 @@ GameManager.Instance.CollectCoin((int)GameConfig.Get("coinValue"));
 
 ### 静态类 vs 单例
 
-- 纯数据/工具、不依赖引擎 → **静态类**（类名.方法，不能 new，最简）；
-- 是 Unity 组件、要用 Awake/Update/Inspector/接口多态 → **单例**（GameManager）；
-- 静态类"整个类都是静态"；单例"只有 Instance 入口是静态，数据方法还是实例成员"，调用：`GameManager.Instance.AddScore(1)`。
+
+
+* 纯数据 / 工具、不依赖引擎 → **静态类**（类名。方法，不能 new，最简）；
+
+* 是 Unity 组件、要用 Awake/Update/Inspector/ 接口多态 → **单例**（GameManager）；
+
+* 静态类 "整个类都是静态"；单例 "只有 Instance 入口是静态，数据方法还是实例成员"，调用：`GameManager.Instance.AddScore(1)`。
 
 ### ⚠️ Unity 序列化坑
 
-Inspector 显示的是场景里存的序列化值，不是代码实时值。字段初始化器只在组件首次创建时跑一次；运行时以配置表为准要在 **Start() 里赋值**。
+Inspector 显示的是场景里存的序列化值，不是代码实时值。字段初始化器只在组件首次创建时跑一次；运行时以配置表为准要在 **Start () 里赋值**。
 
-### 加深：Dictionary<string, Action> 按键映射（命令模式雏形）
+### 加深：Dictionary\<string, Action> 按键映射（命令模式雏形）
+
+
 
 ```
 Dictionary<string, Action> keyMap = new Dictionary<string, Action>();
@@ -2943,8 +4274,11 @@ else
     Console.WriteLine("这个键没有绑定技能");
 ```
 
-- 加技能只加一行表数据，"读键→查表→执行"的主循环永远不动；
-- Action 是委托，`=` 覆盖、`+=` 追加（多播）；一键通知多系统更适合用 D15 的 event。
+
+
+* 加技能只加一行表数据，"读键→查表→执行" 的主循环永远不动；
+
+* Action 是委托，`=` 覆盖、`+=` 追加（多播）；一键通知多系统更适合用 D15 的 event。
 
 ## 🔰 以后专门学
 
@@ -2955,20 +4289,31 @@ Animator.StringToHash（避免参数字符串拼错）、Trigger/Float 参数、
 > 工程：FristScene（团结引擎 Tuanjie 1.10.2，中文界面）
 > 场景：MenuScene（序号 0，启动菜单）、MiniLevel（序号 1，游戏关卡）
 
----
+
+
+***
 
 ## 一、今天做了什么（重要步骤原样记录）
 
 ### 1. 开始界面（Canvas / Button / Panel）
 
 **新建按钮**
-- Canvas 右键 → UI → Button - Legacy（按钮-旧版）。
-- Button 是**组合件**：父物体上挂两个组件——Image（底色，Source Image 用 UISprite，Image Type = Sliced 已切片九宫格）+ Button（点击逻辑）；文字不在按钮上，在它的**子物体 Text** 上。
-- 按钮尺寸 200×60，子 Text 字号 28。
-- Button 组件关键属性：Interactable（可交互）、Transition（过渡）、On Click()（点击时列表）。
+
+
+
+* Canvas 右键 → UI → Button - Legacy（按钮 - 旧版）。
+
+* Button 是**组合件**：父物体上挂两个组件 ——Image（底色，Source Image 用 UISprite，Image Type = Sliced 已切片九宫格）+ Button（点击逻辑）；文字不在按钮上，在它的**子物体 Text** 上。
+
+* 按钮尺寸 200×60，子 Text 字号 28。
+
+* Button 组件关键属性：Interactable（可交互）、Transition（过渡）、On Click ()（点击时列表）。
 
 **点击逻辑 StartMenu.cs（挂在按钮物体上）**
-```csharp
+
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;   // Button、Text 都在这个命名空间
 
@@ -2984,35 +4329,63 @@ public class StartMenu : MonoBehaviour
     }
 }
 ```
-- 订阅点击用 `onClick.AddListener(方法名)`，退订用 RemoveListener；方法名后不加括号（传方法本身）。
-- 这个方法必须是自己写的无参数方法，Unity 只负责点击时调用它。
+
+
+
+* 订阅点击用 `onClick.AddListener(方法名)`，退订用 RemoveListener；方法名后不加括号（传方法本身）。
+
+* 这个方法必须是自己写的无参数方法，Unity 只负责点击时调用它。
 
 **Panel 面板（容器）**
-- Canvas 右键 → UI → Panel，命名 StartPanel，把标题 Text 和开始按钮拖进去。
-- 同级 UI 元素，层级列表里**越靠下画得越上层**，面板要拖到 Canvas 子列表最底部才能盖住血条。
-- `gameObject.SetActive(false)` = 隐藏物体；**父物体隐藏，所有子物体一起消失**。
+
+
+
+* Canvas 右键 → UI → Panel，命名 StartPanel，把标题 Text 和开始按钮拖进去。
+
+* 同级 UI 元素，层级列表里**越靠下画得越上层**，面板要拖到 Canvas 子列表最底部才能盖住血条。
+
+* `gameObject.SetActive(false)` = 隐藏物体；**父物体隐藏，所有子物体一起消失**。
 
 ### 2. 状态机给玩家移动上锁
 
-- GameManager 里定义枚举：
-```csharp
+
+
+* GameManager 里定义枚举：
+
+
+
+```
 public enum GameState { StartGame, Playing, Paused, Win }
 public GameState state = GameState.StartGame;
 ```
-- PlayerPhysicsMove 的 FixedUpdate / Update 开头判断：状态不是 Playing 直接 return（Win 分支还要复位 isMoving/isJumping）。
-- 单场景菜单时期：Awake 里强制 `state = GameState.StartGame;`，点开始进 Playing。
-- 菜单独立成场景后：MiniLevel 的 Awake 改成 `state = GameState.Playing;`（进游戏场景直接能玩）。
+
+
+
+* PlayerPhysicsMove 的 FixedUpdate / Update 开头判断：状态不是 Playing 直接 return（Win 分支还要复位 isMoving/isJumping）。
+
+* 单场景菜单时期：Awake 里强制 `state = GameState.StartGame;`，点开始进 Playing。
+
+* 菜单独立成场景后：MiniLevel 的 Awake 改成 `state = GameState.Playing;`（进游戏场景直接能玩）。
 
 ### 3. 血条 Slider
 
 **搭建**
-- Canvas 右键 → UI → Slider（滑块），命名 HpSlider。
-- 结构：Background（背景槽）、Fill Area / Fill（填充块）、Handle Slide Area / Handle（圆形把手）。
-- 血条设置：取消勾选 **Interactable**（不让玩家拖）；Min Value = 0、Max Value = 100、Value = 100；Direction = Left To Right（从左到右）；把手 Handle 禁用或删除。
-- **拉满还空一截**：是 Fill Area 默认给把手预留了右边距。选中 Fill Area，把 Rect Transform 的 Left、Right 偏移都改成 0，填充条就铺满了。
+
+
+
+* Canvas 右键 → UI → Slider（滑块），命名 HpSlider。
+
+* 结构：Background（背景槽）、Fill Area / Fill（填充块）、Handle Slide Area / Handle（圆形把手）。
+
+* 血条设置：取消勾选 **Interactable**（不让玩家拖）；Min Value = 0、Max Value = 100、Value = 100；Direction = Left To Right（从左到右）；把手 Handle 禁用或删除。
+
+* **拉满还空一截**：是 Fill Area 默认给把手预留了右边距。选中 Fill Area，把 Rect Transform 的 Left、Right 偏移都改成 0，填充条就铺满了。
 
 **接数据 HpUI.cs（挂在血量 Text 物体上）**
-```csharp
+
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -3033,26 +4406,38 @@ public class HpUI : MonoBehaviour
     }
 }
 ```
-- 忘记拖 hpSlider 引用会报 NullReferenceException，堆栈里出现 HpUI.cs:行号 就是自己的空引用。
+
+
+
+* 忘记拖 hpSlider 引用会报 NullReferenceException，堆栈里出现 HpUI.cs: 行号 就是自己的空引用。
 
 ### 4. 组件获取的三种途径（重点）
 
-判据一句话：**看点号左边/组件和脚本的距离**。
+判据一句话：**看点号左边 / 组件和脚本的距离**。
 
-| 组件在哪 | 怎么拿 | 例子 |
-|---|---|---|
-| 和脚本在**同一个物体**上 | `GetComponent<T>()` | HpUI 取同物体的 Text；按钮脚本取同物体的 Button |
-| 在场景里**别的物体**上、编辑时就存在 | public 字段，Inspector **拖引用** | HpUI 引用 HpSlider |
+
+
+| 组件在哪                        | 怎么拿                                      | 例子                                       |
+| --------------------------- | ---------------------------------------- | ---------------------------------------- |
+| 和脚本在**同一个物体**上              | `GetComponent<T>()`                      | HpUI 取同物体的 Text；按钮脚本取同物体的 Button         |
+| 在场景里**别的物体**上、编辑时就存在        | public 字段，Inspector **拖引用**              | HpUI 引用 HpSlider                         |
 | 运行时 **Instantiate 克隆**出来的物体 | Instantiate 返回 GameObject，再 GetComponent | `Enemy e = enemy.GetComponent<Enemy>();` |
 
-- `public Slider hpSlider;` 拖物体进槽时，Unity 自动取它身上的 Slider 组件，等价于 `public GameObject` + 一行 GetComponent，但少写代码。
-- 变量已经是组件类型（Slider），再对它 GetComponent 是多此一举。
-- GetComponent **只在脚本所在的那个物体身上找**，不会翻子物体、不会找别的物体。
+
+
+* `public Slider hpSlider;` 拖物体进槽时，Unity 自动取它身上的 Slider 组件，等价于 `public GameObject` + 一行 GetComponent，但少写代码。
+
+* 变量已经是组件类型（Slider），再对它 GetComponent 是多此一举。
+
+* GetComponent **只在脚本所在的那个物体身上找**，不会翻子物体、不会找别的物体。
 
 ### 5. 重开按钮 + 场景重载
 
 **RestarButton.cs（挂在重开按钮上，文件名少打了个 t，沿用）**
-```csharp
+
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;   // 场景管理命名空间
@@ -3070,21 +4455,37 @@ public class RestarButton : MonoBehaviour
     }
 }
 ```
-- `SceneManager.LoadScene(名字)`：加载场景，旧场景物体全部销毁、新场景重新生成。
-- `SceneManager.GetActiveScene().name`：自动读出"当前场景"的名字，不用手写，重载自己时通用。
-- 加载**另一个**场景才手写名字：`SceneManager.LoadScene("MiniLevel");`
-- 场景必须注册：文件（File）→ 生成设置（Build Settings）→ 添加已打开场景（Add Open Scenes），否则报场景不在构建列表。
-- GameManager 加 `public GameObject restartButton;`，WinGame() 里 `restartButton.SetActive(true);`，按钮默认隐藏。
-- **单场景重开时注释掉 `DontDestroyOnLoad(gameObject);`**，否则旧管理器不死、新管理器又生成，运行时层级会出现两个 GameManager。
+
+
+
+* `SceneManager.LoadScene(名字)`：加载场景，旧场景物体全部销毁、新场景重新生成。
+
+* `SceneManager.GetActiveScene().name`：自动读出 "当前场景" 的名字，不用手写，重载自己时通用。
+
+* 加载**另一个**场景才手写名字：`SceneManager.LoadScene("MiniLevel");`
+
+* 场景必须注册：文件（File）→ 生成设置（Build Settings）→ 添加已打开场景（Add Open Scenes），否则报场景不在构建列表。
+
+* GameManager 加 `public GameObject restartButton;`，WinGame () 里 `restartButton.SetActive(true);`，按钮默认隐藏。
+
+* **单场景重开时注释掉&#x20;**`DontDestroyOnLoad(gameObject);`，否则旧管理器不死、新管理器又生成，运行时层级会出现两个 GameManager。
 
 ### 6. 拆成两个场景（菜单场景 / 游戏场景）
 
+
+
 1. Scenes 文件夹右键 → Create（创建）→ Scene（场景），命名 MenuScene，双击打开（提示保存当前场景就保存）。
+
 2. 新场景右键 → UI → Canvas（EventSystem 自动带出）。
+
 3. 回 MiniLevel 选中 StartPanel 按 Ctrl+C，到 MenuScene 选中 Canvas 按 Ctrl+V，整套菜单搬过去。
+
 4. MiniLevel 里删除 StartPanel；GameManager 的 Awake 状态改 Playing。
+
 5. StartMenu 的点击改成 `SceneManager.LoadScene("MiniLevel");`，删掉 SetActive 和 GameManager.state 相关行（菜单场景没有 GameManager，留着空引用）。
+
 6. Build Settings 列表：MenuScene 在第 0 行（序号 0 = 游戏启动场景），MiniLevel 第 1。
+
 7. 编辑器里点播放运行的是**当前打开的场景**，要测菜单启动就先双击打开 MenuScene。
 
 ### 7. Esc 暂停菜单
@@ -3092,7 +4493,10 @@ public class RestarButton : MonoBehaviour
 **UI**：MiniLevel 的 Canvas 下新建 PausePanel（拖到子列表最底部），放 Text"游戏暂停" + 三个按钮（继续游戏、重新开始、返回主菜单），PausePanel 默认取消勾选隐藏。
 
 **PauseMenu.cs（挂在 GameManager 物体上）**
-```csharp
+
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -3133,90 +4537,132 @@ public class PauseMenu : MonoBehaviour
     }
 }
 ```
-- **Time.timeScale（时间缩放）**：1 = 正常，0 = 停止物理、FixedUpdate、所有按时间走的运动；但 Update 和输入检测照常，所以 Esc 和按钮在暂停时仍能响应。
-- 同一个 ContinueGame 方法有两个入口（Esc、按钮），方法复用。
-- 暂停面板的"重新开始"按钮挂现成的 RestarButton 脚本。
-- "返回主菜单"新建 BackButton.cs，点击里先 `Time.timeScale = 1;` 再 `SceneManager.LoadScene("MenuScene");`。
-- GameManager 的 Awake 里补一行 `Time.timeScale = 1;` 作保底。
 
----
+
+
+* **Time.timeScale（时间缩放）**：1 = 正常，0 = 停止物理、FixedUpdate、所有按时间走的运动；但 Update 和输入检测照常，所以 Esc 和按钮在暂停时仍能响应。
+
+* 同一个 ContinueGame 方法有两个入口（Esc、按钮），方法复用。
+
+* 暂停面板的 "重新开始" 按钮挂现成的 RestarButton 脚本。
+
+* "返回主菜单" 新建 BackButton.cs，点击里先 `Time.timeScale = 1;` 再 `SceneManager.LoadScene("MenuScene");`。
+
+* GameManager 的 Awake 里补一行 `Time.timeScale = 1;` 作保底。
+
+
+
+***
 
 ## 二、易错点（踩过的坑）
 
-1. **序列化坑（最隐蔽）**：public 字段的代码初始值只在脚本**第一次挂载**时写进组件一次，之后存在场景文件里；之后再改代码里的默认值，对已经挂好的组件**不生效**，一切以 Inspector 里显示的值为准。表现：代码写 state=Playing，Inspector 下拉其实是 StartGame。解决：在 Awake() 里强制赋值，或手动改 Inspector。
+
+
+1. **序列化坑（最隐蔽）**：public 字段的代码初始值只在脚本**第一次挂载**时写进组件一次，之后存在场景文件里；之后再改代码里的默认值，对已经挂好的组件**不生效**，一切以 Inspector 里显示的值为准。表现：代码写 state=Playing，Inspector 下拉其实是 StartGame。解决：在 Awake () 里强制赋值，或手动改 Inspector。
+
 2. **文字超出按钮高度会消失**：Text 默认 Vertical Overflow = Truncate（截断），按钮高 30 时字号 28 就被裁掉；把按钮加高到 60 正常。
+
 3. **Slider 拉满还空一截**：Fill Area 的 Right 边距没归零。
+
 4. **漏拖引用 → 空引用**：public 字段拖了物体才有效；判据看报错堆栈，里面有自己脚本名（HpUI.cs:17）才是自己的错；全是 UnityEditor/PackageManager 的是编辑器内部报错，清控制台即可。
-5. **复制按钮会连脚本和点击绑定一起复制**：复制"重新开始"做"继续游戏"后，按钮身上还挂着 RestarButton 脚本，一点继续就重载场景。复制 UI 改用途后，第一件事检查身上有没有多余脚本（⋮ → 移除组件），再看 On Click() 列表有没有残留。
-6. **Time.timeScale 是全局且"粘住"的**：切场景不会自动重置回 1。暂停状态下重开/回菜单，必须在 LoadScene 前写 Time.timeScale = 1，新场景可能以 0 速卡死。
-7. **场景不进 Build Settings 就无法 LoadScene**：两个场景都要在"生成中的场景"列表里并勾选。
+
+5. **复制按钮会连脚本和点击绑定一起复制**：复制 "重新开始" 做 "继续游戏" 后，按钮身上还挂着 RestarButton 脚本，一点继续就重载场景。复制 UI 改用途后，第一件事检查身上有没有多余脚本（⋮ → 移除组件），再看 On Click () 列表有没有残留。
+
+6. **Time.timeScale 是全局且 "粘住" 的**：切场景不会自动重置回 1。暂停状态下重开 / 回菜单，必须在 LoadScene 前写 Time.timeScale = 1，新场景可能以 0 速卡死。
+
+7. **场景不进 Build Settings 就无法 LoadScene**：两个场景都要在 "生成中的场景" 列表里并勾选。
+
 8. **DontDestroyOnLoad 与单场景重开冲突**：重开要一切归零，管理器该随场景销毁；挂着免死金牌会堆出两个 GameManager。
+
 9. **命名规范**：枚举成员 PascalCase（是 Paused 不是 paused）；字段 camelCase（continueButton 不是 ContinueButton）；文件名和类名必须一致。
+
 10. **UI 层级遮挡**：同级元素越靠下越在上层，面板要排 Canvas 子列表最底部。
+
 11. **Panel 父物体隐藏，子物体全部隐藏**；反过来子物体无法在父物体隐藏时显示。
 
----
+
+
+***
 
 ## 三、刚开始没绕过来的点（弄懂后的结论）
 
+
+
 1. **AddListener 和 C# 的 event += 什么区别？**
+
    Button 自带的 onClick 是 UnityEvent，Unity 点击时会自动调用它；自己 new 一个 event Action 没有人去 Invoke 它，所以点了没反应。UI 按钮固定用 AddListener（相当于 +=）。
 
 2. **代码里 state 明明不等于 StartGame，为什么菜单时玩家还能动？**
+
    序列化：Inspector 里存的值才是运行时真正用的值，代码初始值对已挂载组件无效，Awake 强制赋值才说了算。
 
 3. **为什么 Text 要 GetComponent，Slider 却不用？**
+
    和组件类型无关，只看距离：Text 和 HpUI 在同一个物体上，自己身上摸；Slider 在另一个物体上，拖引用。
 
-4. **hpSlider 已经是 Slider 了，再 hpSlider.GetComponent<Slider>() 行不行？**
-   多此一举——手里已经是组件，不用再取一次；GetComponent 是给"手里只有 GameObject"时用的（如 Instantiate 的返回值）。
+4. **hpSlider 已经是 Slider 了，再 hpSlider.GetComponent() 行不行？**
+
+   多此一举 —— 手里已经是组件，不用再取一次；GetComponent 是给 "手里只有 GameObject" 时用的（如 Instantiate 的返回值）。
 
 5. **DontDestroyOnLoad 是干嘛的？和单例什么关系？**
-   单例解决"怎么找到唯一管理器"（访问问题）；DontDestroyOnLoad 解决"切场景时它死不死"（生命周期问题）。它是免死金牌，让物体带着数据跨场景存活；单场景重开要归零，所以不能挂。
 
-6. **SceneManager.GetActiveScene().name 要手写场景名吗？**
-   不用，它自动读当前场景名；只有加载"另一个"场景时才手写 "MiniLevel"/"MenuScene"。
+   单例解决 "怎么找到唯一管理器"（访问问题）；DontDestroyOnLoad 解决 "切场景时它死不死"（生命周期问题）。它是免死金牌，让物体带着数据跨场景存活；单场景重开要归零，所以不能挂。
+
+6. **SceneManager.GetActiveScene ().name 要手写场景名吗？**
+
+   不用，它自动读当前场景名；只有加载 "另一个" 场景时才手写 "MiniLevel"/"MenuScene"。
 
 7. **timeScale 都设成 0 了，为什么按 Esc、点按钮还有反应？**
-   timeScale=0 停的是物理和 FixedUpdate、deltaTime；Update 每帧照常执行，输入检测和 UI 事件系统不受影响——暂停菜单正是靠这个才能操作。
+
+   timeScale=0 停的是物理和 FixedUpdate、deltaTime；Update 每帧照常执行，输入检测和 UI 事件系统不受影响 —— 暂停菜单正是靠这个才能操作。
 
 8. **都返回主菜单了，为什么还要写 Time.timeScale = 1？**
+
    timeScale 是全局粘性状态，不随场景切换重置；谁制造的暂停谁负责清理，再加上新场景 Awake 保底，双保险。
 
 9. **重开场景为什么能一键满血满状态？**
-   LoadScene 会把场景所有物体销毁后按场景原始状态重新生成，分数、血量、敌人生成器全部重新出生，等于游戏重启——比重置一个个变量干净。
 
----
+   LoadScene 会把场景所有物体销毁后按场景原始状态重新生成，分数、血量、敌人生成器全部重新出生，等于游戏重启 —— 比重置一个个变量干净。
+
+
+
+***
 
 ## 四、今天新增脚本 / 场景清单
 
-| 文件 | 挂在哪 | 作用 |
-|---|---|---|
-| StartMenu.cs | MenuScene 开始按钮 | 点击加载 MiniLevel |
-| RestarButton.cs | 胜利面板、暂停面板的重开按钮 | 重载当前场景 |
-| BackButton.cs | 暂停面板"返回主菜单" | 加载 MenuScene |
-| PauseMenu.cs | GameManager 物体 | Esc 暂停/继续、timeScale、面板显隐 |
-| HpUI.cs | 血量 Text 物体 | 刷新血量文字 + Slider |
-| MenuScene.scene | Build 序号 0 | 启动菜单场景 |
-| MiniLevel.scene | Build 序号 1 | 游戏关卡场景（新增血条/暂停面板/重开） |
+
+
+| 文件              | 挂在哪            | 作用                         |
+| --------------- | -------------- | -------------------------- |
+| StartMenu.cs    | MenuScene 开始按钮 | 点击加载 MiniLevel             |
+| RestarButton.cs | 胜利面板、暂停面板的重开按钮 | 重载当前场景                     |
+| BackButton.cs   | 暂停面板 "返回主菜单"   | 加载 MenuScene               |
+| PauseMenu.cs    | GameManager 物体 | Esc 暂停 / 继续、timeScale、面板显隐 |
+| HpUI.cs         | 血量 Text 物体     | 刷新血量文字 + Slider            |
+| MenuScene.scene | Build 序号 0     | 启动菜单场景                     |
+| MiniLevel.scene | Build 序号 1     | 游戏关卡场景（新增血条 / 暂停面板 / 重开）   |
 
 **今日提交**：commit 8b62f3f，18 files changed，2756 insertions(+)
 
-# 📄 D19（2026-10-13 周二）游戏状态机完善 + 主菜单设置/退出 + PlayerPrefs 存档 + UI 事件解耦 + 链表
+# 📄 D19（2026-10-13 周二）游戏状态机完善 + 主菜单设置 / 退出 + PlayerPrefs 存档 + UI 事件解耦 + 链表
 
-> 今日主线：上午把 Lose 失败状态补齐（状态机四态成型）、主菜单加设置/退出；下午做 PlayerPrefs 音量与最高分存档、暂停内设置面板，并把血条重构成事件驱动；晚上整理 Assets 工程目录、刷 LeetCode 21（链表入门）。
+> 今日主线：上午把 Lose 失败状态补齐（状态机四态成型）、主菜单加设置 / 退出；下午做 PlayerPrefs 音量与最高分存档、暂停内设置面板，并把血条重构成事件驱动；晚上整理 Assets 工程目录、刷 LeetCode 21（链表入门）。
 
----
 
-## 🌞 上午：Lose 状态 + 主菜单设置/退出
 
-### 步骤1：Lose 失败状态——照 Win 套路把状态机补齐
+***
 
-**大白话**：D18 状态机只有"赢"没有"输"，这次加一个 `Lose` 状态。玩家血量掉到 0 就失败，和碰到金币赢游戏是同一套套路：改状态 → 弹面板。
+## 🌞 上午：Lose 状态 + 主菜单设置 / 退出
+
+### 步骤 1：Lose 失败状态 —— 照 Win 套路把状态机补齐
+
+**大白话**：D18 状态机只有 "赢" 没有 "输"，这次加一个 `Lose` 状态。玩家血量掉到 0 就失败，和碰到金币赢游戏是同一套套路：改状态 → 弹面板。
 
 **① 血量数据放 PlayerHealth.cs（挂玩家 Cube）**
 
-```csharp
+
+
+```
 using UnityEngine;
 using System;
 
@@ -3258,12 +4704,17 @@ public class PlayerHealth : MonoBehaviour
 }
 ```
 
-- `Mathf.Clamp(value, 0, maxHp)`：把值钳制在区间内，小于 0 取 0、大于上限取上限，防止血量超界。
-- `public bool IsDead => hp <= 0;` 是只读属性的简写，等价于 `get { return hp <= 0; }`。
+
+
+* `Mathf.Clamp(value, 0, maxHp)`：把值钳制在区间内，小于 0 取 0、大于上限取上限，防止血量超界。
+
+* `public bool IsDead => hp <= 0;` 是只读属性的简写，等价于 `get { return hp <= 0; }`。
 
 **② GameManager.cs 加 Lose 状态和方法**
 
-```csharp
+
+
+```
 public enum GameState { Playing, Paused, Win, Lose }
 
 public void LoseGame()
@@ -3278,6 +4729,8 @@ public void LoseGame()
 
 **③ UI 层级（面板容器 + 子按钮）**
 
+
+
 ```
 LoseText（Panel，默认隐藏）
 ├── Text（"游戏失败"）
@@ -3285,39 +4738,56 @@ LoseText（Panel，默认隐藏）
 └── BackButton（返回主菜单）
 ```
 
-- 面板父物体 SetActive(true)，**子按钮自动显示**，所以 LoseGame 不用单独把按钮一个个点亮。
-- **双重防重入**：TakeDamage 开头挡一次（死了不再掉血）、LoseGame 开头挡一次（不是 Playing 不结算），防止掉出地图连续触发结算、或边赢边死。
 
-### 步骤2：主菜单设置按钮——Slider 滑块绑全局音量
 
-**大白话**：设置面板就是一个"另一张面板"，点设置把开始面板藏起来、把设置面板亮出来；面板里放一个滑块，拖滑块改游戏全局音量。
+* 面板父物体 SetActive (true)，**子按钮自动显示**，所以 LoseGame 不用单独把按钮一个个点亮。
+
+* **双重防重入**：TakeDamage 开头挡一次（死了不再掉血）、LoseGame 开头挡一次（不是 Playing 不结算），防止掉出地图连续触发结算、或边赢边死。
+
+### 步骤 2：主菜单设置按钮 ——Slider 滑块绑全局音量
+
+**大白话**：设置面板就是一个 "另一张面板"，点设置把开始面板藏起来、把设置面板亮出来；面板里放一个滑块，拖滑块改游戏全局音量。
 
 **① Slider 滑块（Canvas 右键 → UI → Slider）**
 
-- 音量滑块设置：Min Value = 0、Max Value = 1、Value = 1、**不勾** Whole Numbers（音量要小数）、**勾** Interactable（要能拖）。
-- 血条滑块反过来：勾 Whole Numbers、**不勾** Interactable。
+
+
+* 音量滑块设置：Min Value = 0、Max Value = 1、Value = 1、**不勾** Whole Numbers（音量要小数）、**勾** Interactable（要能拖）。
+
+* 血条滑块反过来：勾 Whole Numbers、**不勾** Interactable。
 
 **② onValueChanged 和 onClick 的区别（重点）**
 
-| 事件 | 所属控件 | 回调方法签名 | 通知什么 |
-|---|---|---|---|
-| `onClick` | Button | `void 方法名()` | 只通知"被点了" |
+
+
+| 事件               | 所属控件   | 回调方法签名                  | 通知什么           |
+| ---------------- | ------ | ----------------------- | -------------- |
+| `onClick`        | Button | `void 方法名()`            | 只通知 "被点了"      |
 | `onValueChanged` | Slider | `void 方法名(float value)` | 拖动时把**当前值**传进来 |
 
-- Slider 是 `UnityEvent<float>`，订阅的方法必须带一个 float 参数接收滑块值。
+
+
+* Slider 是 `UnityEvent<float>`，订阅的方法必须带一个 float 参数接收滑块值。
 
 **③ 全局音量 AudioListener.volume**
 
-```csharp
+
+
+```
 AudioListener.volume = value;   // 0~1，全局所有声音的总开关
 ```
 
-- AudioListener 是场景的"耳朵"，Main Camera 自带，全场景一个。
-- **它是 static 属性，Inspector 上看不到**（Audio Listener 组件没有可展开的 Volume 滑条），只能代码控制，用 `Debug.Log(AudioListener.volume)` 验证。
+
+
+* AudioListener 是场景的 "耳朵"，Main Camera 自带，全场景一个。
+
+* **它是 static 属性，Inspector 上看不到**（Audio Listener 组件没有可展开的 Volume 滑条），只能代码控制，用 `Debug.Log(AudioListener.volume)` 验证。
 
 **④ SettingsMenu.cs（挂 MenuScene 的 Canvas，字段拖引用）**
 
-```csharp
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -3360,13 +4830,17 @@ public class SettingsMenu : MonoBehaviour
 }
 ```
 
-- **为什么挂 Canvas 还要拖引用？** GetComponent 只在脚本所在物体上找，不翻父子；Canvas 的子物体、孙物体上的面板和滑块，必须 public 字段拖。
 
-### 步骤3：退出游戏
 
-**QuitButton.cs（挂"退出游戏"按钮）**
+* **为什么挂 Canvas 还要拖引用？** GetComponent 只在脚本所在物体上找，不翻父子；Canvas 的子物体、孙物体上的面板和滑块，必须 public 字段拖。
 
-```csharp
+### 步骤 3：退出游戏
+
+**QuitButton.cs（挂 "退出游戏" 按钮）**
+
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -3383,19 +4857,25 @@ public class QuitButton : MonoBehaviour
 }
 ```
 
-- `Application.Quit()` 打包后才真正退出，**编辑器里点了没反应是正常的**，不是代码错。
 
----
+
+* `Application.Quit()` 打包后才真正退出，**编辑器里点了没反应是正常的**，不是代码错。
+
+
+
+***
 
 ## 🌞 下午：PlayerPrefs 存档 + 暂停内设置 + 血条事件解耦
 
-### 步骤4：PlayerPrefs——音量/最高分存到本地
+### 步骤 4：PlayerPrefs—— 音量 / 最高分存到本地
 
-**大白话**：PlayerPrefs 是 Unity 自带的"本地小账本"，按"键名（字符串）→ 值"存数据，游戏关掉重开还在。适合存音量、最高分这种小数据。
+**大白话**：PlayerPrefs 是 Unity 自带的 "本地小账本"，按 "键名（字符串）→ 值" 存数据，游戏关掉重开还在。适合存音量、最高分这种小数据。
 
 **① 四组 API**
 
-```csharp
+
+
+```
 PlayerPrefs.SetFloat("Volume", 0.5f);          // 存小数
 float v = PlayerPrefs.GetFloat("Volume", 1f);  // 读，第二参数=没存过时的默认值
 PlayerPrefs.SetInt("HighScore", 10);           // 存整数
@@ -3405,11 +4885,17 @@ int high = PlayerPrefs.GetInt("HighScore", 0);
 
 **② 坑：键名大小写敏感 + 魔法字符串**
 
-- 现象：设置面板存了音量，进游戏 Debug.Log 打印音量却是 1。
-- 原因：SettingsMenu 里写的键是 `"Volume"`，GameManager 里误写成 `"volume"`，**PlayerPrefs 键名区分大小写**，这是两个不同的账本格子。
-- 解决：把键名集中到 GameConfig 静态类里用 `const` 声明，杜绝手写魔法字符串：
 
-```csharp
+
+* 现象：设置面板存了音量，进游戏 Debug.Log 打印音量却是 1。
+
+* 原因：SettingsMenu 里写的键是 `"Volume"`，GameManager 里误写成 `"volume"`，**PlayerPrefs 键名区分大小写**，这是两个不同的账本格子。
+
+* 解决：把键名集中到 GameConfig 静态类里用 `const` 声明，杜绝手写魔法字符串：
+
+
+
+```
 public class GameConfig
 {
     public const string VolumeKey = "Volume";
@@ -3418,12 +4904,17 @@ public class GameConfig
 }
 ```
 
-- 两处都写 `PlayerPrefs.GetFloat(GameConfig.VolumeKey, 1f)`，以后改键名只改一处。
-- 编辑器里清档：**Edit → Clear All PlayerPrefs**。
+
+
+* 两处都写 `PlayerPrefs.GetFloat(GameConfig.VolumeKey, 1f)`，以后改键名只改一处。
+
+* 编辑器里清档：**Edit → Clear All PlayerPrefs**。
 
 **③ 最高分保存逻辑（GameManager.cs）**
 
-```csharp
+
+
+```
 void SaveHighScoreIfNeeded()
 {
     int highScore = PlayerPrefs.GetInt(GameConfig.HighScoreKey, 0);  // 读旧纪录
@@ -3436,13 +4927,17 @@ void SaveHighScoreIfNeeded()
 // WinGame()、LoseGame() 末尾各调一次（赢或输都结算）
 ```
 
-- 注意 int 是**值类型**，`highScore` 只是存档里的"快照"；SetInt 不会回改本地变量，所以日志要打印 `score`（新纪录），打印 highScore 永远是旧值。
 
-### 步骤5：最高分上屏（主菜单读档显示）
 
-**HighScoreText.cs（挂在主菜单"最高分"Text 物体上）**
+* 注意 int 是**值类型**，`highScore` 只是存档里的 "快照"；SetInt 不会回改本地变量，所以日志要打印 `score`（新纪录），打印 highScore 永远是旧值。
 
-```csharp
+### 步骤 5：最高分上屏（主菜单读档显示）
+
+**HighScoreText.cs（挂在主菜单 "最高分"Text 物体上）**
+
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -3456,21 +4951,31 @@ public class HighScoreText : MonoBehaviour
 }
 ```
 
-- 脚本和 Text 同物体，GetComponent 直接摸，不用拖引用、不用字段。
-- 验证：初次显示 0；玩出 10 分回主菜单显示 10；停止重开依然显示（数据在本地）。
 
-### 步骤6：暂停内设置面板（场景隔离 + Esc 优先级）
 
-**大白话**：暂停面板里再加一个"设置"，想直接复用主菜单的设置面板，但发现**跨场景拿不到别的场景的物体**——这是场景隔离。
+* 脚本和 Text 同物体，GetComponent 直接摸，不用拖引用、不用字段。
+
+* 验证：初次显示 0；玩出 10 分回主菜单显示 10；停止重开依然显示（数据在本地）。
+
+### 步骤 6：暂停内设置面板（场景隔离 + Esc 优先级）
+
+**大白话**：暂停面板里再加一个 "设置"，想直接复用主菜单的设置面板，但发现**跨场景拿不到别的场景的物体**—— 这是场景隔离。
 
 **① 场景隔离（重要概念）**
 
-- `LoadScene` 后旧场景物体**全部销毁**，新场景重新 Awake/Start，新场景里没有任何代码能访问旧场景的 UI。
-- 跨场景复用 UI 的标准做法：把 UI 做成**预制体**，两个场景各放一份；共享数据走 PlayerPrefs（音量就是这么共享的）。
-- DontDestroyOnLoad 让 UI 跨场景常驻对这种小面板来说太重，不用。
-- 今天赶进度：暂停里的设置面板**复制一份**（音量逻辑重复一点，以后再抽预制体+通用脚本）。
+
+
+* `LoadScene` 后旧场景物体**全部销毁**，新场景重新 Awake/Start，新场景里没有任何代码能访问旧场景的 UI。
+
+* 跨场景复用 UI 的标准做法：把 UI 做成**预制体**，两个场景各放一份；共享数据走 PlayerPrefs（音量就是这么共享的）。
+
+* DontDestroyOnLoad 让 UI 跨场景常驻对这种小面板来说太重，不用。
+
+* 今天赶进度：暂停里的设置面板**复制一份**（音量逻辑重复一点，以后再抽预制体 + 通用脚本）。
 
 **② 层级坑：设置面板必须和暂停面板同级**
+
+
 
 ```
 Canvas
@@ -3480,19 +4985,29 @@ Canvas
 └── SettingsPanel（✅ 必须是 Canvas 的子物体，和 PausePanel 同级）
 ```
 
-- 设置面板如果是 PausePanel 的子物体，隐藏 PausePanel 时设置面板会跟着消失，永远打不开。
 
-**③ 两个"返回"按钮别搞混**
 
-- 暂停面板的"返回主菜单"：挂 BackButton.cs（切场景）。
-- 设置面板的"返回"：只给 PauseMenu 订阅（回到暂停面板），**不挂**任何脚本。
+* 设置面板如果是 PausePanel 的子物体，隐藏 PausePanel 时设置面板会跟着消失，永远打不开。
+
+**③ 两个 "返回" 按钮别搞混**
+
+
+
+* 暂停面板的 "返回主菜单"：挂 BackButton.cs（切场景）。
+
+* 设置面板的 "返回"：只给 PauseMenu 订阅（回到暂停面板），**不挂**任何脚本。
 
 **④ Esc 优先级：设置面板开着时先关设置**
 
-- 原始问题：设置面板开着时按 Esc，代码直接恢复游戏，设置面板残留没关。
-- 用 `gameObject.activeSelf`（读当前是否激活）判优先级：
 
-```csharp
+
+* 原始问题：设置面板开着时按 Esc，代码直接恢复游戏，设置面板残留没关。
+
+* 用 `gameObject.activeSelf`（读当前是否激活）判优先级：
+
+
+
+```
 void Update()
 {
     if (Input.GetKeyDown(KeyCode.Escape))
@@ -3509,17 +5024,23 @@ void Update()
 
 **⑤ 面试点：timeScale=0 时为什么还能拖滑块？**
 
-- UGUI（点击、滑块、按钮）用的是 **unscaled（不受缩放）时间**，timeScale=0 时照常响应。
-- timeScale=0 时：Update 照常、UI 事件照常；物理、FixedUpdate、基于 deltaTime 的动画/协程暂停。
-- 所以如果以后做 UI 动画，暂停时还想动，要用 `Time.unscaledDeltaTime` 而不是 `Time.deltaTime`。
 
-### 步骤7：血条改事件驱动——逻辑层不认识 UI
 
-**大白话**：D18 的血条是 PlayerHealth 拖一个 HpUI 引用、掉血时直接调 HpUI 的刷新方法（逻辑层认识 UI）。现在反转过来：血量脚本只管"广播我变了"，UI 自己来订阅，谁想显示血量就订阅，逻辑层一行不用改。金币早就是这个模式。
+* UGUI（点击、滑块、按钮）用的是 **unscaled（不受缩放）时间**，timeScale=0 时照常响应。
+
+* timeScale=0 时：Update 照常、UI 事件照常；物理、FixedUpdate、基于 deltaTime 的动画 / 协程暂停。
+
+* 所以如果以后做 UI 动画，暂停时还想动，要用 `Time.unscaledDeltaTime` 而不是 `Time.deltaTime`。
+
+### 步骤 7：血条改事件驱动 —— 逻辑层不认识 UI
+
+**大白话**：D18 的血条是 PlayerHealth 拖一个 HpUI 引用、掉血时直接调 HpUI 的刷新方法（逻辑层认识 UI）。现在反转过来：血量脚本只管 "广播我变了"，UI 自己来订阅，谁想显示血量就订阅，逻辑层一行不用改。金币早就是这个模式。
 
 **① PlayerHealth 发事件（删掉 public HpUI 字段）**
 
-```csharp
+
+
+```
 public event Action<int> OnHpChanged;   // using System;
 // 事件名 OnXxxChanged，Action<int> 表示广播时带一个 int（新血量）
 
@@ -3529,7 +5050,9 @@ OnHpChanged?.Invoke(hp);   // ?.：有订阅者才调用，没有也不报错
 
 **② HpUI 订阅（引用方向反转：UI 拖玩家引用）**
 
-```csharp
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 using System;
@@ -3555,32 +5078,47 @@ public class HpUI : MonoBehaviour
 }
 ```
 
-- 订阅后**必须主动刷一次初始值**：万一 UI 的 Start 比 PlayerHealth 第一次广播还晚，就会漏掉开局血量。
-- 解耦好处：以后加"低血警告红屏""队友血条"，只要新脚本再订阅一次 OnHpChanged，PlayerHealth 完全不用动。
 
----
+
+* 订阅后**必须主动刷一次初始值**：万一 UI 的 Start 比 PlayerHealth 第一次广播还晚，就会漏掉开局血量。
+
+* 解耦好处：以后加 "低血警告红屏"" 队友血条 "，只要新脚本再订阅一次 OnHpChanged，PlayerHealth 完全不用动。
+
+
+
+***
 
 ## 🌙 晚上：工程整理 + LeetCode 21 链表
 
-### 步骤8：Assets 文件夹整理（GUID 与 .meta）
+### 步骤 8：Assets 文件夹整理（GUID 与 .meta）
 
 **大白话**：Assets 根目录 30 多个脚本平铺太乱，按职责分文件夹；但 Unity 资源不能在资源管理器里乱挪，会丢引用。
 
-- 最终结构：`Assets/Scripts/{UI,Player,Enemy,Items,Game}` + `Materials`，Scenes/Prefabs/Animations 保持原样。
-- **铁律：只在 Unity 的 Project 窗口内移动**。每个资源有同名 `.meta` 文件，里面存 GUID（全局唯一编号），场景靠 GUID 记引用；Unity 内移动会带着 .meta 一起走，引用不断。在资源管理器/VS Code 里移动会断。
-- **Ctrl+拖 = 复制**：会生成一个新 GUID 的副本，场景仍引用原件，导致两个材质球并存。普通拖拽才是移动。
-- 查某个资源被谁引用：Project 窗口选中 → 右键 **Find References In Scene**。
-- 图标辨认：`#` = 脚本、圆球 = 材质、蓝色立方体 = 预制体；材质丢失变洋红色。
 
-### 步骤9：LeetCode 21 合并两个有序链表（链表入门）
 
-**大白话**：链表是一串节点，每个节点只拿两样东西——一个数据 `val` + 一根指向下一个节点的线 `next`，走到 null 表示没了。像寻宝线索：每个点写着数字和下一个点的位置。
+* 最终结构：`Assets/Scripts/{UI,Player,Enemy,Items,Game}` + `Materials`，Scenes/Prefabs/Animations 保持原样。
 
-- 对比 List：List 像带编号的储物柜（找第 N 个直接开 N 号柜）；链表像铁链（找第 N 个必须从头顺着走 N 步）。
+* **铁律：只在 Unity 的 Project 窗口内移动**。每个资源有同名 `.meta` 文件，里面存 GUID（全局唯一编号），场景靠 GUID 记引用；Unity 内移动会带着 .meta 一起走，引用不断。在资源管理器 / VS Code 里移动会断。
+
+* **Ctrl + 拖 = 复制**：会生成一个新 GUID 的副本，场景仍引用原件，导致两个材质球并存。普通拖拽才是移动。
+
+* 查某个资源被谁引用：Project 窗口选中 → 右键 **Find References In Scene**。
+
+* 图标辨认：`#` = 脚本、圆球 = 材质、蓝色立方体 = 预制体；材质丢失变洋红色。
+
+### 步骤 9：LeetCode 21 合并两个有序链表（链表入门）
+
+**大白话**：链表是一串节点，每个节点只拿两样东西 —— 一个数据 `val` + 一根指向下一个节点的线 `next`，走到 null 表示没了。像寻宝线索：每个点写着数字和下一个点的位置。
+
+
+
+* 对比 List：List 像带编号的储物柜（找第 N 个直接开 N 号柜）；链表像铁链（找第 N 个必须从头顺着走 N 步）。
 
 **① 节点定义（LeetCode 现成给，控制台练习要自己写）**
 
-```csharp
+
+
+```
 public class ListNode
 {
     public int val;
@@ -3593,17 +5131,25 @@ public class ListNode
 }
 ```
 
-- `new ListNode()` 不报错，是因为参数有默认值（`= 0`、`= null`），等价于 `new ListNode(0, null)`。
+
+
+* `new ListNode()` 不报错，是因为参数有默认值（`= 0`、`= null`），等价于 `new ListNode(0, null)`。
 
 **② 合并思路：两摞牌 + 哑节点 dummy**
 
-- 两摞已排好序的牌，每轮比两摞最上面的牌，拿小的放到结果链；一摞空了，另一摞剩下的整段接上。
-- **dummy 假头**：结果链一开始没有头，尾部接线不方便，先放一个不参与结果的假头占座，current 当接线员在尾部接线，最后返回 dummy.next 跳过假头。
-- `ListNode current = dummy;` 是引用类型赋值：current 和 dummy 指向**同一个假头**（两个门牌号指向同一个房间），不是复制对象。dummy 留守当头、current 移动接线。
+
+
+* 两摞已排好序的牌，每轮比两摞最上面的牌，拿小的放到结果链；一摞空了，另一摞剩下的整段接上。
+
+* **dummy 假头**：结果链一开始没有头，尾部接线不方便，先放一个不参与结果的假头占座，current 当接线员在尾部接线，最后返回 dummy.next 跳过假头。
+
+* `ListNode current = dummy;` 是引用类型赋值：current 和 dummy 指向**同一个假头**（两个门牌号指向同一个房间），不是复制对象。dummy 留守当头、current 移动接线。
 
 **③ 代码（一次跑通 1 1 2 3 4 4）**
 
-```csharp
+
+
+```
 static ListNode MergeTwoLists(ListNode a, ListNode b)
 {
     ListNode dummy = new ListNode();
@@ -3629,44 +5175,69 @@ static ListNode MergeTwoLists(ListNode a, ListNode b)
 }
 ```
 
-- 面试词：**双指针**（a、b 各扫一条链）、**哑节点 dummy**、时间复杂度 **O(n)**。
-- 重构：两个分支里重复的 `current = current.next` 提出来；末尾 if/else 用 `a ?? b`（空合并运算符）一行。
-- 提交网站：leetcode.cn 搜 21，语言选 C#，**只填方法体**（ListNode 类、Main 都由网站给），方法签名按官网 `public ListNode MergeTwoLists(ListNode list1, ListNode list2)`（去掉 static）。
 
----
+
+* 面试词：**双指针**（a、b 各扫一条链）、**哑节点 dummy**、时间复杂度 **O(n)**。
+
+* 重构：两个分支里重复的 `current = current.next` 提出来；末尾 if/else 用 `a ?? b`（空合并运算符）一行。
+
+* 提交网站：[leetcode.cn](https://leetcode.cn) 搜 21，语言选 C#，**只填方法体**（ListNode 类、Main 都由网站给），方法签名按官网 `public ListNode MergeTwoLists(ListNode list1, ListNode list2)`（去掉 static）。
+
+
+
+***
 
 ## ⚠️ D19 易错点汇总
 
+
+
 1. **PlayerPrefs 键名大小写敏感**："Volume" ≠ "volume"，读不到值先查两边键名是否逐字一致；用 const 集中。
+
 2. **AudioListener.volume 是 static，Inspector 不显示**：找不到滑条不是没找对，是它根本不在那；用 Debug.Log 验证。
+
 3. **跨场景会重新生成 AudioListener**：音量设置可能被覆盖，GameManager.Awake 要读档保底；Instance=this 放 Awake 第一行。
+
 4. **暂停面板的子设置面板会一起被隐藏**：设置面板必须和暂停面板同级（都在 Canvas 下）。
+
 5. **Esc 要判面板优先级**：设置面板开着时先关设置，否则面板残留；用 activeSelf 读激活态。
+
 6. **事件订阅要刷初始值**：Start 里订阅后主动调一次刷新，防 Start 顺序导致开局数据为空。
-7. **UI 资源只在 Project 窗口移动**（.meta 保 GUID）；Ctrl+拖是复制，不是移动。
-8. **复制 UI 会连带脚本/绑定**：两个"返回"按钮职责不同，设置面板的返回不能挂 BackButton。
+
+7. **UI 资源只在 Project 窗口移动**（.meta 保 GUID）；Ctrl + 拖是复制，不是移动。
+
+8. **复制 UI 会连带脚本 / 绑定**：两个 "返回" 按钮职责不同，设置面板的返回不能挂 BackButton。
+
 9. **Application.Quit 编辑器无效**：打包才生效，别误判成代码错误。
+
 10. **结算必须防重入**：数据层（IsDead）和状态层（state!=Playing）各挡一道。
 
 # 📅 D20：敌人 AI 状态机（FSM）+ 音效系统 + 整合收尾
 
 今天把 W3 所学串成一个完整小游戏，核心新内容：敌人 AI 三态、玩家攻击、音效系统。
 
----
+
+
+***
 
 ## 🌞 上午：敌人 AI 有限状态机
 
 ### 步骤 1：什么是状态机（FSM）
 
-**大白话**：一个对象同一时刻只能处于一种"状态"，每种状态下做不同的事，满足条件就切到别的状态。就像保安：平时巡逻、看见人就追、贴脸就打。
+**大白话**：一个对象同一时刻只能处于一种 "状态"，每种状态下做不同的事，满足条件就切到别的状态。就像保安：平时巡逻、看见人就追、贴脸就打。
 
 **状态机三要素**：
 
+
+
 1. 用 `enum` 列出所有状态；
-2. 一个字段记住"当前是哪个状态"；
+
+2. 一个字段记住 "当前是哪个状态"；
+
 3. 每帧根据条件改状态，再用 `switch` 调用对应行为。
 
-```csharp
+
+
+```
 private enum EnemyState { Patrol, Chase, Attack }  // 列出三种状态
 private EnemyState state = Patrol;                  // 记住当前状态，开局巡逻
 private Transform player;
@@ -3695,15 +5266,21 @@ void Update()
 
 **分工记忆**：
 
-- `if` 三行 = **换岗决策**（根据距离决定该是什么状态）；
-- `switch` = **按岗派活**（调用对应行为）；
-- Behavior = **只管在这个状态下做什么，不管什么时候离开**。
+
+
+* `if` 三行 = **换岗决策**（根据距离决定该是什么状态）；
+
+* `switch` = **按岗派活**（调用对应行为）；
+
+* Behavior = **只管在这个状态下做什么，不管什么时候离开**。
 
 ### 步骤 2：Patrol 巡逻
 
 **大白话**：在出生点左右两个点之间来回走，走到一个点就换目标。
 
-```csharp
+
+
+```
 public float patrolSpeed = 1.5f;
 public float patrolDistance = 3f;
 private Vector3 startPosition;   // 出生点
@@ -3739,7 +5316,9 @@ void PatrolBehavior()
 
 **大白话**：照巡逻换皮，目标点从固定巡逻点换成玩家，速度更快。
 
-```csharp
+
+
+```
 public float chaseSpeed = 3f;
 
 void ChaseBehavior()
@@ -3752,11 +5331,13 @@ void ChaseBehavior()
 
 ### 步骤 4：Attack 攻击 + 冷却计时器
 
-**大白话**：贴脸站住，不能每帧都打（一秒60拳），要"打一下、等冷却、再打"。
+**大白话**：贴脸站住，不能每帧都打（一秒 60 拳），要 "打一下、等冷却、再打"。
 
 **冷却计时器套路**：一个倒计时数字，每帧减 `Time.deltaTime`，减到 0 就出手并重置。
 
-```csharp
+
+
+```
 public int attackATK = 10;          // 一次咬10血
 public float attackInterval = 1f;   // 攻击间隔1秒
 private float attackTimer = 0f;     // 倒计时，0表示开局立刻咬
@@ -3776,15 +5357,19 @@ void AttackBehavior()
 }
 ```
 
----
+
+
+***
 
 ## 🌤 下午：玩家攻击 + 音效系统
 
 ### 步骤 5：K 键攻击身边敌人
 
-**大白话**：按 K 时，找出"还活着且在攻击范围内"的敌人，让它们死。距离必须**对每个敌人现算**，写进 `FindAll` 的 lambda 里。
+**大白话**：按 K 时，找出 "还活着且在攻击范围内" 的敌人，让它们死。距离必须**对每个敌人现算**，写进 `FindAll` 的 lambda 里。
 
-```csharp
+
+
+```
 public float playerAttackRange = 2.5f;
 private Transform player;
 
@@ -3803,23 +5388,27 @@ void Update()
 }
 ```
 
-同时删掉敌人原来"碰到玩家就自杀"的 OnTriggerEnter，改成只能由 K 键击杀。
+同时删掉敌人原来 "碰到玩家就自杀" 的 OnTriggerEnter，改成只能由 K 键击杀。
 
 ### 步骤 6：音频三件套
 
 **大白话**：
 
-| 组件 | 大白话 |
-|------|--------|
-| AudioClip | 音频文件（素材） |
-| AudioSource | 喇叭（播放器） |
+
+
+| 组件            | 大白话             |
+| ------------- | --------------- |
+| AudioClip     | 音频文件（素材）        |
+| AudioSource   | 喇叭（播放器）         |
 | AudioListener | 耳朵（摄像机上，一个场景一个） |
 
 播放用 `PlayOneShot(clip)`：播放一次，多个音效不互相打断。
 
 用单例 AudioManager 统一管理（DontDestroyOnLoad 切场景不停）：
 
-```csharp
+
+
+```
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
@@ -3850,41 +5439,56 @@ public class AudioManager : MonoBehaviour
 
 ### 步骤 7：随机生成
 
-**大白话**：用 `Random.Range(min, max)` 让敌人/金币每次随机位置，别排成一条线。
+**大白话**：用 `Random.Range(min, max)` 让敌人 / 金币每次随机位置，别排成一条线。
 
-```csharp
+
+
+```
 float x = Random.Range(-10f, 10f);  // 安全边界内随机
 float z = Random.Range(2f, 30f);
 GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 1f, z), Quaternion.identity);
 ```
 
-地面是 Plane（基础10×10，scale 5,1,35 后实际 50×350），在安全范围内随机不会出界。
+地面是 Plane（基础 10×10，scale 5,1,35 后实际 50×350），在安全范围内随机不会出界。
 
----
+
+
+***
 
 ## 🌙 对比表
 
-| 对比 | 说明 |
-|------|------|
-| 状态机 vs 一堆 if | 状态互斥、行为分离，加状态只改 enum + 一个 case，不乱 |
-| 状态切换 vs 行为执行 | 切换在 if（决策），执行在 switch（派活） |
-| Play() vs PlayOneShot() | Play 会打断当前音效，PlayOneShot 适合一次性音效 |
-| 音效调用 | 用 `?.` 判空：`AudioManager.Instance?.PlayCoin()` |
+
+
+| 对比                      | 说明                                            |
+| ----------------------- | --------------------------------------------- |
+| 状态机 vs 一堆 if            | 状态互斥、行为分离，加状态只改 enum + 一个 case，不乱             |
+| 状态切换 vs 行为执行            | 切换在 if（决策），执行在 switch（派活）                     |
+| Play() vs PlayOneShot() | Play 会打断当前音效，PlayOneShot 适合一次性音效              |
+| 音效调用                    | 用 `?.` 判空：`AudioManager.Instance?.PlayCoin()` |
 
 ## ⚠️ 易错点
 
-1. **MoveTowards 起点用 `transform.position`**，不是固定的 startPosition（否则每帧从出生点重新走，永远到不了）；
+
+
+1. **MoveTowards 起点用&#x20;**`transform.position`，不是固定的 startPosition（否则每帧从出生点重新走，永远到不了）；
+
 2. **状态切换在 if 不在 switch**，顺序先判贴脸再判侦测；
+
 3. **单例调用要判空** `?.`：AudioManager 不在时音效跳过，但核心玩法不能中断；
+
 4. **序列化坑**：改代码里 public 默认值不影响已挂组件，调数值去 Inspector；
+
 5. **距离要按每个敌人现算**，不能用预制体 enemyPrefab 全局只算一次；
+
 6. 冷却计时器初始 0 = 立刻出手，想要前摇就给初始值。
 
 # 📅 D22: MonoBehaviour 生命周期 + 协程入门
 
 今天进入 W4 脚本进阶，核心新内容：生命周期八个方法的执行顺序、协程三要素；并用协程重写刷怪器、做技能冷却 UI、Boss 登场，最后完成事件退订自查。
 
----
+
+
+***
 
 ## 🌞 上午：MonoBehaviour 生命周期
 
@@ -3894,6 +5498,8 @@ GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 1f, z), Quaternion.id
 
 **完整执行顺序**：
 
+
+
 ```
 出生：Awake → OnEnable → Start
 帧循环：FixedUpdate（物理时间，慢帧可多次）→ Update → LateUpdate
@@ -3902,20 +5508,24 @@ GameObject enemy = Instantiate(enemyPrefab, new Vector3(x, 1f, z), Quaternion.id
 
 **八个方法各管什么**：
 
-| 方法 | 调用时机 | 用途 |
-|---|---|---|
-| Awake | 物体创建时，一次 | 取自身组件、单例 Instance 赋值 |
-| OnEnable | 每次启用（物体/组件），可多次 | 可重复的初始化 |
-| Start | 第一帧 Update 之前，一次 | 取跨对象引用 |
-| FixedUpdate | 固定 0.02s（50Hz） | 物理移动、速度、力 |
-| Update | 每帧，频率随帧率 | 输入、普通逻辑 |
-| LateUpdate | 每帧，所有 Update 之后 | 相机跟随 |
-| OnDisable | 每次禁用 | 配对 OnEnable 的清理 |
-| OnDestroy | 销毁时，一次 | 退订事件、释放资源 |
+
+
+| 方法          | 调用时机              | 用途                   |
+| ----------- | ----------------- | -------------------- |
+| Awake       | 物体创建时，一次          | 取自身组件、单例 Instance 赋值 |
+| OnEnable    | 每次启用（物体 / 组件），可多次 | 可重复的初始化              |
+| Start       | 第一帧 Update 之前，一次  | 取跨对象引用               |
+| FixedUpdate | 固定 0.02s（50Hz）    | 物理移动、速度、力            |
+| Update      | 每帧，频率随帧率          | 输入、普通逻辑              |
+| LateUpdate  | 每帧，所有 Update 之后   | 相机跟随                 |
+| OnDisable   | 每次禁用              | 配对 OnEnable 的清理      |
+| OnDestroy   | 销毁时，一次            | 退订事件、释放资源            |
 
 验证脚本 `LifecycleTest.cs`，每个方法里打一行日志，折叠（Collapse）后看顺序：
 
-```csharp
+
+
+```
 using UnityEngine;
 
 public class LifecycleTest : MonoBehaviour
@@ -3933,24 +5543,37 @@ public class LifecycleTest : MonoBehaviour
 
 ### 步骤 2：Awake / Start 的时机规则（重点）
 
-**大白话**：Unity 保证"所有人都先醒来（Awake），才开始第一个人的 Start；所有 Start 都在第一帧 Update 之前"。
+**大白话**：Unity 保证 "所有人都先醒来（Awake），才开始第一个人的 Start；所有 Start 都在第一帧 Update 之前"。
 
-- **取自身组件、单例 `Instance = this`**：放 **Awake**——比如 GameManager、AudioManager 的单例赋值都在 Awake，是对的
-- **取跨对象引用**（比如找玩家、找别的物体）：放 **Start**——此时别人的 Awake 已跑完，组件都就位
-- **Start 一生一次**：物体禁用再激活，Start 不会再跑；OnEnable 每次激活都会跑
-- 组件勾选框取消：只触发 OnDisable/OnEnable，不触发 Start
+
+
+* **取自身组件、单例&#x20;**`Instance = this`：放 **Awake**—— 比如 GameManager、AudioManager 的单例赋值都在 Awake，是对的
+
+* **取跨对象引用**（比如找玩家、找别的物体）：放 **Start**—— 此时别人的 Awake 已跑完，组件都就位
+
+* **Start 一生一次**：物体禁用再激活，Start 不会再跑；OnEnable 每次激活都会跑
+
+* 组件勾选框取消：只触发 OnDisable/OnEnable，不触发 Start
 
 ### 步骤 3：FixedUpdate / Update / LateUpdate 怎么分工
 
-**大白话**：FixedUpdate 按固定物理节拍走，Update 按画面帧数走，LateUpdate 是"大家都动完后"的收尾帧。
+**大白话**：FixedUpdate 按固定物理节拍走，Update 按画面帧数走，LateUpdate 是 "大家都动完后" 的收尾帧。
 
-- FixedUpdate 默认**固定时间步长 0.02 秒（50Hz）**，与帧率无关，物理逻辑写这里
-- 慢帧（一帧耗时超过 0.02s）：引擎在同一帧内按 0.02 **补跑多次**，欠几次补几次
-- 实测：空场景 FixedUpdate 30 次 vs Update 302 次（空场景约 500fps，Fixed 只跟时间）
-- 最大允许时间步长 0.333s 封顶【以后学】
-- **相机跟随必须 LateUpdate**：所有 Update 跑完、位置最终确定后相机才拍，避免拍旧位置抖动
 
----
+
+* FixedUpdate 默认**固定时间步长 0.02 秒（50Hz）**，与帧率无关，物理逻辑写这里
+
+* 慢帧（一帧耗时超过 0.02s）：引擎在同一帧内按 0.02 **补跑多次**，欠几次补几次
+
+* 实测：空场景 FixedUpdate 30 次 vs Update 302 次（空场景约 500fps，Fixed 只跟时间）
+
+* 最大允许时间步长 0.333s 封顶【以后学】
+
+* **相机跟随必须 LateUpdate**：所有 Update 跑完、位置最终确定后相机才拍，避免拍旧位置抖动
+
+
+
+***
 
 ## 🌤 下午：协程 Coroutine
 
@@ -3960,11 +5583,17 @@ public class LifecycleTest : MonoBehaviour
 
 **协程三要素**：
 
+
+
 1. `using System.Collections;`
-2. 返回类型写 `IEnumerator`（注意不是 IEnumerable：-or 是"器"，-able 是"能…的"）
+
+2. 返回类型写 `IEnumerator`（注意不是 IEnumerable：-or 是 "器"，-able 是 "能… 的"）
+
 3. 方法体内用 `yield return` 写暂停点，外部用 `StartCoroutine(方法())` 启动
 
-```csharp
+
+
+```
 using System.Collections;
 using UnityEngine;
 
@@ -3993,17 +5622,21 @@ public class CoroutineTest : MonoBehaviour
 
 ### 步骤 5：三种 yield 等待
 
-| 写法 | 含义 |
-|---|---|
-| `yield return null;` | 等下一帧（下一帧 Update 后继续） |
-| `yield return new WaitForSeconds(nf);` | 等 n 秒 |
-| `yield return new WaitForEndOfFrame();` | 等这一帧结束（相机/渲染之后） |
+
+
+| 写法                                      | 含义                   |
+| --------------------------------------- | -------------------- |
+| `yield return null;`                    | 等下一帧（下一帧 Update 后继续） |
+| `yield return new WaitForSeconds(nf);`  | 等 n 秒                |
+| `yield return new WaitForEndOfFrame();` | 等这一帧结束（相机 / 渲染之后）    |
 
 ### 步骤 6：用协程重写刷怪器
 
 **大白话**：把刷怪写进 `while(true)` 协程，每轮生成一个敌人、等 2 秒、再来一轮，逻辑顺序往下写就行。
 
-```csharp
+
+
+```
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -4045,7 +5678,9 @@ public class EnemySpawner : MonoBehaviour
 
 **大白话**：`StopCoroutine(句柄)` 是精准叫停一个，`StopAllCoroutines()` 是把本脚本启动的全部叫停。
 
-```csharp
+
+
+```
 void Update()
 {
     // K 键：范围击杀
@@ -4073,12 +5708,19 @@ void Update()
 
 **协程生命周期（反直觉点，已验证）**：
 
-- 只取消勾选脚本组件（enabled=false）：协程**继续跑**——协程跟 GameObject 不跟 enabled
-- 物体 `SetActive(false)` 或销毁：协程自动停
-- 所以协程不能挂在"等待期间会被禁用"的对象上
-- 字符串版只有启动也用字符串 `StartCoroutine("名字")` 才能对应停，不推荐
 
----
+
+* 只取消勾选脚本组件（enabled=false）：协程**继续跑**—— 协程跟 GameObject 不跟 enabled
+
+* 物体 `SetActive(false)` 或销毁：协程自动停
+
+* 所以协程不能挂在 "等待期间会被禁用" 的对象上
+
+* 字符串版只有启动也用字符串 `StartCoroutine("名字")` 才能对应停，不推荐
+
+
+
+***
 
 ## 🌙 晚上：技能冷却 + Boss 登场 + 事件退订自查
 
@@ -4086,7 +5728,9 @@ void Update()
 
 **大白话**：放技能时用一个 bool 锁住技能，开协程倒计时并每秒更新 UI，时间到自动解锁。妲己放完技能按钮灰掉转 CD，就是这个。
 
-```csharp
+
+
+```
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -4125,24 +5769,32 @@ public class SkillCooldown : MonoBehaviour
 
 **协程 vs 计时器（旧写法对照）**：
 
-- 计时器：字段每帧 `attackTimer -= Time.deltaTime`，到 0 触发——"每帧看表"
-- 协程：流程独立，按秒推进，UI 更新写在流程内部
-- 两种都对，逻辑越复杂协程越好读
+
+
+* 计时器：字段每帧 `attackTimer -= Time.deltaTime`，到 0 触发 ——"每帧看表"
+
+* 协程：流程独立，按秒推进，UI 更新写在流程内部
+
+* 两种都对，逻辑越复杂协程越好读
 
 ### 步骤 9：Boss 登场（倒计时 + SetActive）
 
 **大白话**：Boss 先在场景里藏好（检查器取消勾选），导演协程倒计时结束后 `SetActive(true)` 把它激活。
 
-**两种"让对象出现"的区别**：
+**两种 "让对象出现" 的区别**：
 
-| 方式 | 含义 | 适用 |
-|---|---|---|
-| Instantiate | 从无到有克隆 | 刷怪、子弹 |
+
+
+| 方式              | 含义              | 适用         |
+| --------------- | --------------- | ---------- |
+| Instantiate     | 从无到有克隆          | 刷怪、子弹      |
 | SetActive(true) | 早摆在场景里、只是藏着，激活它 | 固定位置的 Boss |
 
 注意：协程挂在始终激活的 BossDirector 上，不能挂在被禁用的 Boss 身上。
 
-```csharp
+
+
+```
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -4175,49 +5827,67 @@ public class BossDirector : MonoBehaviour
 
 ### 步骤 10：事件退订自查（W3 遗留）
 
-**大白话**：`+=` 订阅等于告诉发布者"有事喊我"，发布者会一直记着你；销毁时若不 `-=` 退订，它会对着已销毁的对象喊，空引用报错 + 泄漏。
+**大白话**：`+=` 订阅等于告诉发布者 "有事喊我"，发布者会一直记着你；销毁时若不 `-=` 退订，它会对着已销毁的对象喊，空引用报错 + 泄漏。
 
-- **C# 事件（自造 event）必须退订**：在 OnDestroy 里 `-=`
-- **UnityEvent（按钮 onClick、滑条 onValueChanged 的 AddListener）不用退订**：随对象一起销毁
-- 自查结果：CoinSound、ScoreUI 有配对 ✅；HpUI 缺退订，已补 ✅；GameManager 自订阅同生共死不用
-- 稳妥写法：OnDestroy 里退订前先判 `if (playerHealth != null)`（销毁顺序不保证）
 
----
+
+* **C# 事件（自造 event）必须退订**：在 OnDestroy 里 `-=`
+
+* **UnityEvent（按钮 onClick、滑条 onValueChanged 的 AddListener）不用退订**：随对象一起销毁
+
+* 自查结果：CoinSound、ScoreUI 有配对 ✅；HpUI 缺退订，已补 ✅；GameManager 自订阅同生共死不用
+
+* 稳妥写法：OnDestroy 里退订前先判 `if (playerHealth != null)`（销毁顺序不保证）
+
+
+
+***
 
 ## 📌 今日新增 / 改动
 
-- 改：`EnemySpawner.cs`（协程刷怪 + U/Y 停止）、`HpUI.cs`（补 OnDestroy 退订）
-- 新：`SkillCooldown.cs`（L 键技能 CD 倒计时）、`BossDirector.cs`（倒计时 Boss 登场）
-- 练习：`LifecycleTest.cs`、`CoroutineTest.cs`
-- 场景 MiniLevel：CdText、BossText、Boss、BossDirector
+
+
+* 改：`EnemySpawner.cs`（协程刷怪 + U/Y 停止）、`HpUI.cs`（补 OnDestroy 退订）
+
+* 新：`SkillCooldown.cs`（L 键技能 CD 倒计时）、`BossDirector.cs`（倒计时 Boss 登场）
+
+* 练习：`LifecycleTest.cs`、`CoroutineTest.cs`
+
+* 场景 MiniLevel：CdText、BossText、Boss、BossDirector
 
 # 📅 D23: Input 输入系统 + 场景管理
 
 今天是 W4 地基期关键一天，核心新内容：旧版 Input 五个 API 对照与鼠标操作、新版 Input System 事件驱动体验、DontDestroyOnLoad 让 GameManager 跨场景保数据、LoadSceneAsync 异步加载 + 进度条。
 
----
+
+
+***
 
 ## 🌞 上午：旧版 Input 输入系统
 
 ### 步骤 1：三类输入时机
 
-**大白话**：输入系统就是"代码怎么知道玩家在敲什么、点什么"。三种时机：
+**大白话**：输入系统就是 "代码怎么知道玩家在敲什么、点什么"。三种时机：
 
-| API | 触发时机 | 例子 |
-|---|---|---|
-| `Input.GetKey(KeyCode.W)` | 按住期间**每帧都 true** | 持续移动 |
-| `Input.GetKeyDown(KeyCode.Space)` | 按下那一帧**只 true 一次** | 跳跃、普攻 |
-| `Input.GetKeyUp(KeyCode.X)` | 松开那一帧 true 一次 | 松开回城 |
-| `Input.GetMouseButtonDown(0)` | 鼠标左键点一下（0左/1右/2中） | 鼠标攻击 |
-| `Input.GetAxis("Horizontal")` | 轴值 -1~1，自带平滑 | 摇杆半推半速 |
+
+
+| API                               | 触发时机                     | 例子     |
+| --------------------------------- | ------------------------ | ------ |
+| `Input.GetKey(KeyCode.W)`         | 按住期间**每帧都 true**         | 持续移动   |
+| `Input.GetKeyDown(KeyCode.Space)` | 按下那一帧**只 true 一次**       | 跳跃、普攻  |
+| `Input.GetKeyUp(KeyCode.X)`       | 松开那一帧 true 一次            | 松开回城   |
+| `Input.GetMouseButtonDown(0)`     | 鼠标左键点一下（0 左 / 1 右 / 2 中） | 鼠标攻击   |
+| `Input.GetAxis("Horizontal")`     | 轴值 -1\~1，自带平滑            | 摇杆半推半速 |
 
 ### 步骤 2：GetAxis 平滑输入重构移动
 
-**大白话**：GetAxis 是一个 -1~1 的模拟量，键盘按一下从 0 平滑加到 1、松开平滑归零，天然带"起步/减速"。
+**大白话**：GetAxis 是一个 -1\~1 的模拟量，键盘按一下从 0 平滑加到 1、松开平滑归零，天然带 "起步 / 减速"。
 
 把 PlayerPhysicsMove 里四个 GetKey 的 if 换成两行：
 
-```csharp
+
+
+```
 public void Move()
 {
     float moveZ = Input.GetAxis("Vertical");   // W/S 前后
@@ -4239,7 +5909,9 @@ public void Move()
 
 攻击改成 K 键或鼠标左键都触发：
 
-```csharp
+
+
+```
 if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
 {
     List<Enemy> targets = enemies.FindAll(e => e.hp > 0 &&
@@ -4251,27 +5923,35 @@ if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
 }
 ```
 
-⚠️ 坑：`GetMouseButtonDown` 是外部类 Input 的静态方法，必须写 `Input.` 前缀；不带前缀 = 调用自己类/父类的方法（如 StartCoroutine 才不用前缀）。
+⚠️ 坑：`GetMouseButtonDown` 是外部类 Input 的静态方法，必须写 `Input.` 前缀；不带前缀 = 调用自己类 / 父类的方法（如 StartCoroutine 才不用前缀）。
 
----
+
+
+***
 
 ## 🌤 下午：场景管理 + DontDestroyOnLoad
 
 ### 步骤 3：切场景的本质与两个加载 API
 
-**大白话**：`LoadScene` 一切场景，旧场景物体**全部销毁**，新场景物体**从零创建**（照着场景文件这张"图纸"重新摆一遍）。
+**大白话**：`LoadScene` 一切场景，旧场景物体**全部销毁**，新场景物体**从零创建**（照着场景文件这张 "图纸" 重新摆一遍）。
 
-- `SceneManager.LoadScene("MiniLevel")`：按**名字**同步加载，加载期间画面卡死
-- `SceneManager.LoadScene(0)`：按 **Build Settings 里的索引**加载
-- `SceneManager.LoadSceneAsync("MiniLevel")`：异步加载（晚上用）
+
+
+* `SceneManager.LoadScene("MiniLevel")`：按**名字**同步加载，加载期间画面卡死
+
+* `SceneManager.LoadScene(0)`：按 **Build Settings 里的索引**加载
+
+* `SceneManager.LoadSceneAsync("MiniLevel")`：异步加载（晚上用）
 
 ### 步骤 4：DontDestroyOnLoad + 持久单例三件套
 
-**大白话**：`DontDestroyOnLoad(gameObject)` 是一块"免死金牌"，物体被移进隐藏的 DontDestroyOnLoad 区域，切场景不销毁。
+**大白话**：`DontDestroyOnLoad(gameObject)` 是一块 "免死金牌"，物体被移进隐藏的 DontDestroyOnLoad 区域，切场景不销毁。
 
 **必须判重**：总管不死后，每个场景如果都放了一个，重复进出就会出现两个总管，各自计分、重复监听。Awake 三件套（AudioManager 范本）：
 
-```csharp
+
+
+```
 void Awake()
 {
     if (Instance != null)
@@ -4290,24 +5970,32 @@ void Awake()
 
 **两类东西的分界**：
 
-| 类别 | 例子 | 切场景时 |
-|---|---|---|
-| 全局数据（总管） | GameManager、AudioManager、分数、音量 | 免死保留 |
-| 场景物件 | 金币、敌人、面板、玩家位置 | 销毁后照图纸重建 |
 
-### 步骤 5：场景引用"报到"模式（重点难点）
+
+| 类别       | 例子                             | 切场景时     |
+| -------- | ------------------------------ | -------- |
+| 全局数据（总管） | GameManager、AudioManager、分数、音量 | 免死保留     |
+| 场景物件     | 金币、敌人、面板、玩家位置                  | 销毁后照图纸重建 |
+
+### 步骤 5：场景引用 "报到" 模式（重点难点）
 
 **大白话**：总管搬到主菜单后，WinPanel/LosePanel 还在关卡场景里，编辑器**跨场景拖不了**，而且每关面板都是新建的，总管不认识。
 
 谁能当介绍人？
 
-- 总管自己：不行，跨场景搜不到，隐藏面板 GameObject.Find 也找不到
-- 面板自己：不行，隐藏物体的 Start 不运行（睡着没法自我介绍）
-- **Canvas**：行，它是面板的父节点，加载后激活，且能在编辑器里拖面板
 
-**① 总管身上的"接待处" RegisterLevel**：
 
-```csharp
+* 总管自己：不行，跨场景搜不到，隐藏面板 GameObject.Find 也找不到
+
+* 面板自己：不行，隐藏物体的 Start 不运行（睡着没法自我介绍）
+
+* **Canvas**：行，它是面板的父节点，加载后激活，且能在编辑器里拖面板
+
+**① 总管身上的 "接待处" RegisterLevel**：
+
+
+
+```
 public GameObject winText;
 public GameObject loseText;
 
@@ -4321,9 +6009,11 @@ public void RegisterLevel(GameObject win, GameObject lose)
 }
 ```
 
-**② 场景里的"联络员" LevelSceneSetup（挂 Canvas）**：
+**② 场景里的 "联络员" LevelSceneSetup（挂 Canvas）**：
 
-```csharp
+
+
+```
 using UnityEngine;
 
 public class LevelSceneSetup : MonoBehaviour
@@ -4339,7 +6029,9 @@ public class LevelSceneSetup : MonoBehaviour
 
 **③ 分数牌出生时主动问一次当前分数**（否则要等吃到第一个金币才刷新）：
 
-```csharp
+
+
+```
 void Start()
 {
     scoreText = GetComponent<Text>();
@@ -4348,26 +6040,35 @@ void Start()
 }
 ```
 
-**编辑器操作**：GameManager 物体放到 MenuScene（字段留空）→ MiniLevel 删旧 GameManager → Canvas 挂 LevelSceneSetup 并拖 WinPanel/LosePanel；PauseMenu 也是场景物件，用"复制组件 → 粘贴为新组件"搬到 Canvas 再删旧物体。
+**编辑器操作**：GameManager 物体放到 MenuScene（字段留空）→ MiniLevel 删旧 GameManager → Canvas 挂 LevelSceneSetup 并拖 WinPanel/LosePanel；PauseMenu 也是场景物件，用 "复制组件 → 粘贴为新组件" 搬到 Canvas 再删旧物体。
 
-验证：DontDestroyOnLoad 区域始终只有一个 GameManager；捡 2 金币回主菜单再进，分数从 2 开始；金币/敌人每关刷新是正常的（本局数据与场景物件分离）。
+验证：DontDestroyOnLoad 区域始终只有一个 GameManager；捡 2 金币回主菜单再进，分数从 2 开始；金币 / 敌人每关刷新是正常的（本局数据与场景物件分离）。
 
----
+
+
+***
 
 ## 🌙 晚上：异步加载 + 进度条
 
 ### 步骤 6：LoadSceneAsync 与 AsyncOperation
 
-**大白话**：同步加载像"快递员堵在门口等货"，大场景卡死；异步加载是"后台慢慢搬，前台给你看进度"。
+**大白话**：同步加载像 "快递员堵在门口等货"，大场景卡死；异步加载是 "后台慢慢搬，前台给你看进度"。
 
-- `SceneManager.LoadSceneAsync(场景名)` 返回 `AsyncOperation`（加载任务单）
-- `op.progress`：进度 0~1，**走到 0.9 就停**（资源就绪，等放行）
-- `op.allowSceneActivation`：默认 true；设 false 时"准备好也不切"，等你铺满进度条再放行
-- 协程里 `yield return null` 每帧查一次进度
+
+
+* `SceneManager.LoadSceneAsync(场景名)` 返回 `AsyncOperation`（加载任务单）
+
+* `op.progress`：进度 0\~1，**走到 0.9 就停**（资源就绪，等放行）
+
+* `op.allowSceneActivation`：默认 true；设 false 时 "准备好也不切"，等你铺满进度条再放行
+
+* 协程里 `yield return null` 每帧查一次进度
 
 StartMenu 改造：
 
-```csharp
+
+
+```
 public GameObject loadingPanel;
 public Slider loadingSlider;
 
@@ -4395,26 +6096,39 @@ IEnumerator LoadingCoroutine(string sceneName)
 
 ### 步骤 7：0.9f 浮点精度坑（卡死真凶）
 
-**大白话**：0.9（double，64位）和 0.9f（float，32位）不是同一个数。
+**大白话**：0.9（double，64 位）和 0.9f（float，32 位）不是同一个数。
 
-- `0.9f` 实际存成 0.8999999761…
-- `0.9`（double）实际是 0.90000000000000002…
-- progress 是 float，卡在 0.9f 时和 double 0.9 比：`0.89999997 < 0.90000000000000002` 永远为 true → while 死循环，放行代码永远不执行
 
-**规则：和 Unity 的 float 属性比较，字面量一律带 `f`。**
 
----
+* `0.9f` 实际存成 0.8999999761…
+
+* `0.9`（double）实际是 0.90000000000000002…
+
+* progress 是 float，卡在 0.9f 时和 double 0.9 比：`0.89999997 < 0.90000000000000002` 永远为 true → while 死循环，放行代码永远不执行
+
+**规则：和 Unity 的 float 属性比较，字面量一律带&#x20;**`f`**。**
+
+
+
+***
 
 ## 🔬 加深版：Input System 新版
 
 **大白话**：旧版是每帧主动问（轮询），新版是动作被触发时系统主动回调（事件推送）。
 
-- **InputAction（输入动作）**：抽象的"动作"（Move/Jump），不关心设备
-- **Binding（绑定）**：动作到具体按键的连线；多键拼一个值用 `AddCompositeBinding`（2DVector），一个路径搞定用 `AddBinding`（如手柄左摇杆）
-- **performed / canceled**：触发/取消事件；**CallbackContext** 是回调时递来的"包裹"，用 `ReadValue<Vector2>()` 取值
-- 动作默认不监听，必须在 OnEnable/OnDisable 里 Enable/Disable
 
-```csharp
+
+* **InputAction（输入动作）**：抽象的 "动作"（Move/Jump），不关心设备
+
+* **Binding（绑定）**：动作到具体按键的连线；多键拼一个值用 `AddCompositeBinding`（2DVector），一个路径搞定用 `AddBinding`（如手柄左摇杆）
+
+* **performed / canceled**：触发 / 取消事件；**CallbackContext** 是回调时递来的 "包裹"，用 `ReadValue<Vector2>()` 取值
+
+* 动作默认不监听，必须在 OnEnable/OnDisable 里 Enable/Disable
+
+
+
+```
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -4469,53 +6183,77 @@ public class NewInputTest : MonoBehaviour
 
 **新旧对比（面试点）**：
 
-| 维度 | 旧版 Input | 新版 Input System |
-|---|---|---|
-| 方式 | 每帧轮询 | 事件驱动回调 |
-| 按键 | 代码写死 | Action 抽象，绑定可改 |
-| 设备 | 键盘鼠标分开写 | 一套动作自动支持键盘/手柄 |
-| 生命周期 | 直接调 | 必须 Enable/Disable |
-| 读值 | GetKey/GetAxis | ReadValue<T>() |
 
----
+
+| 维度   | 旧版 Input       | 新版 Input System   |
+| ---- | -------------- | ----------------- |
+| 方式   | 每帧轮询           | 事件驱动回调            |
+| 按键   | 代码写死           | Action 抽象，绑定可改    |
+| 设备   | 键盘鼠标分开写        | 一套动作自动支持键盘 / 手柄   |
+| 生命周期 | 直接调            | 必须 Enable/Disable |
+| 读值   | GetKey/GetAxis | ReadValue()       |
+
+
+
+***
 
 ## 顺延与待办
 
-- LeetCode 203 移除链表元素（刷题长线，跳过）
-- CanvasGroup 淡入淡出遮罩（透明度每帧动画，Demo 打磨阶段做）
-- 已知现象：协程边刷边杀时 enemies.Count==0 可能提前触发 WinGame
+
+
+* LeetCode 203 移除链表元素（刷题长线，跳过）
+
+* CanvasGroup 淡入淡出遮罩（透明度每帧动画，Demo 打磨阶段做）
+
+* 已知现象：协程边刷边杀时 enemies.Count==0 可能提前触发 WinGame
 
 # 📅 D24: 存档系统（PlayerPrefs 封装 + JSON 整包）
 
-今天是 W4 地基期收官日，核心内容：PlayerPrefs 散键存档、SaveManager 统一封装、结算面板标准结构、GameManager 收尾（Restart/本局分数）、JSON 序列化整包存档（ToJson/FromJson）、删档。
+今天是 W4 地基期收官日，核心内容：PlayerPrefs 散键存档、SaveManager 统一封装、结算面板标准结构、GameManager 收尾（Restart / 本局分数）、JSON 序列化整包存档（ToJson/FromJson）、删档。
 
----
+
+
+***
 
 ## 🌞 上午：PlayerPrefs 散键存档 + SaveManager 封装
 
 ### 步骤 1：PlayerPrefs 是什么
 
-**大白话**：PlayerPrefs 是 Unity 自带的"笔记本"，游戏关掉、电脑重启，写进去的东西还在（内存像黑板，下课就擦；硬盘像笔记本，写进去永久保留）。
+**大白话**：PlayerPrefs 是 Unity 自带的 "笔记本"，游戏关掉、电脑重启，写进去的东西还在（内存像黑板，下课就擦；硬盘像笔记本，写进去永久保留）。
 
-- `PlayerPrefs.SetInt(键, 值)` / `GetInt(键, 默认值)`：存整数
-- `PlayerPrefs.SetFloat / GetFloat`：存小数（音量 0~1）
-- `PlayerPrefs.SetString / GetString`：存文本
-- `PlayerPrefs.Save()`：强制立刻写进硬盘（Set 类有时攒到退出时才写）
-- 键名统一放 GameConfig 常量，不写裸字符串
+
+
+* `PlayerPrefs.SetInt(键, 值)` / `GetInt(键, 默认值)`：存整数
+
+* `PlayerPrefs.SetFloat / GetFloat`：存小数（音量 0\~1）
+
+* `PlayerPrefs.SetString / GetString`：存文本
+
+* `PlayerPrefs.Save()`：强制立刻写进硬盘（Set 类有时攒到退出时才写）
+
+* 键名统一放 GameConfig 常量，不写裸字符串
 
 ### 步骤 2：为什么要封装 SaveManager
 
-**大白话**：PlayerPrefs 直接散写在 5 个脚本里，有三个毛病：① 同样逻辑到处重复；② 业务代码和存储细节搅在一起；③ 以后换存档方案要改 5 个地方。封装就是把"怎么存"收进一个管家，业务只管说"我要存最高分"。
+**大白话**：PlayerPrefs 直接散写在 5 个脚本里，有三个毛病：① 同样逻辑到处重复；② 业务代码和存储细节搅在一起；③ 以后换存档方案要改 5 个地方。封装就是把 "怎么存" 收进一个管家，业务只管说 "我要存最高分"。
 
 **踩的坑**：
-- 第一版把 key 当参数传入 → 封装失败（键名应该是管家的内部细节，调用方不关心）
-- `static class` 里方法默认是 private，外部调不到，必须显式写 `public static`
-- `SetInt(key, LoadX())` 存了旧值，新值永远写不进——**第二参数才是要存的新值**
-- SaveHighScore 内部比较才存；SaveLastScore 无条件覆盖（每局都更新）
+
+
+
+* 第一版把 key 当参数传入 → 封装失败（键名应该是管家的内部细节，调用方不关心）
+
+* `static class` 里方法默认是 private，外部调不到，必须显式写 `public static`
+
+* `SetInt(key, LoadX())` 存了旧值，新值永远写不进 ——**第二参数才是要存的新值**
+
+* SaveHighScore 内部比较才存；SaveLastScore 无条件覆盖（每局都更新）
 
 最终版：
 
-```csharp
+
+
+```
 using UnityEngine;
 
 static class SaveManager
@@ -4554,13 +6292,17 @@ static class SaveManager
 
 验证标准：全局搜索 PlayerPrefs，只出现在 SaveManager 一个文件里；其他脚本全调 SaveManager。
 
----
+
+
+***
 
 ### 步骤 3：GameManager 收尾
 
 **RegisterLevel 每局归零**（D23 为了验证免死故意保留分数，现在回归正轨）：
 
-```csharp
+
+
+```
 public void RegisterLevel(GameObject win, GameObject lose)
 {
     score = 0;                          // 本局分数每局清零
@@ -4575,28 +6317,39 @@ public void RegisterLevel(GameObject win, GameObject lose)
 }
 ```
 
-**新 API：GetComponentInChildren<Text>(true)**：在子物体里找组件；默认**不搜隐藏物体**，面板开局是隐藏的，必须传 true。对照旧写法：GetComponent 是在自己身上找（自己身上没有 Text 就空引用），GetComponentInChildren 才是向下找。
+**新 API：GetComponentInChildren(true)**：在子物体里找组件；默认**不搜隐藏物体**，面板开局是隐藏的，必须传 true。对照旧写法：GetComponent 是在自己身上找（自己身上没有 Text 就空引用），GetComponentInChildren 才是向下找。
 
 **结算三行文字**：`"\n"` 换行，一个 Text 显示三行：
 
-```csharp
+
+
+```
 winResultText.text = "游戏胜利" + "\n本局得分：" + score + "\n最高分：" + SaveManager.LoadHighScore();
 ```
 
-**Restart() 重开本关**：`SceneManager.LoadScene(SceneManager.GetActiveScene().name)`——读当前场景名再加载，比写死字符串通用。
+**Restart () 重开本关**：`SceneManager.LoadScene(SceneManager.GetActiveScene().name)`—— 读当前场景名再加载，比写死字符串通用。
 
 **踩坑**：
-- Rider 自动补 using 选了 `UnityEditor.SearchService`（编辑器命名空间）——游戏脚本只认 UnityEngine 开头的命名空间
-- 字段声明了 Text 但不在编辑器拖引用，运行时就是 null
-- 直接播放关卡场景 → 7+ 个 NullReferenceException：GameManager 已搬到 MenuScene，**必须从主菜单启动**。排查方法：找最早时间戳的报错，所有错误都是同一个根因（Instance 为 null）
 
----
+
+
+* Rider 自动补 using 选了 `UnityEditor.SearchService`（编辑器命名空间）—— 游戏脚本只认 UnityEngine 开头的命名空间
+
+* 字段声明了 Text 但不在编辑器拖引用，运行时就是 null
+
+* 直接播放关卡场景 → 7+ 个 NullReferenceException：GameManager 已搬到 MenuScene，**必须从主菜单启动**。排查方法：找最早时间戳的报错，所有错误都是同一个根因（Instance 为 null）
+
+
+
+***
 
 ### 步骤 4：结算面板的标准结构（UI 通用模式）
 
 **大白话**：弹窗 = 背景层 + 内容层。原来的面板是个 300×80 的 Text 但字号 160，文字溢出糊满屏。
 
 标准结构（所有游戏通用）：
+
+
 
 ```
 弹窗根物体（Image，半透明黑遮罩 A≈180~220）
@@ -4605,30 +6358,41 @@ winResultText.text = "游戏胜利" + "\n本局得分：" + score + "\n最高分
 └── 返回主菜单按钮
 ```
 
-- 半透明遮罩让 3D 场景透出但不抢注意力；想更沉就调大 Image 的 A
-- 这就是工业界标准弹窗层级，以后做 UIManager 也不推倒重来
-- 重构方法：新建父物体加 Image → 旧 Text 移进去改名 ResultText → 按钮提为子物体 → 代码换 GetComponentInChildren<Text>(true) → 重拖 LevelSceneSetup 的引用
 
-**主菜单"最近得分"**：HighScoreText 脚本加 `public Text LastScoreText` 字段，Start 同时刷新两个 Text，字段在编辑器拖到新 Text 物体。
 
----
+* 半透明遮罩让 3D 场景透出但不抢注意力；想更沉就调大 Image 的 A
+
+* 这就是工业界标准弹窗层级，以后做 UIManager 也不推倒重来
+
+* 重构方法：新建父物体加 Image → 旧 Text 移进去改名 ResultText → 按钮提为子物体 → 代码换 GetComponentInChildren(true) → 重拖 LevelSceneSetup 的引用
+
+**主菜单 "最近得分"**：HighScoreText 脚本加 `public Text LastScoreText` 字段，Start 同时刷新两个 Text，字段在编辑器拖到新 Text 物体。
+
+
+
+***
 
 ## 🌤 下午：JSON 整包存档
 
 ### 步骤 5：为什么需要 JSON
 
-**大白话**：PlayerPrefs 只认识 int/float/string 三种"标准件"，不认识你自己造的数据类。玩家数据一多（最高分、解锁关卡、背包……），散键存要写几十次，还容易漏一项。
+**大白话**：PlayerPrefs 只认识 int/float/string 三种 "标准件"，不认识你自己造的数据类。玩家数据一多（最高分、解锁关卡、背包……），散键存要写几十次，还容易漏一项。
 
-做法：把所有数据打包成一个"箱子"，压扁成一段字符串（SetString 能存），读的时候再撑回箱子。
+做法：把所有数据打包成一个 "箱子"，压扁成一段字符串（SetString 能存），读的时候再撑回箱子。
 
-- 压扁 = 序列化（ToJson），撑回 = 反序列化（FromJson）
-- JSON 就是"键:值"的纯文本：`{"highScore":12,"lastScore":3,"unlockedLevel":2}`
+
+
+* 压扁 = 序列化（ToJson），撑回 = 反序列化（FromJson）
+
+* JSON 就是 "键：值" 的纯文本：`{"highScore":12,"lastScore":3,"unlockedLevel":2}`
 
 ### 步骤 6：数据箱子 SaveData
 
 **大白话**：数据箱子是普通 C# 类，不继承 MonoBehaviour（不挂物体，只装数据）。
 
-```csharp
+
+
+```
 using System;   // [Serializable] 在这个命名空间
 
 [Serializable]  // 许可令：允许 Unity 把这个类打包成文本
@@ -4641,20 +6405,29 @@ public class SaveData
 ```
 
 **JsonUtility 的规矩**：
-- 只打包 public 字段（private 要加 [SerializeField]）
-- 不支持 Dictionary、不支持属性（get/set）
-- 箱子里可以再套小箱子（嵌套类也要 [Serializable]）
+
+
+
+* 只打包 public 字段（private 要加 \[SerializeField]）
+
+* 不支持 Dictionary、不支持属性（get/set）
+
+* 箱子里可以再套小箱子（嵌套类也要 \[Serializable]）
 
 ### 步骤 7：四个 API
 
-| API | 作用 | 进/出 |
-|---|---|---|
-| `[Serializable]` | 类的打包许可令 | 写在类上方 |
-| `JsonUtility.ToJson(箱子)` | 箱子 → JSON 文本 | 进对象，出 string |
+
+
+| API                           | 作用            | 进 / 出                         |
+| ----------------------------- | ------------- | ----------------------------- |
+| `[Serializable]`              | 类的打包许可令       | 写在类上方                         |
+| `JsonUtility.ToJson(箱子)`      | 箱子 → JSON 文本  | 进对象，出 string                  |
 | `JsonUtility.FromJson<T>(文本)` | JSON 文本 → 新箱子 | 进 string，出 T 类型对象（泛型告诉它还原成什么） |
-| `PlayerPrefs.HasKey(键)` | 这页存没存过 | 出 bool，第一次玩必须先判空 |
+| `PlayerPrefs.HasKey(键)`       | 这页存没存过        | 出 bool，第一次玩必须先判空              |
 
 完整数据流：
+
+
 
 ```
 内存箱子 →ToJson→ JSON文本 →SetString→ 硬盘
@@ -4666,7 +6439,9 @@ FromJson 像复印：复印件内容和原件一样，但它是一张新纸（�
 
 ### 步骤 8：正式集成（SaveManager 加两个方法）
 
-```csharp
+
+
+```
 //整包存取
 public static void SaveGame(int highScore, int lastScore, int unlockedLevel)
 {
@@ -4695,7 +6470,9 @@ public static SaveData LoadGame()
 
 **GameManager 接线**：
 
-```csharp
+
+
+```
 // WinGame：先更新散键，再把最新值拍进 JSON 快照
 SaveManager.SaveHighScore(score);
 SaveManager.SaveLastScore(score);
@@ -4706,13 +6483,19 @@ SaveManager.SaveGame(SaveManager.LoadHighScore(), score,
     SaveManager.LoadGame().unlockedLevel);
 ```
 
-- 执行顺序很关键：先 SaveHighScore 内部比较出最新值，再 LoadHighScore 读出来打包，散键和 JSON 永远一致
-- 整包覆盖，没有任何字段能残留旧值——测试假数据在第一次真实结算后自然消失
-- `LoadGame().unlockedLevel` 是"先搬箱子再取字段"的连写；要取多个字段必须先接住箱子，别连写三遍（会重复读三次硬盘）
+
+
+* 执行顺序很关键：先 SaveHighScore 内部比较出最新值，再 LoadHighScore 读出来打包，散键和 JSON 永远一致
+
+* 整包覆盖，没有任何字段能残留旧值 —— 测试假数据在第一次真实结算后自然消失
+
+* `LoadGame().unlockedLevel` 是 "先搬箱子再取字段" 的连写；要取多个字段必须先接住箱子，别连写三遍（会重复读三次硬盘）
 
 ### 步骤 9：删档
 
-```csharp
+
+
+```
 public static void ClearSave()
 {
     PlayerPrefs.DeleteKey(GameConfig.SaveDataKey);  // 只撕整包这一页
@@ -4725,52 +6508,81 @@ public static void ClearAll()
 }
 ```
 
-- 开发期清档：Edit（编辑）→ Clear All PlayerPrefs
-- 正式按钮做在设置页，调试按键不留在正式代码里（录屏误按风险）
-- 坑：字符串当开关参数（`ClearSave("All")`）拼错编译器不报错、静默失败；开关要么拆两个方法，要么用枚举（enum）
+
+
+* 开发期清档：Edit（编辑）→ Clear All PlayerPrefs
+
+* 正式按钮做在设置页，调试按键不留在正式代码里（录屏误按风险）
+
+* 坑：字符串当开关参数（`ClearSave("All")`）拼错编译器不报错、静默失败；开关要么拆两个方法，要么用枚举（enum）
 
 ### 架构边界（面试点）
 
-- **唯一数据源原则**：一份数据只该有一个权威的家
-- 标准分工：设置类（音量、画质）走散键；进度类（解锁、背包、养成）走 JSON 整包
-- 今天最高分两边都写是过渡方案（老代码已跑通），以后重构统一收进箱子
-- 键名区分大小写：`"saveData"` 和 `"SaveData"` 是两页
+
+
+* **唯一数据源原则**：一份数据只该有一个权威的家
+
+* 标准分工：设置类（音量、画质）走散键；进度类（解锁、背包、养成）走 JSON 整包
+
+* 今天最高分两边都写是过渡方案（老代码已跑通），以后重构统一收进箱子
+
+* 键名区分大小写：`"saveData"` 和 `"SaveData"` 是两页
 
 ### 存档升级路线（以后再学）
 
+
+
 1. 字段多：嵌套箱子（SaveData 里放 PlayerData/LevelData）
-2. JsonUtility 不够：换 Newtonsoft.Json（支持 Dictionary/属性，团结引擎自带）
-3. 多存档槽/大数据：写文件（File + Application.persistentDataPath，slot1.json）
+
+2. JsonUtility 不够：换 Newtonsoft.Json（支持 Dictionary / 属性，团结引擎自带）
+
+3. 多存档槽 / 大数据：写文件（File + Application.persistentDataPath，slot1.json）
+
 4. 云存档：JSON 不变，存放地换成服务器；再往后有加密（防改档）、压缩
 
----
+
+
+***
 
 ## 顺延与待办
 
-- JsonSaveTest 验证脚本保留在 Scripts/Test 目录（测试脚本统一归档）
-- 以后做选关界面：读 LoadGame().unlockedLevel
-- 以后做设置页"清除存档"按钮：调 ClearSave/ClearAll
-- Awake 里 LoadGame 返回值暂未接住（内部日志验证），有使用场景时再接
+
+
+* JsonSaveTest 验证脚本保留在 Scripts/Test 目录（测试脚本统一归档）
+
+* 以后做选关界面：读 LoadGame ().unlockedLevel
+
+* 以后做设置页 "清除存档" 按钮：调 ClearSave/ClearAll
+
+* Awake 里 LoadGame 返回值暂未接住（内部日志验证），有使用场景时再接
 
 # 📅 D25: Boss 五态状态机 + 攻击前摇后摇 + 受击打断死亡 + Boss 血条
 
-今天是 W4 地基期最后一个编码日（10/17 晚 → 10/18 凌晨跨夜），核心内容：给 Boss 从零写完整 AI——五态有限状态机（FSM）、追击、攻击协程（前摇→判定→后摇）、受击硬直与打断、死亡结算、事件驱动血条、Unity Recorder 录屏。Boss 是个 3 倍大的立方体，未激活放在关卡里，由 BossDirector 倒数后激活。
+今天是 W4 地基期最后一个编码日（10/17 晚 → 10/18 凌晨跨夜），核心内容：给 Boss 从零写完整 AI—— 五态有限状态机（FSM）、追击、攻击协程（前摇→判定→后摇）、受击硬直与打断、死亡结算、事件驱动血条、Unity Recorder 录屏。Boss 是个 3 倍大的立方体，未激活放在关卡里，由 BossDirector 倒数后激活。
 
----
+
+
+***
 
 ## 🌙 晚上：Boss 五态状态机
 
 ### 步骤 1：状态机是什么（大白话）
 
-**状态机 = 一个角色在同一时刻只能处于一种状态，处于什么状态就只做那个状态的事。** 王者荣耀里的英雄：站着（Idle）、跑（Chase）、放技能（Attack）、被打硬直（Hurt）、死了（Dead）。没有状态机的 Boss 就会"边死边追边打"，动作全乱套。
+**状态机 = 一个角色在同一时刻只能处于一种状态，处于什么状态就只做那个状态的事。** 王者荣耀里的英雄：站着（Idle）、跑（Chase）、放技能（Attack）、被打硬直（Hurt）、死了（Dead）。没有状态机的 Boss 就会 "边死边追边打"，动作全乱套。
 
-- 状态用 **enum（枚举）** 定义，就是一组起好名字的编号，比数字 0/1/2 可读
-- 状态切换 = 给 state 赋新值；Update 里按 state 决定行为
-- 门禁：Idle/Hurt/Dead 三个状态 Update 直接 return，什么都不做
+
+
+* 状态用 **enum（枚举）** 定义，就是一组起好名字的编号，比数字 0/1/2 可读
+
+* 状态切换 = 给 state 赋新值；Update 里按 state 决定行为
+
+* 门禁：Idle/Hurt/Dead 三个状态 Update 直接 return，什么都不做
 
 ### 步骤 2：五态骨架与激活即追击
 
-```csharp
+
+
+```
 public enum BossState
 {
     Idle, Chase, Attack, Hurt, Dead
@@ -4778,13 +6590,15 @@ public enum BossState
 private BossState state = BossState.Idle;
 ```
 
-**为什么激活瞬间就是 Chase**：Boss 物体在场景里默认未激活，Director 倒数后 `SetActive(true)` 才开始它的生命周期（Start）。Start 里直接 `state = BossState.Chase`，表示"一睁眼就进入战斗"。不需要先 Idle 再切——Idle 是给以后"巡逻待机"预留的。
+**为什么激活瞬间就是 Chase**：Boss 物体在场景里默认未激活，Director 倒数后 `SetActive(true)` 才开始它的生命周期（Start）。Start 里直接 `state = BossState.Chase`，表示 "一睁眼就进入战斗"。不需要先 Idle 再切 ——Idle 是给以后 "巡逻待机" 预留的。
 
-**为什么小怪不用这样**：小怪没有前摇/硬直/死亡演出这些复杂状态，巡逻→追击→攻击三态就够了；Boss 有完整的战斗节奏，必须显式管理状态。
+**为什么小怪不用这样**：小怪没有前摇 / 硬直 / 死亡演出这些复杂状态，巡逻→追击→攻击三态就够了；Boss 有完整的战斗节奏，必须显式管理状态。
 
 ### 步骤 3：追击（XZ 平面，照抄小怪但修一个坑）
 
-```csharp
+
+
+```
 void ChaseBehavior()
 {
     Vector3 target = player.position;
@@ -4794,29 +6608,39 @@ void ChaseBehavior()
 }
 ```
 
-**大白话**：MoveTowards 是"匀速朝目标点挪"，参数：当前位置、目标位置、**这一帧挪多远（速度 × 每帧时间）**。
+**大白话**：MoveTowards 是 "匀速朝目标点挪"，参数：当前位置、目标位置、**这一帧挪多远（速度 × 每帧时间）**。
 
 **坑（小怪也有，一起修了）**：直接朝玩家的 3D 坐标追，玩家一跳起来，Boss 就会朝天上歪（因为 y 不同）。把目标点的 y 改成自己的 y，只在水平面（XZ 平面）追。LookAt 同理要面向拍平后的点。
 
-### 步骤 4：攻击协程——前摇、判定、后摇（今天含金量最高的一段）
+### 步骤 4：攻击协程 —— 前摇、判定、后摇（今天含金量最高的一段）
 
-**大白话**：Boss 攻击不是"贴脸立刻掉血"，而是三段式，王者荣耀里都见过：
+**大白话**：Boss 攻击不是 "贴脸立刻掉血"，而是三段式，王者荣耀里都见过：
 
-- **前摇（windup）**：蓄力、变红、变大，0.7 秒——给玩家反应时间，可以跑
-- **判定**：前摇结束的一瞬间，检查玩家还在不在范围、死没死，在才掉血
-- **后摇（recover）**：收招原地不动，0.9 秒——玩家的输出窗口，可以连打
 
-**协程是"另一条时间线"**：Update 是每帧从头跑到尾的主时间线；协程（IEnumerator + yield）可以让一段代码"等几秒再继续"，期间 Update 照常跑。攻击期间 Boss 处于 Attack 状态，Update 门禁不让它移动。
+
+* **前摇（windup）**：蓄力、变红、变大，0.7 秒 —— 给玩家反应时间，可以跑
+
+* **判定**：前摇结束的一瞬间，检查玩家还在不在范围、死没死，在才掉血
+
+* **后摇（recover）**：收招原地不动，0.9 秒 —— 玩家的输出窗口，可以连打
+
+**协程是 "另一条时间线"**：Update 是每帧从头跑到尾的主时间线；协程（IEnumerator + yield）可以让一段代码 "等几秒再继续"，期间 Update 照常跑。攻击期间 Boss 处于 Attack 状态，Update 门禁不让它移动。
 
 **新 API：**
 
-- `GetComponent<Renderer>().material.color`：Renderer（渲染器）里有材质，改材质颜色就能变色。`Color.red/yellow/gray`
-- `Vector3.Lerp(a, b, p)`：在 a 和 b 之间按比例 p（0~1）插值，做平滑动画
-- `while (t < 时间) { t += Time.deltaTime; ...; yield return null; }`：协程逐帧动画的标准写法，每帧推进一步，t 从 0 走到目标时间
 
-**两次距离判定（重点）**：进攻击范围时判定一次（启动协程），**前摇结束判定瞬间再判一次**——玩家前摇时跑出去了，这一拳就空大，不掉血。
 
-```csharp
+* `GetComponent<Renderer>().material.color`：Renderer（渲染器）里有材质，改材质颜色就能变色。`Color.red/yellow/gray`
+
+* `Vector3.Lerp(a, b, p)`：在 a 和 b 之间按比例 p（0\~1）插值，做平滑动画
+
+* `while (t < 时间) { t += Time.deltaTime; ...; yield return null; }`：协程逐帧动画的标准写法，每帧推进一步，t 从 0 走到目标时间
+
+**两次距离判定（重点）**：进攻击范围时判定一次（启动协程），**前摇结束判定瞬间再判一次**—— 玩家前摇时跑出去了，这一拳就空大，不掉血。
+
+
+
+```
 IEnumerator AttackCoroutine()
 {
     state = BossState.Attack;
@@ -4851,17 +6675,23 @@ IEnumerator AttackCoroutine()
 }
 ```
 
-注意：缩放/变色只是**视觉表现**，不影响判定——判定只看 transform.position 之间的距离。
+注意：缩放 / 变色只是**视觉表现**，不影响判定 —— 判定只看 transform.position 之间的距离。
 
 ### 步骤 5：受击、硬直、打断、死亡（状态机最容易踩的坑都在这）
 
 **大白话**：
 
-- **硬直（Hurt）**：被打中的短暂 0.4 秒闪黄、不能动，玩家的输出窗口
-- **打断**：Boss 正在前摇蓄力时被打，攻击协程要立刻停掉，不能让它继续打完
-- **死亡（Dead）**：灰色、缩小到消失、弹胜利
 
-```csharp
+
+* **硬直（Hurt）**：被打中的短暂 0.4 秒闪黄、不能动，玩家的输出窗口
+
+* **打断**：Boss 正在前摇蓄力时被打，攻击协程要立刻停掉，不能让它继续打完
+
+* **死亡（Dead）**：灰色、缩小到消失、弹胜利
+
+
+
+```
 public void TakeDamage(int dmg)
 {
     if (state == BossState.Dead) return;        // 死了不再挨打
@@ -4918,15 +6748,21 @@ IEnumerator DieRoutine()
 
 **今天踩的三个真实 bug（面试可以讲）：**
 
+
+
 1. **死亡后还会复活**：TakeDamage 死亡分支漏了 return，致命一击后继续走到 HurtRoutine，Dead 被覆盖成 Hurt。**提前 return 后，遗漏的活要移交给死亡协程**（比如停攻击协程，统一在 DieRoutine 开头做）
+
 2. **硬直无敌**：最初把 `if (Hurt) return` 写在了掉血之前，导致硬直期间刀砍上去不掉血。正确顺序：**先扣血、先通知血条，再按状态决定要不要新硬直**
+
 3. **硬直中被击杀后状态被覆盖**：HurtRoutine 醒来无脑把 state 改回 Chase，会把已被设成的 Dead 覆盖。末尾加守卫 `if (state != Hurt) yield break`
 
-**共同教训**：协程是"另一条时间线在并行跑"，任何状态切换都要想——**此刻还有谁在跑？它醒来会不会覆盖我？**
+**共同教训**：协程是 "另一条时间线在并行跑"，任何状态切换都要想 ——**此刻还有谁在跑？它醒来会不会覆盖我？**
 
 ### 步骤 6：玩家攻击接线（EnemySpawner）
 
-```csharp
+
+
+```
 public Boss boss;
 // K 键 / 左键攻击分支里，小怪循环之后：
 if (boss != null &&
@@ -4938,16 +6774,21 @@ if (boss != null &&
 }
 ```
 
-**两个"活着"的区别（重要）**：
+**两个 "活着" 的区别（重要）**：
 
-- `gameObject.activeInHierarchy`：物体在场景里有没有被激活（未激活的物体组件还在，但不在场上）
-- `boss.IsAlive => state != Dead`：物体激活着，但状态可能已经 Dead
+
+
+* `gameObject.activeInHierarchy`：物体在场景里有没有被激活（未激活的物体组件还在，但不在场上）
+
+* `boss.IsAlive => state != Dead`：物体激活着，但状态可能已经 Dead
 
 **胜利条件改掉**：原来小怪列表清空就 WinGame，但小怪是无限刷的（而且有提前胜利的 bug）。改为：RemoveEnemy 里的 WinGame 删掉，**杀 Boss 才赢**。
 
 ### 步骤 7：BossDirector 激活 Boss 和血条
 
-```csharp
+
+
+```
 public GameObject bossHpSlider;
 // ...倒数结束
 boss.SetActive(true);
@@ -4957,9 +6798,11 @@ bossText.text = "Boss降临";
 
 ### 步骤 8：事件驱动血条（BossHpUI）
 
-**大白话**：血条和玩家血条是同一个模式——Slider 显示数值，订阅 Boss 的 OnHpChanged 事件，Boss 一掉血就刷新。这是 HpUI 的第二次独立复现。
+**大白话**：血条和玩家血条是同一个模式 ——Slider 显示数值，订阅 Boss 的 OnHpChanged 事件，Boss 一掉血就刷新。这是 HpUI 的第二次独立复现。
 
-```csharp
+
+
+```
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -4988,71 +6831,106 @@ public class BossHpUI : MonoBehaviour
 
 **今天踩的坑：为什么和 HpUI 差不多却不工作？**
 
-- 滑块 MaxValue 默认是 1，Boss 有 6 血，value=5 被截断成 1，血条永远满，死了才空
-- 玩家血条能用是因为当时在检查器手动把最大值设成了 100；Boss 血条在代码里设，以后调血量自动跟上
-- **GetComponent vs 拖引用的分界**：组件在自己身上用 GetComponent（BossHpUI 挂在 Slider 根物体上）；组件在别的物体上才 public 拖引用（HpUI 挂在 Text 上，滑块是另一个物体）
+
+
+* 滑块 MaxValue 默认是 1，Boss 有 6 血，value=5 被截断成 1，血条永远满，死了才空
+
+* 玩家血条能用是因为当时在检查器手动把最大值设成了 100；Boss 血条在代码里设，以后调血量自动跟上
+
+* **GetComponent vs 拖引用的分界**：组件在自己身上用 GetComponent（BossHpUI 挂在 Slider 根物体上）；组件在别的物体上才 public 拖引用（HpUI 挂在 Text 上，滑块是另一个物体）
 
 **事件订阅三件套（固定套路）**：Start 里 `+=`、事件触发时自动调刷新方法、OnDestroy 里 `-=`。
 
 ### 步骤 9：Unity Recorder 录屏
 
-- 安装：窗口（Window）→ 包管理器（Package Manager）→ Unity 注册表 → Unity Recorder 4.0.3
-- 配置：窗口 → 常规 → Recorder；+ 添加录制器 → 影片录制
-  - Source = Game View、Output Resolution = FHD 1080p、Aspect 16:9
-  - 常量 30 FPS + Cap FPS、Encoder H.264 MP4、Include audio 勾上
-  - 游戏视图顶部 Free Aspect 改 16:9
-- **游戏视图工具栏下拉选 Play Maximized（播放最大化）**：进入播放自动占满编辑器
-- 操作顺序：START RECORDING（自动进入播放）→ 演流程 → STOP RECORDING（自动停止）
-- 产物在 `FristScene/Recordings/`，已加进 .gitignore（视频不进 git）
 
-**踩坑**：第一版录像半屏灰、内容翻转重复——游戏视图面板太小（974×634）+ 1.5x 缩放，录制器强行渲染 1080p 时缓冲错位。开 Play Maximized 后满屏正常。缩放滑块只影响编辑器预览，不影响录制分辨率。
+
+* 安装：窗口（Window）→ 包管理器（Package Manager）→ Unity 注册表 → Unity Recorder 4.0.3
+
+* 配置：窗口 → 常规 → Recorder；+ 添加录制器 → 影片录制
+
+
+  * Source = Game View、Output Resolution = FHD 1080p、Aspect 16:9
+
+  * 常量 30 FPS + Cap FPS、Encoder H.264 MP4、Include audio 勾上
+
+  * 游戏视图顶部 Free Aspect 改 16:9
+
+* **游戏视图工具栏下拉选 Play Maximized（播放最大化）**：进入播放自动占满编辑器
+
+* 操作顺序：START RECORDING（自动进入播放）→ 演流程 → STOP RECORDING（自动停止）
+
+* 产物在 `FristScene/Recordings/`，已加进 .gitignore（视频不进 git）
+
+**踩坑**：第一版录像半屏灰、内容翻转重复 —— 游戏视图面板太小（974×634）+ 1.5x 缩放，录制器强行渲染 1080p 时缓冲错位。开 Play Maximized 后满屏正常。缩放滑块只影响编辑器预览，不影响录制分辨率。
 
 ### 音效补漏
 
 Boss 挨打漏接了音效：小怪死亡走 Enemy.Die 的 `PlayHit()`、玩家受击走 PlayerHealth 的 `PlayHurt()`，Boss.TakeDamage 没调。补在死亡分支之后、Hurt 判定之前，前 5 刀播打怪音、致命一击只播胜利音（不重叠）。
 
----
+
+
+***
 
 ## 今日关键概念速查
 
-| 概念 | 一句话 |
-|---|---|
-| 状态机 FSM | 同一时刻只有一种状态，什么状态干什么事 |
-| enum | 一组有名字的编号，比裸数字可读 |
-| 协程 | 另一条时间线，能"等几秒再继续"，期间 Update 照跑 |
-| 前摇/后摇 | 前摇给玩家躲，后摇给玩家打 |
-| 硬直/打断 | 受击短暂失控（输出窗口）；蓄力被打要停掉协程 |
-| Lerp | 两个值之间按比例插值，做平滑动画 |
-| 协程句柄 | StartCoroutine 的返回值存下来，StopCoroutine 才能精确停 |
-| 状态守卫 | 协程醒来先检查 state 还是不是我，防止覆盖新状态 |
-| activeInHierarchy / IsAlive | 物体激没激活 / 状态死没死，是两层判断 |
-| 事件驱动 UI | 数据变化 Invoke 事件，UI 订阅刷新，双方互不直接引用 |
-| Slider 量程 | 不设 maxValue，value 超过最大值会被截断 |
+
+
+| 概念                          | 一句话                                        |
+| --------------------------- | ------------------------------------------ |
+| 状态机 FSM                     | 同一时刻只有一种状态，什么状态干什么事                        |
+| enum                        | 一组有名字的编号，比裸数字可读                            |
+| 协程                          | 另一条时间线，能 "等几秒再继续"，期间 Update 照跑             |
+| 前摇 / 后摇                     | 前摇给玩家躲，后摇给玩家打                              |
+| 硬直 / 打断                     | 受击短暂失控（输出窗口）；蓄力被打要停掉协程                     |
+| Lerp                        | 两个值之间按比例插值，做平滑动画                           |
+| 协程句柄                        | StartCoroutine 的返回值存下来，StopCoroutine 才能精确停 |
+| 状态守卫                        | 协程醒来先检查 state 还是不是我，防止覆盖新状态                |
+| activeInHierarchy / IsAlive | 物体激没激活 / 状态死没死，是两层判断                       |
+| 事件驱动 UI                     | 数据变化 Invoke 事件，UI 订阅刷新，双方互不直接引用            |
+| Slider 量程                   | 不设 maxValue，value 超过最大值会被截断                |
 
 ## 面试点
 
+
+
 1. 状态机怎么设计的？为什么用枚举不用一堆 bool？（互斥状态枚举天然互斥；bool 可以同时为 true 出非法组合）
+
 2. 协程和 Update 的区别？协程里怎么判断攻击命中？（两段时间线；判定瞬间二次确认距离）
+
 3. 状态切换时怎么防止协程竞态？（提前 return、句柄停协程、醒来守卫 state）
-4. UI 怎么和游戏数据同步？（event 订阅/退订，事件驱动，不每帧轮询）
+
+4. UI 怎么和游戏数据同步？（event 订阅 / 退订，事件驱动，不每帧轮询）
+
 5. 为什么判定要做两次？（前摇给了玩家躲避窗口，跑出范围必须空大）
 
 ## 顺延与待办（打磨期）
 
-- BossHpUI.cs 现在放在 Scripts/Enemy 文件夹，以后挪到 Scripts/UI
-- BossHpSlider 的 Handle Slide Area 子物体可删（不影响功能）
-- playerAttackRange 检查器值为 3（Boss 攻击范围 3.5），手感偏难，可调 4~5
-- Boss 专用厚重受击音效（现在复用打怪音效）
-- Boss 前 WaitForSeconds(5f) 录屏时可临时改 1 秒，录完改回
-- 正式录屏 Movie_007（约 44 秒，本地 Recordings 文件夹），打磨期录完整作品集版
 
----
 
-# 📅 D26: W4 复盘——速查表 + 闭卷自测 + 周总结 + 面试口述
+* BossHpUI.cs 现在放在 Scripts/Enemy 文件夹，以后挪到 Scripts/UI
 
-今天是 W4 复盘日（10/18 周日上午），不写新代码，做四件事：闭卷回忆速查表、闭卷自测 3 题、写 week4 周总结、面试口述 3 题。核心目标是把 W4 学的生命周期/协程/Input/场景存档从"看得懂"逼到"说得出、写得出"。
+* BossHpSlider 的 Handle Slide Area 子物体可删（不影响功能）
 
----
+* playerAttackRange 检查器值为 3（Boss 攻击范围 3.5），手感偏难，可调 4\~5
+
+* Boss 专用厚重受击音效（现在复用打怪音效）
+
+* Boss 前 WaitForSeconds (5f) 录屏时可临时改 1 秒，录完改回
+
+* 正式录屏 Movie\_007（约 44 秒，本地 Recordings 文件夹），打磨期录完整作品集版
+
+
+
+***
+
+# 📅 D26: W4 复盘 —— 速查表 + 闭卷自测 + 周总结 + 面试口述
+
+今天是 W4 复盘日（10/18 周日上午），不写新代码，做四件事：闭卷回忆速查表、闭卷自测 3 题、写 week4 周总结、面试口述 3 题。核心目标是把 W4 学的生命周期 / 协程 / Input / 场景存档从 "看得懂" 逼到 "说得出、写得出"。
+
+
+
+***
 
 ## ☀️ 上午：速查表闭卷回忆
 
@@ -5060,16 +6938,25 @@ Boss 挨打漏接了音效：小怪死亡走 Enemy.Die 的 `PlayHit()`、玩家�
 
 口述生命周期 8 个方法执行顺序，全部正确：
 
-- **Awake**：物体创建时立刻执行，所有物体的 Awake 跑完才跑 Start；适合取组件、初始化引用、单例登记
-- **OnEnable**：物体每次激活时执行（SetActive(true) 或勾选组件）
-- **Start**：第一帧 Update 之前，只执行一次；适合需要别的物体 Awake 已完成的初始化
-- **FixedUpdate**：固定步长（默认 0.02s），慢帧会同帧补跑多次；物理操作写这里
-- **Update**：每帧一次，帧率不固定；输入检测、非物理逻辑写这里
-- **LateUpdate**：所有 Update 跑完后执行；相机跟随写这里（保证角色先移动相机再跟）
-- **OnDisable**：物体每次禁用时执行
-- **OnDestroy**：物体销毁时执行；事件退订写这里
 
-**Awake vs Start（面试高频）**：Awake 是"自己醒过来"，不管别的物体有没有醒；Start 是"大家都醒了，准备开始第一帧"。单例必须写 Awake（DontDestroyOnLoad + 判重），因为别的脚本可能在 Start 里就引用 Instance。
+
+* **Awake**：物体创建时立刻执行，所有物体的 Awake 跑完才跑 Start；适合取组件、初始化引用、单例登记
+
+* **OnEnable**：物体每次激活时执行（SetActive (true) 或勾选组件）
+
+* **Start**：第一帧 Update 之前，只执行一次；适合需要别的物体 Awake 已完成的初始化
+
+* **FixedUpdate**：固定步长（默认 0.02s），慢帧会同帧补跑多次；物理操作写这里
+
+* **Update**：每帧一次，帧率不固定；输入检测、非物理逻辑写这里
+
+* **LateUpdate**：所有 Update 跑完后执行；相机跟随写这里（保证角色先移动相机再跟）
+
+* **OnDisable**：物体每次禁用时执行
+
+* **OnDestroy**：物体销毁时执行；事件退订写这里
+
+**Awake vs Start（面试高频）**：Awake 是 "自己醒过来"，不管别的物体有没有醒；Start 是 "大家都醒了，准备开始第一帧"。单例必须写 Awake（DontDestroyOnLoad + 判重），因为别的脚本可能在 Start 里就引用 Instance。
 
 **FixedUpdate vs Update（面试高频）**：FixedUpdate 固定时间步长，物理引擎在它之后结算；Update 随帧率波动。GetKeyDown 放 FixedUpdate 会漏按（按键事件只在一帧内有效，FixedUpdate 可能错过），所以输入检测放 Update，物理移动放 FixedUpdate。
 
@@ -5077,27 +6964,38 @@ Boss 挨打漏接了音效：小怪死亡走 Enemy.Die 的 `PlayHit()`、玩家�
 
 首答漏了两个点：
 
+
+
 1. **IEnumerator 拼写**：一开始写成 IEnumertor，纠正为 IEnumerator（e-r-a-t-o-r）
-2. **WaitForFixedUpdate**：只记得 WaitForSeconds / WaitForEndOfFrame / yield return null，漏了 WaitForFixedUpdate（等到下一次 FixedUpdate 之后）
+
+2. **WaitForFixedUpdate**：只记得 WaitForSeconds / WaitForEndOfFrame /yield return null，漏了 WaitForFixedUpdate（等到下一次 FixedUpdate 之后）
 
 补全后协程三要素：
 
-- `using System.Collections;` + 返回类型 `IEnumerator`
-- 方法体内 `yield return xxx` 交还控制权
-- `StartCoroutine(方法名())` 启动，返回值存句柄可 `StopCoroutine(句柄)` 精准停
+
+
+* `using System.Collections;` + 返回类型 `IEnumerator`
+
+* 方法体内 `yield return xxx` 交还控制权
+
+* `StartCoroutine(方法名())` 启动，返回值存句柄可 `StopCoroutine(句柄)` 精准停
 
 **三种等待对比**：
 
-| 等待 | 含义 |
-|---|---|
-| `yield return null` | 下一帧 Update 之后继续 |
-| `yield return new WaitForSeconds(n)` | 等 n 秒（受 timeScale 影响） |
-| `yield return new WaitForFixedUpdate()` | 等下一次 FixedUpdate 之后 |
-| `yield return new WaitForEndOfFrame()` | 等本帧渲染结束（最末尾） |
 
-**反直觉点**：禁用脚本组件（enabled=false）不停协程；SetActive(false) 或销毁物体才停。
 
----
+| 等待                                      | 含义                    |
+| --------------------------------------- | --------------------- |
+| `yield return null`                     | 下一帧 Update 之后继续       |
+| `yield return new WaitForSeconds(n)`    | 等 n 秒（受 timeScale 影响） |
+| `yield return new WaitForFixedUpdate()` | 等下一次 FixedUpdate 之后   |
+| `yield return new WaitForEndOfFrame()`  | 等本帧渲染结束（最末尾）          |
+
+**反直觉点**：禁用脚本组件（enabled=false）不停协程；SetActive (false) 或销毁物体才停。
+
+
+
+***
 
 ## 🌤 闭卷自测 3 题
 
@@ -5107,7 +7005,7 @@ Boss 挨打漏接了音效：小怪死亡走 Enemy.Die 的 `PlayHit()`、玩家�
 
 回答正确：GetKeyDown 只在按下的那一帧有效，FixedUpdate 固定步长可能错过那一帧 → 漏按；相机写 LateUpdate 保证所有 Update（含角色移动）先跑完，相机再跟，不抖动。
 
-扣 10 分：没提到"慢帧时 FixedUpdate 同帧补跑多次，GetKeyDown 在补跑的那次也会重复触发"。
+扣 10 分：没提到 "慢帧时 FixedUpdate 同帧补跑多次，GetKeyDown 在补跑的那次也会重复触发"。
 
 ### 题 2：协程刷怪器（初版 78 分，两轮修正）
 
@@ -5115,91 +7013,123 @@ Boss 挨打漏接了音效：小怪死亡走 Enemy.Die 的 `PlayHit()`、玩家�
 
 初版三个问题：
 
+
+
 1. **缺判空**：生成器引用没判 null，生成器被销毁后协程还在跑 → 空引用
+
 2. **门禁写在协程内部**：`if (isSpawning) yield break;` 写在 IEnumerator 方法体开头，导致 StartCoroutine 被调用后句柄已被覆盖，StopCoroutine 停不掉旧的。正确做法：门禁写在调用方（启动协程之前判断 isSpawning）
+
 3. **bool 没置 true**：启动协程后忘了 `isSpawning = true`，门禁永远不生效
 
-修正后标准写法：调用方判 `!isSpawning` 才 StartCoroutine 并置 true；协程末尾置 false；StopCoroutine(句柄) 精准停。
+修正后标准写法：调用方判 `!isSpawning` 才 StartCoroutine 并置 true；协程末尾置 false；StopCoroutine (句柄) 精准停。
 
 ### 题 3：单例 + PlayerPrefs（参考完成，未闭卷）
 
-主动要求看参考答案。涉及 ClosedBookScore / ClosedBookMenuText 两个脚本，核心是单例三件套（判重/登记/免死）+ PlayerPrefs 存取最高分。标注"参考完成未闭卷"，打磨期需重测。
+主动要求看参考答案。涉及 ClosedBookScore / ClosedBookMenuText 两个脚本，核心是单例三件套（判重 / 登记 / 免死）+ PlayerPrefs 存取最高分。标注 "参考完成未闭卷"，打磨期需重测。
 
----
+
+
+***
 
 ## 🌙 面试口述 3 题
 
 ### 题 1：生命周期（85 分）
 
-能讲清顺序和分工，但举例子时用了"结算界面"不当（结算界面是 UI 显隐，不是生命周期典型场景）。应举"玩家跳跃输入放 Update、刚体移动放 FixedUpdate、相机跟随放 LateUpdate"。
+能讲清顺序和分工，但举例子时用了 "结算界面" 不当（结算界面是 UI 显隐，不是生命周期典型场景）。应举 "玩家跳跃输入放 Update、刚体移动放 FixedUpdate、相机跟随放 LateUpdate"。
 
 ### 题 2：协程机制（首答 60 分 → 重讲 80 分）
 
-首答只说了"协程可以等几秒"，没讲清核心机制：
+首答只说了 "协程可以等几秒"，没讲清核心机制：
 
-- **yield return 是"交还控制权"**：协程跑到 yield return 就暂停，把控制权还给 Unity 主循环
-- **Unity 每帧轮询所有协程**：检查每个协程的等待条件满足了没，满足了就从暂停处继续
-- **协程不是多线程**：它和 Update 在同一个主线程上跑，只是"分段执行"
 
-重讲后 80 分，扣 20 分：没提到"协程句柄"和"StopCoroutine 精准停止 vs StopAllCoroutines 全停"。
 
-**当场纠正一个虚构**：口述时说"玩家攻击用了协程"，核实工程代码确认是 EnemySpawner.Update 里 GetKeyDown 瞬间调 TakeDamage，没有协程。面试不能编代码细节，不确定就说"这个功能我用的是 Update 轮询"。
+* **yield return 是 "交还控制权"**：协程跑到 yield return 就暂停，把控制权还给 Unity 主循环
+
+* **Unity 每帧轮询所有协程**：检查每个协程的等待条件满足了没，满足了就从暂停处继续
+
+* **协程不是多线程**：它和 Update 在同一个主线程上跑，只是 "分段执行"
+
+重讲后 80 分，扣 20 分：没提到 "协程句柄" 和 "StopCoroutine 精准停止 vs StopAllCoroutines 全停"。
+
+**当场纠正一个虚构**：口述时说 "玩家攻击用了协程"，核实工程代码确认是 EnemySpawner.Update 里 GetKeyDown 瞬间调 TakeDamage，没有协程。面试不能编代码细节，不确定就说 "这个功能我用的是 Update 轮询"。
 
 ### 题 3：单例（75 分）
 
-能讲清单例三件套，但缺"第二个管理员怎么冒出来"的具体场景：返回主菜单重新加载 MenuScene 时，场景里的 GameManager 物体被重建，Awake 发现 Instance 已存在 → Destroy 自己。这是单例判重的真实触发场景，必须能讲出来。
+能讲清单例三件套，但缺 "第二个管理员怎么冒出来" 的具体场景：返回主菜单重新加载 MenuScene 时，场景里的 GameManager 物体被重建，Awake 发现 Instance 已存在 → Destroy 自己。这是单例判重的真实触发场景，必须能讲出来。
 
----
+
+
+***
 
 ## 今日关键概念速查
 
-| 概念 | 一句话 |
-|---|---|
-| Awake vs Start | Awake 所有物体跑完才 Start；单例写 Awake，依赖别人的写 Start |
+
+
+| 概念                    | 一句话                                               |
+| --------------------- | ------------------------------------------------- |
+| Awake vs Start        | Awake 所有物体跑完才 Start；单例写 Awake，依赖别人的写 Start        |
 | FixedUpdate vs Update | Fixed 固定步长跑物理，Update 每帧跑输入；GetKeyDown 放 Fixed 会漏按 |
-| LateUpdate | 所有 Update 之后，相机跟随写这里防抖动 |
-| 协程三要素 | IEnumerator 返回 + yield return + StartCoroutine 启动 |
-| yield return | 交还控制权给 Unity，等待条件满足后从暂停处继续 |
-| 协程不是多线程 | 和 Update 同主线程，只是分段执行 |
-| 协程句柄 | StartCoroutine 返回值存下来，StopCoroutine 才能精准停 |
-| 门禁位置 | 防重复启动的 bool 判断写在调用方，不写协程内部 |
-| 禁用组件不停协程 | enabled=false 不停，SetActive(false)/销毁才停 |
+| LateUpdate            | 所有 Update 之后，相机跟随写这里防抖动                           |
+| 协程三要素                 | IEnumerator 返回 + yield return + StartCoroutine 启动 |
+| yield return          | 交还控制权给 Unity，等待条件满足后从暂停处继续                        |
+| 协程不是多线程               | 和 Update 同主线程，只是分段执行                              |
+| 协程句柄                  | StartCoroutine 返回值存下来，StopCoroutine 才能精准停         |
+| 门禁位置                  | 防重复启动的 bool 判断写在调用方，不写协程内部                        |
+| 禁用组件不停协程              | enabled=false 不停，SetActive (false)/ 销毁才停          |
 
 ## 面试点
 
+
+
 1. 生命周期执行顺序？Awake 和 Start 的区别？（所有 Awake 先跑完；单例写 Awake）
+
 2. 为什么输入放 Update、物理放 FixedUpdate？（GetKeyDown 只一帧有效；Fixed 固定步长结算物理）
-3. 协程原理？yield return 做了什么？（交还控制权+Unity 每帧轮询；不是多线程）
+
+3. 协程原理？yield return 做了什么？（交还控制权 + Unity 每帧轮询；不是多线程）
+
 4. 怎么停止一个协程？（句柄 StopCoroutine 精准停；StopAllCoroutines 全停）
+
 5. 单例怎么防止重复创建？第二个实例什么时候冒出来？（Awake 判重 Destroy；切场景重新加载时）
 
 ## 顺延与待办（打磨期）
 
-- 题 3 单例+PlayerPrefs 是参考完成，打磨期需闭卷重测
-- ClosedBookScore / ClosedBookMenuText 脚本在 Scripts/Test/，可保留
-- week4.md 需贴入 notes/ 并提交
 
----
 
-# 📅 D27: 地基期收官整合——攻击动画 + 试玩修 bug + BGM + 录屏 + README
+* 题 3 单例 + PlayerPrefs 是参考完成，打磨期需闭卷重测
 
-今天是地基期最后一天（10/18 周日下午），把 W1-W4 学的所有东西整合成一个完整可玩的游戏。四件事：补攻击动画、试玩修 bug、加 BGM 音乐开关、录屏+README+提交。
+* ClosedBookScore / ClosedBookMenuText 脚本在 Scripts/Test/，可保留
 
----
+* week4.md 需贴入 notes/ 并提交
+
+
+
+***
+
+# 📅 D27: 地基期收官整合 —— 攻击动画 + 试玩修 bug + BGM + 录屏 + README
+
+今天是地基期最后一天（10/18 周日下午），把 W1-W4 学的所有东西整合成一个完整可玩的游戏。四件事：补攻击动画、试玩修 bug、加 BGM 音乐开关、录屏 + README + 提交。
+
+
+
+***
 
 ## ☀️ 攻击动画补全
 
 ### 现状：Animator 只有三态，缺 Attack
 
-打开 Animator 窗口，现有 Idle（默认）/ Move / Jump 三个状态，参数 isMoving（Bool）/ isJumping（Bool）。玩家 K 键攻击时没有动画，Cube 原地不动。
+打开 Animator 窗口，现有 Idle（默认）/ Move / Jump 三个状态，参数 isMoving（Bool）/isJumping（Bool）。玩家 K 键攻击时没有动画，Cube 原地不动。
 
 ### 步骤 1：录制 Attack.anim
 
-Animation 窗口（窗口 → 动画 → 动画）点录制红点，Cube 没骨骼，动画属性录 Transform.Scale 即可，做"出拳前扑"三帧：
+Animation 窗口（窗口 → 动画 → 动画）点录制红点，Cube 没骨骼，动画属性录 Transform.Scale 即可，做 "出拳前扑" 三帧：
 
-- 0:00 帧：Scale (1, 1, 1)
-- 0:10 帧：Scale (0.8, 0.8, 1.4)——压扁拉长，像往前扑
-- 0:20 帧：Scale (1, 1, 1)——还原
+
+
+* 0:00 帧：Scale (1, 1, 1)
+
+* 0:10 帧：Scale (0.8, 0.8, 1.4)—— 压扁拉长，像往前扑
+
+* 0:20 帧：Scale (1, 1, 1)—— 还原
 
 片段时长拖到 0.3 秒左右（攻击要干脆）。
 
@@ -5209,27 +7139,34 @@ Animation 窗口（窗口 → 动画 → 动画）点录制红点，Cube 没骨�
 
 **Trigger vs Bool（重要区别）**：
 
-- Bool 是持续 true/false（"在不在跑"），需要手动设回 false
-- Trigger 是**瞬间触发一次、被 Animator 消费后自动重置**（"打了一拳"），适合攻击这种瞬时动作
+
+
+* Bool 是持续 true/false（"在不在跑"），需要手动设回 false
+
+* Trigger 是**瞬间触发一次、被 Animator 消费后自动重置**（"打了一拳"），适合攻击这种瞬时动作
 
 代码里 `animator.SetTrigger("isAttacking")` 触发一次，Animator 消费后自动归零，不用手动设 false。
 
 ### 步骤 3：两条过渡线
 
-| 过渡 | Has Exit Time | Transition Duration | 条件 |
-|---|---|---|---|
-| Any State → Attack | 取消（不等当前动画播完） | 0（立刻切入） | isAttacking |
-| Attack → Idle | 保留（播完才走） | 0.1（轻微混合） | 无条件（播完自动回） |
 
-**Any State 的含义**：从任何状态都能切到 Attack——移动中、跳跃中按 K 都能立刻攻击，不用先回 Idle。
 
-**Transition Duration（过渡持续时间）在哪里**：点过渡线，检查器里展开 Settings（设置）折叠项，"过渡持续时间"就是它。Any State→Attack 设 0 是为了攻击响应零延迟。
+| 过渡                 | Has Exit Time | Transition Duration | 条件          |
+| ------------------ | ------------- | ------------------- | ----------- |
+| Any State → Attack | 取消（不等当前动画播完）  | 0（立刻切入）             | isAttacking |
+| Attack → Idle      | 保留（播完才走）      | 0.1（轻微混合）           | 无条件（播完自动回）  |
+
+**Any State 的含义**：从任何状态都能切到 Attack—— 移动中、跳跃中按 K 都能立刻攻击，不用先回 Idle。
+
+**Transition Duration（过渡持续时间）在哪里**：点过渡线，检查器里展开 Settings（设置）折叠项，"过渡持续时间" 就是它。Any State→Attack 设 0 是为了攻击响应零延迟。
 
 ### 步骤 4：代码接线
 
-PlayerPhysicsMove.cs 的 Update 里，Playing 状态判断内部，加 K/鼠标左键检测：
+PlayerPhysicsMove.cs 的 Update 里，Playing 状态判断内部，加 K / 鼠标左键检测：
 
-```csharp
+
+
+```
 if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
 {
     animator.SetTrigger("isAttacking");
@@ -5238,7 +7175,9 @@ if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
 
 验证：按 K 时 Cube 有前扑缩放动作，Animator 窗口状态高亮流转到 Attack 再回 Idle/Move。
 
----
+
+
+***
 
 ## 🌤 试玩 3 遍，修 3 个 bug
 
@@ -5248,40 +7187,54 @@ if (Input.GetKeyDown(KeyCode.K) || Input.GetMouseButtonDown(0))
 
 **根因**：场地没有边界，Cube 是刚体，走到边缘就掉下去。
 
-**修法：空气墙**。Collider（碰撞体）和 Renderer（渲染器）是两个独立组件——只有 BoxCollider 没有模型的物体，玩家看不见但会被挡住。
+**修法：空气墙**。Collider（碰撞体）和 Renderer（渲染器）是两个独立组件 —— 只有 BoxCollider 没有模型的物体，玩家看不见但会被挡住。
 
-1. 层级面板 + → 创建空对象，命名 Wall_North
+
+
+1. 层级面板 + → 创建空对象，命名 Wall\_North
+
 2. 添加组件 → 物理 → Box Collider（盒形碰撞体）
+
 3. 改 Collider 的 Size（大小），不用改 Transform 的 Scale
+
 4. Ctrl+D 复制四面，围住场地
 
 **公式**：墙的位置 = 地面中心 + 半边长方向偏移。
 
 地面 5×1×35（中心假设在原点），半宽 2.5，半长 17.5：
 
-| 墙 | Position | BoxCollider Size |
-|---|---|---|
-| Wall_North | (0, 2.5, 17.5) | (6, 5, 1) |
-| Wall_South | (0, 2.5, -17.5) | (6, 5, 1) |
-| Wall_East | (2.5, 2.5, 0) | (1, 5, 36) |
-| Wall_West | (-2.5, 2.5, 0) | (1, 5, 36) |
+
+
+| 墙           | Position        | BoxCollider Size |
+| ----------- | --------------- | ---------------- |
+| Wall\_North | (0, 2.5, 17.5)  | (6, 5, 1)        |
+| Wall\_South | (0, 2.5, -17.5) | (6, 5, 1)        |
+| Wall\_East  | (2.5, 2.5, 0)   | (1, 5, 36)       |
+| Wall\_West  | (-2.5, 2.5, 0)  | (1, 5, 36)       |
 
 墙高 5，中心 y=2.5（从地面到 5 米高，跳不出去）；长度 +1 是墙角多盖一点不留缝。
 
 ### Bug 2：Boss 降临时和玩家重合，被挤入虚空
 
-**根因**：Boss 出生点 (0,1,10)，玩家如果站在那里等，Boss SetActive(true) 时两个碰撞体重叠，物理引擎暴力把玩家弹开，可能弹出空气墙（早期没墙时直接飞出地图）。
+**根因**：Boss 出生点 (0,1,10)，玩家如果站在那里等，Boss SetActive (true) 时两个碰撞体重叠，物理引擎暴力把玩家弹开，可能弹出空气墙（早期没墙时直接飞出地图）。
 
 **修法：出生点保护**。在 Boss 激活之前，检测玩家离出生点是否小于安全距离，是的话沿水平方向把玩家推到 5.5 米外。
 
 **核心思路**：
 
+
+
 1. **先挪人，再激活 Boss**（顺序反了，这一帧还是会弹）
+
 2. 方向向量拍平 y：只在水平面挪，否则人被挪到天上
+
 3. 向量归一化（Normalize）：长度缩成 1 只保留方向，再乘 5.5 保证无论从哪儿来都正好推到 5.5 米外
+
 4. 玩家正好站在 Boss 中心时方向是零向量，给默认方向 Vector3.back（朝 -z）
 
-```csharp
+
+
+```
 Vector3 bossPos = boss.transform.position;
 Vector3 playerPos = player.position;
 Vector3 dir = new Vector3(playerPos.x - bossPos.x, 0, playerPos.z - bossPos.z);
@@ -5302,7 +7255,10 @@ boss.SetActive(true);
 
 **今天踩的两个真实 bug**：
 
-1. **初版永远传西南角**：写成 `boss.x - 5.5, boss.z - 5.5`，不管玩家从哪边来都传到西南角，视觉上穿过 Boss。正确做法是沿"Boss 指向玩家"的方向推出。
+
+
+1. **初版永远传西南角**：写成 `boss.x - 5.5, boss.z - 5.5`，不管玩家从哪边来都传到西南角，视觉上穿过 Boss。正确做法是沿 "Boss 指向玩家" 的方向推出。
+
 2. **dir.z 写成 dir.y**：方向向量拍平后 dir.y=0，第三个分量用 dir.y 导致 z 偏移永远是 0，正北方站着的玩家被放进 Boss 中心。正确是 `dir.z * 5.5f`。
 
 **magnitude 是什么**：向量的长度，√(x²+y²+z²)，就是起点到终点的直线距离。`Vector3.Distance(a,b)` 内部算的就是 `(a-b).magnitude`。Normalize 把长度缩成 1 只保留方向。
@@ -5313,35 +7269,44 @@ Boss.TakeDamage 的顺序：扣血 → 通知血条 → `if (hp <= 0) { StartCor
 
 第 6 刀是致命一击，走死亡分支 return，不播打怪音，之后 DieRoutine 里 WinGame 播胜利音。所以是 5 声打怪音 + 1 声胜利音，避免两个音效叠在一起糊掉。保持现状。
 
----
+
+
+***
 
 ## 🌙 BGM 背景音乐 + 开关存档
 
 ### 为什么要两个 AudioSource
 
-AudioSource 像播音喇叭。现有一个喇叭用 PlayOneShot 播一次性音效（可叠加）。BGM 是循环长音乐，要常播、要独立开关——和音效混用一个喇叭，静音乐会把音效也静了。
+AudioSource 像播音喇叭。现有一个喇叭用 PlayOneShot 播一次性音效（可叠加）。BGM 是循环长音乐，要常播、要独立开关 —— 和音效混用一个喇叭，静音乐会把音效也静了。
 
-工业界标准：两个喇叭各管一摊——
+工业界标准：两个喇叭各管一摊 ——
 
-- sfxSource（现有）：PlayOneShot 播一次性音效
-- bgmSource（新加）：loop 循环播 BGM，独立 mute 开关
+
+
+* sfxSource（现有）：PlayOneShot 播一次性音效
+
+* bgmSource（新加）：loop 循环播 BGM，独立 mute 开关
 
 ### 两种播放模式对比
 
-| 模式 | 怎么播 | 能循环 | 能叠加 | 适合 |
-|---|---|---|---|---|
-| `PlayOneShot(clip)` | 临时传 clip，播完就完 | ❌ | ✅ | 音效（叮、受击） |
-| `clip = xxx; Play()` | 播喇叭自己存的那首 | ✅ | ❌ | 背景音乐 |
 
-PlayOneShot 不需要给 source.clip 赋值；Play() 播的是 source.clip 字段里的东西，所以必须先 `bgmSource.clip = bgmClip` 再 Play。
+
+| 模式                   | 怎么播           | 能循环 | 能叠加 | 适合       |
+| -------------------- | ------------- | --- | --- | -------- |
+| `PlayOneShot(clip)`  | 临时传 clip，播完就完 | ❌   | ✅   | 音效（叮、受击） |
+| `clip = xxx; Play()` | 播喇叭自己存的那首     | ✅   | ❌   | 背景音乐     |
+
+PlayOneShot 不需要给 source.clip 赋值；Play () 播的是 source.clip 字段里的东西，所以必须先 `bgmSource.clip = bgmClip` 再 Play。
 
 ### AddComponent vs GetComponent（今天的核心坑）
 
-`GetComponent<AudioSource>()` 是"在我身上找已经存在的组件"——AudioManager 物体上只挂了一个 AudioSource，写两行 GetComponent 拿到的是**同一个**。
+`GetComponent<AudioSource>()` 是 "在我身上找已经存在的组件"——AudioManager 物体上只挂了一个 AudioSource，写两行 GetComponent 拿到的是**同一个**。
 
-要第二个喇叭必须用 `gameObject.AddComponent<AudioSource>()` 动态新建——这是代码版的"添加组件"按钮。
+要第二个喇叭必须用 `gameObject.AddComponent<AudioSource>()` 动态新建 —— 这是代码版的 "添加组件" 按钮。
 
-```csharp
+
+
+```
 bgmSource = gameObject.AddComponent<AudioSource>();
 bgmSource.clip = bgmClip;
 bgmSource.loop = true;
@@ -5352,13 +7317,15 @@ bgmSource.mute = !musicOn;
 if (musicOn && bgmClip != null) bgmSource.Play();
 ```
 
-`bgmSource.mute = !musicOn`：mute（静音）和 musicOn（音乐开）语义是反的，要取反对齐——音乐开→不静音，音乐关→静音。
+`bgmSource.mute = !musicOn`：mute（静音）和 musicOn（音乐开）语义是反的，要取反对齐 —— 音乐开→不静音，音乐关→静音。
 
 ### PlayerPrefs 存 bool（int 1/0）
 
-PlayerPrefs 不认识 bool，用 int 存：1=开，0=关。
+PlayerPrefs 不认识 bool，用 int 存：1 = 开，0 = 关。
 
-```csharp
+
+
+```
 public static void SaveMusicOn(bool isOn)
 {
     PlayerPrefs.SetInt(GameConfig.MusicOnKey, isOn ? 1 : 0);
@@ -5373,14 +7340,19 @@ public static bool LoadMusicOn()
 
 ### Toggle 开关接线
 
-Toggle（中文界面叫"切换"）是勾选框组件，记住开/关状态。和 Button 的区别：
+Toggle（中文界面叫 "切换"）是勾选框组件，记住开 / 关状态。和 Button 的区别：
 
-- Button.onClick：点一下触发一次，不记状态，绑定的方法不带参数
-- Toggle.onValueChanged：状态变化时触发，**自动传一个 bool 参数**（当前是开还是关）
+
+
+* Button.onClick：点一下触发一次，不记状态，绑定的方法不带参数
+
+* Toggle.onValueChanged：状态变化时触发，**自动传一个 bool 参数**（当前是开还是关）
 
 SettingsMenu 里：
 
-```csharp
+
+
+```
 public Toggle musicToggle;
 
 void Start()
@@ -5400,72 +7372,106 @@ void OnMusicToggle(bool isOn)
 
 设置 isOn 会触发 onValueChanged → 调 OnMusicToggle → 重新存同样的值 + 重新设 mute，无害。
 
----
+
+
+***
 
 ## 今日关键概念速查
 
-| 概念 | 一句话 |
-|---|---|
-| Trigger 参数 | 瞬间触发一次、被消费后自动重置，适合攻击；不用手动设回 false |
-| Any State | 从任何状态都能切到目标状态，适合"随时能攻击" |
-| Transition Duration | 两个动画混合的过渡时间，检查器 Settings 折叠项里 |
-| 空气墙 | 只有 Collider 没有 Renderer 的物体，看不见但挡人 |
-| 墙位置公式 | 地面中心 + 半边长方向偏移 |
-| 出生点保护 | 激活 Boss 前把玩家沿水平方向推到安全距离外 |
-| 向量归一化 Normalize | 长度缩成 1 只保留方向，乘距离保证推出固定米数 |
-| magnitude | 向量长度，√(x²+y²+z²)，= Vector3.Distance |
-| 双 AudioSource | 音效喇叭 PlayOneShot 可叠加 + BGM 喇叭 loop 独立开关 |
-| AddComponent | 代码动态新建组件，GetComponent 是找已有的 |
-| PlayOneShot vs Play | OneShot 临时传 clip 不循环可叠加；Play 播 source.clip 可循环 |
-| mute = !musicOn | 静音和开语义相反，取反对齐 |
-| PlayerPrefs 存 bool | 不认识 bool，用 int 1/0 存 |
-| Toggle.onValueChanged | 状态变化触发，自动传 bool 参数；Button.onClick 不带参数 |
+
+
+| 概念                    | 一句话                                            |
+| --------------------- | ---------------------------------------------- |
+| Trigger 参数            | 瞬间触发一次、被消费后自动重置，适合攻击；不用手动设回 false              |
+| Any State             | 从任何状态都能切到目标状态，适合 "随时能攻击"                       |
+| Transition Duration   | 两个动画混合的过渡时间，检查器 Settings 折叠项里                  |
+| 空气墙                   | 只有 Collider 没有 Renderer 的物体，看不见但挡人             |
+| 墙位置公式                 | 地面中心 + 半边长方向偏移                                 |
+| 出生点保护                 | 激活 Boss 前把玩家沿水平方向推到安全距离外                       |
+| 向量归一化 Normalize       | 长度缩成 1 只保留方向，乘距离保证推出固定米数                       |
+| magnitude             | 向量长度，√(x²+y²+z²)，= Vector3.Distance            |
+| 双 AudioSource         | 音效喇叭 PlayOneShot 可叠加 + BGM 喇叭 loop 独立开关        |
+| AddComponent          | 代码动态新建组件，GetComponent 是找已有的                    |
+| PlayOneShot vs Play   | OneShot 临时传 clip 不循环可叠加；Play 播 source.clip 可循环 |
+| mute = !musicOn       | 静音和开语义相反，取反对齐                                  |
+| PlayerPrefs 存 bool    | 不认识 bool，用 int 1/0 存                           |
+| Toggle.onValueChanged | 状态变化触发，自动传 bool 参数；Button.onClick 不带参数         |
 
 ## 面试点
 
+
+
 1. Animator 的 Trigger 和 Bool 有什么区别？（Trigger 自动重置瞬时触发；Bool 持续需手动改）
-2. 怎么实现"移动中也能攻击"？（Any State → Attack，取消 Has Exit Time，Duration 0）
-3. 玩家掉出地图怎么修？（空气墙=无渲染的 Collider；或死亡平面触发器）
-4. 两个物体碰撞体重叠时物理引擎会怎样？怎么避免？（暴力弹开；激活前挪开/生成点保护）
+
+2. 怎么实现 "移动中也能攻击"？（Any State → Attack，取消 Has Exit Time，Duration 0）
+
+3. 玩家掉出地图怎么修？（空气墙 = 无渲染的 Collider；或死亡平面触发器）
+
+4. 两个物体碰撞体重叠时物理引擎会怎样？怎么避免？（暴力弹开；激活前挪开 / 生成点保护）
+
 5. 向量归一化是做什么的？（长度缩 1 保留方向，推出固定距离）
+
 6. 为什么 BGM 和音效要用两个 AudioSource？（一个要循环独立开关，一个要一次性可叠加）
+
 7. AddComponent 和 GetComponent 的区别？（新建 vs 查找已有）
+
 8. PlayerPrefs 怎么存 bool？（int 1/0，因为不认识 bool）
+
 9. Toggle 和 Button 的事件有什么不同？（onValueChanged 传 bool；onClick 无参数）
 
 ## 顺延与待办（打磨期）
 
-- week4.md 需贴入 notes/ 并提交
-- 录屏文件确认位置（Unity Recorder 默认输出 Recordings/）
-- playerAttackRange=3 手感偏难，可调 4~5
-- Boss 专用厚重受击音效（现在复用打怪音效）
-- public 字段重构为 [SerializeField] private
-- ClosedBookSpawmer.cs 命名拼写（CloseBook→ClosedBook，Spawmer→Spawner）
 
-# 📅 D28: 地基期收官整理——阶段总结 + API 速查表 + git tag/Release + 截图
+
+* week4.md 需贴入 notes/ 并提交
+
+* 录屏文件确认位置（Unity Recorder 默认输出 Recordings/）
+
+* playerAttackRange=3 手感偏难，可调 4\~5
+
+* Boss 专用厚重受击音效（现在复用打怪音效）
+
+* public 字段重构为 \[SerializeField] private
+
+* ClosedBookSpawmer.cs 命名拼写（CloseBook→ClosedBook，Spawmer→Spawner）
+
+# 📅 D28: 地基期收官整理 —— 阶段总结 + API 速查表 + git tag/Release + 截图
 
 今天（10/18 晚）不写新代码，做作品集整理：把地基期沉淀成可展示、可回顾的资产。四件事：阶段总结、API 速查表、打 tag 发 Release、截图进 README。
 
----
+
+
+***
 
 ## ☀️ 阶段总结与 API 速查表（notes/）
 
-- `notes/stage1.md`：W1-W4 地基期总结。知识地图（C# 语言基础→OOP→集合/委托/事件→Unity 生命周期/物理/协程/Input/UGUI/存档/音频/Animator/简单 FSM）、已完成成果、踩坑表、面试自评、下一阶段（Demo1 状态机小怪 AI）规划。
-- `notes/UnityAPI速查表.md`：16 大类 API，每个写清**参数、代码示例、坑、高频固定模式**，面试和查手册时都能快速翻。
 
----
+
+* `notes/stage1.md`：W1-W4 地基期总结。知识地图（C# 语言基础→OOP→集合 / 委托 / 事件→Unity 生命周期 / 物理 / 协程 / Input/UGUI/ 存档 / 音频 / Animator / 简单 FSM）、已完成成果、踩坑表、面试自评、下一阶段（Demo1 状态机小怪 AI）规划。
+
+* `notes/UnityAPI速查表.md`：16 大类 API，每个写清**参数、代码示例、坑、高频固定模式**，面试和查手册时都能快速翻。
+
+
+
+***
 
 ## 🌤 git tag 与 GitHub Release
 
 ### tag 是什么、Release 是什么
 
-- **git tag**：在本地给某一个 commit 贴一个**名字标签**（如 v0.1），是代码层面的标记，存在 git 里。
-- **GitHub Release**：在网页上给这个 tag 套一层**版本发布说明**（标题、正文、附件），是展示层给人看的东西。
-- 关系：**先有 tag，Release 才能挂到这个 tag 上**。tag 像小说里"第一章完结"的标记，Release 像在书城上架"第一章正式版"并写简介。
+
+
+* **git tag**：在本地给某一个 commit 贴一个**名字标签**（如 v0.1），是代码层面的标记，存在 git 里。
+
+* **GitHub Release**：在网页上给这个 tag 套一层**版本发布说明**（标题、正文、附件），是展示层给人看的东西。
+
+* 关系：**先有 tag，Release 才能挂到这个 tag 上**。tag 像小说里 "第一章完结" 的标记，Release 像在书城上架 "第一章正式版" 并写简介。
 
 ### 命令（tag 要单独推送）
 
-```powershell
+
+
+```
 git tag v0.1          # 本地给当前 commit 打标签（只在本机）
 git push origin v0.1  # 把标签推到 GitHub（tag 不随 main 自动推！）
 ```
@@ -5474,28 +7480,45 @@ git push origin v0.1  # 把标签推到 GitHub（tag 不随 main 自动推！）
 
 ### 网页发 Release 的字段
 
-- Choose a tag（选择标签）：选 v0.1，固定这个版本对应的代码快照
-- Target（目标）：默认 main，不改
-- Release title（标题）：人话版本名，如"v0.1 地基期——MiniLevel"
-- Describe（正文）：版本更新日志（changelog），写玩法/功能/技术栈
-- Attach binaries（附件区）：挂 exe、zip、视频，最大 2GB
-- Publish release（发布）
+
+
+* Choose a tag（选择标签）：选 v0.1，固定这个版本对应的代码快照
+
+* Target（目标）：默认 main，不改
+
+* Release title（标题）：人话版本名，如 "v0.1 地基期 ——MiniLevel"
+
+* Describe（正文）：版本更新日志（changelog），写玩法 / 功能 / 技术栈
+
+* Attach binaries（附件区）：挂 exe、zip、视频，最大 2GB
+
+* Publish release（发布）
 
 ### 两个上传区域的区别（踩坑）
 
-- **正文 Markdown 文本框**：写文字，贴图/视频限 **10MB**
-- **页面下方大虚线框附件区**（"通过在这里放置或选择…"）：挂下载文件，最大 **2GB**，视频/exe 放这里
 
----
+
+* **正文 Markdown 文本框**：写文字，贴图 / 视频限 **10MB**
+
+* **页面下方大虚线框附件区**（"通过在这里放置或选择…"）：挂下载文件，最大 **2GB**，视频 /exe 放这里
+
+
+
+***
 
 ## 🌙 截图进 README
 
 ### 图片要显示在 GitHub 上，需要两件事
 
+
+
 1. **图片文件本身进 git**：git 不自动跟踪新文件，必须 `git add` 告诉它
+
 2. **README 里写图片引用**：markdown 图片语法
 
-```markdown
+
+
+```
 ![主菜单](docs/screenshots/01_mainmenu.png)
 ```
 
@@ -5503,11 +7526,13 @@ git push origin v0.1  # 把标签推到 GitHub（tag 不随 main 自动推！）
 
 ### git 三步（大白话）
 
-| 命令 | 大白话 |
-|---|---|
-| `git add 文件` | 放进购物车（暂存区），git 开始跟踪 |
-| `git commit -m "说明"` | 把购物车打包成一个版本，记录在本地 |
-| `git push origin main` | 把本地版本上传到 GitHub |
+
+
+| 命令                     | 大白话                 |
+| ---------------------- | ------------------- |
+| `git add 文件`           | 放进购物车（暂存区），git 开始跟踪 |
+| `git commit -m "说明"`   | 把购物车打包成一个版本，记录在本地   |
+| `git push origin main` | 把本地版本上传到 GitHub     |
 
 新文件不 add 不跟踪；只 commit 不 push 就只在本机。
 
@@ -5517,47 +7542,62 @@ GitHub 存的是**源码**（.cs/.unity/.meta），必须装 Unity 才能跑。�
 
 ### 今日关键概念速查
 
-| 概念 | 一句话 |
-|---|---|
-| git tag | 给某个 commit 贴名字标签，代码层标记 |
-| GitHub Release | 套在 tag 上的版本说明+附件，展示层 |
-| tag 单独推 | `git push origin v0.1`，不随 main 自动推 |
-| 正文框 vs 附件区 | 正文框限 10MB，下方大虚线附件区限 2GB |
-| README 图片语法 | `![文字](相对路径.png)` |
-| git add/commit/push | 放购物车→打包成本地版本→上传 GitHub |
-| Build 打包 | 把源码编译成免 Unity 运行的 exe+Data |
+
+
+| 概念                  | 一句话                                |
+| ------------------- | ---------------------------------- |
+| git tag             | 给某个 commit 贴名字标签，代码层标记             |
+| GitHub Release      | 套在 tag 上的版本说明 + 附件，展示层             |
+| tag 单独推             | `git push origin v0.1`，不随 main 自动推 |
+| 正文框 vs 附件区          | 正文框限 10MB，下方大虚线附件区限 2GB            |
+| README 图片语法         | `![文字](相对路径.png)`                  |
+| git add/commit/push | 放购物车→打包成本地版本→上传 GitHub             |
+| Build 打包            | 把源码编译成免 Unity 运行的 exe+Data         |
 
 # 📅 D29: 简历收尾 + FSM 状态机入门（Demo1 预热）
 
 今天（10/18 晚）晚上做技术 C 的简历收尾（作品集对外检查），上午的 FSM 概念在晚上补课完成，并写了一个纯 C# 控制台状态机，为明天开始的 Demo1 预热。
 
----
+
+
+***
 
 ## ☀️ 简历收尾：作品集对外检查
 
 ### 简历四个节点（别搞混）
 
-| 时间 | 任务 |
-|---|---|
-| D3（9/5） | 简历骨架（已完成） |
-| D65（11/8） | 简历初稿，含 Demo1 录屏 + GitHub 链接 |
-| D95（12/8） | 简历二版，含 Demo2 开源项目 |
-| 2027/1/31 | 简历终版 v3（春招版）+ 项目一页纸 |
 
-**D29 不写简历**，只做"收尾"：确认仓库公开、录屏/README 齐全。简历初稿要等 Demo1 完成（D65）才有"独立实现 FSM AI、协程攻击系统、事件驱动"这些硬货可写。
+
+| 时间        | 任务                          |
+| --------- | --------------------------- |
+| D3（9/5）   | 简历骨架（已完成）                   |
+| D65（11/8） | 简历初稿，含 Demo1 录屏 + GitHub 链接 |
+| D95（12/8） | 简历二版，含 Demo2 开源项目           |
+| 2027/1/31 | 简历终版 v3（春招版）+ 项目一页纸         |
+
+**D29 不写简历**，只做 "收尾"：确认仓库公开、录屏 / README 齐全。简历初稿要等 Demo1 完成（D65）才有 "独立实现 FSM AI、协程攻击系统、事件驱动" 这些硬货可写。
 
 ### 检查清单
 
+
+
 1. 仓库公开可访问：不带认证访问仓库 URL 返回 HTTP 200
+
 2. README 含项目描述、操作、技术亮点、5 张截图
-3. 录屏挂到 Release：Movie_017.mp4（18.8MB）拖进**附件区**（不是正文框）
+
+3. 录屏挂到 Release：Movie\_017.mp4（18.8MB）拖进**附件区**（不是正文框）
+
 4. README 加视频链接：链接到 Release 页（GitHub 会内联播放 mp4），不要直接贴 mp4 地址（会触发下载）
 
-```markdown
+
+
+```
 🎬 [点击在 Release 页在线观看完整通关视频](https://github.com/用户名/仓库/releases/tag/v0.1)
 ```
 
----
+
+
+***
 
 ## 🌤 FSM 有限状态机是什么
 
@@ -5565,21 +7605,25 @@ GitHub 存的是**源码**（.cs/.unity/.meta），必须装 Unity 才能跑。�
 
 **有限状态机（Finite State Machine）**：一个对象**同一时刻只能处于一种状态，满足条件就切换状态**的行为组织方式。
 
-**解决什么问题**：把一坨互相嵌套、越堆越乱的 if-else，拆成一张清晰的"状态表"。
+**解决什么问题**：把一坨互相嵌套、越堆越乱的 if-else，拆成一张清晰的 "状态表"。
 
 王者荣耀例子：妲己在巡逻（走河道找敌人）→ 视野出现英雄（条件）→ 追击 → 进技能范围（条件）→ 释放技能 → 敌人跑远消失（条件）→ 回巡逻。任何瞬间只做一件事。
 
 ### 三个核心概念
 
-| 概念 | 大白话 | Boss.cs 里对应 |
-|---|---|---|
-| 状态 State | 此刻在干什么 | `enum BossState`（巡逻/追击/攻击/受击/死亡） |
-| 转换条件 Transition | 什么情况下从 A 变 B | `if (distance < range)` |
-| 当前状态指针 Current State | 记住"现在在哪个状态"的变量 | `currentState` 字段 |
+
+
+| 概念                   | 大白话              | Boss.cs 里对应                              |
+| -------------------- | ---------------- | ---------------------------------------- |
+| 状态 State             | 此刻在干什么           | `enum BossState`（巡逻 / 追击 / 攻击 / 受击 / 死亡） |
+| 转换条件 Transition      | 什么情况下从 A 变 B     | `if (distance < range)`                  |
+| 当前状态指针 Current State | 记住 "现在在哪个状态" 的变量 | `currentState` 字段                        |
 
 `Update` 里的 `switch (currentState)` 就是在说：**根据当前状态执行对应行为**。
 
 ### 小怪 4 状态 + 5 转换（设计规格）
+
+
 
 ```
 巡逻 →(距离<5m 发现)→ 追击
@@ -5589,7 +7633,9 @@ GitHub 存的是**源码**（.cs/.unity/.meta），必须装 Unity 才能跑。�
 任意状态 →(血量<=0)→ 死亡（终点，不再切出）
 ```
 
----
+
+
+***
 
 ## 🌙 纯 C# 控制台版 FSM（DailyPractice/FsmPractice）
 
@@ -5597,25 +7643,35 @@ GitHub 存的是**源码**（.cs/.unity/.meta），必须装 Unity 才能跑。�
 
 ### 控制台与 Unity 的对应
 
-| Unity（Boss.cs） | 控制台版 |
-|---|---|
-| `Update()` 每帧 | `while` 循环每一轮 |
-| 真实距离 Transform | 一个 `distance` 变量手动模拟 |
-| `currentState` 字段 | 同名变量 |
-| 移动/攻击 | `Console.WriteLine()` 打印 |
-| 游戏一直跑 | 循环跑 20 轮 |
+
+
+| Unity（Boss.cs）    | 控制台版                     |
+| ----------------- | ------------------------ |
+| `Update()` 每帧     | `while` 循环每一轮            |
+| 真实距离 Transform    | 一个 `distance` 变量手动模拟     |
+| `currentState` 字段 | 同名变量                     |
+| 移动 / 攻击           | `Console.WriteLine()` 打印 |
+| 游戏一直跑             | 循环跑 20 轮                 |
 
 ### 结构（依赖顺序）
 
+
+
 1. `enum EnemyState { Patrol, Chase, Attack, Dead }`（状态定义，底层）
+
 2. 字段：`currentState`（初始 Patrol）、`distance`（初始 10）、`hp`（100）
+
 3. 模拟玩家走位：bool `isPlayerApproaching`，靠近时 distance 每轮减 1，到 0 翻转为远离、每轮加 1
+
 4. 主循环 `while` 跑 20 轮，每轮先更新 distance，再 switch
+
 5. `switch(currentState)`：每个 case 打印行为并检查转换条件
 
 ### 运行结果（验证）
 
 玩家先靠近后远离，小怪自动走出完整一圈：
+
+
 
 ```
 巡逻(1-5轮) → 第6轮距离<5 发现玩家 → 追击
@@ -5626,44 +7682,61 @@ GitHub 存的是**源码**（.cs/.unity/.meta），必须装 Unity 才能跑。�
 
 ### 关键设计：滞回（Hysteresis，加分点）
 
-发现用 **5m**、丢失用 **8m**，中间留 3m 缓冲带。如果发现和丢失都用 5m，玩家在 5m 边缘来回晃，小怪会在巡逻/追击之间疯狂横跳。双阈值让状态一旦进入就稳定，防抖动。
+发现用 **5m**、丢失用 **8m**，中间留 3m 缓冲带。如果发现和丢失都用 5m，玩家在 5m 边缘来回晃，小怪会在巡逻 / 追击之间疯狂横跳。双阈值让状态一旦进入就稳定，防抖动。
 
 ### 边界细节
 
-- 严格 `<`/`>`：距离正好 =5 不切巡逻→追击，正好 =8 不切追击→巡逻，边界无歧义
-- hp 永远 100 时，死亡分支写了但不触发；要观察死亡，可在 Attack 状态让 hp 每轮减少（扩展）
+
+
+* 严格 `<`/`>`：距离正好 =5 不切巡逻→追击，正好 =8 不切追击→巡逻，边界无歧义
+
+* hp 永远 100 时，死亡分支写了但不触发；要观察死亡，可在 Attack 状态让 hp 每轮减少（扩展）
 
 ### 今日关键概念速查
 
-| 概念 | 一句话 |
-|---|---|
-| 有限状态机 FSM | 同一时刻只在一个状态，满足条件就切换 |
-| 状态 State | 此刻在干什么 |
-| 转换条件 Transition | 从 A 变 B 的条件 |
-| 当前状态指针 | 记住当前状态的变量（currentState） |
-| while 循环 | 控制台版的"Update"，每轮跑一次 switch |
-| 滞回 | 进入/退出用不同阈值（5m/8m），中间缓冲带防抖动 |
-| 死亡状态 | 终点态，不再切出 |
+
+
+| 概念              | 一句话                          |
+| --------------- | ---------------------------- |
+| 有限状态机 FSM       | 同一时刻只在一个状态，满足条件就切换           |
+| 状态 State        | 此刻在干什么                       |
+| 转换条件 Transition | 从 A 变 B 的条件                  |
+| 当前状态指针          | 记住当前状态的变量（currentState）      |
+| while 循环        | 控制台版的 "Update"，每轮跑一次 switch  |
+| 滞回              | 进入 / 退出用不同阈值（5m/8m），中间缓冲带防抖动 |
+| 死亡状态            | 终点态，不再切出                     |
 
 ### 面试点
 
+
+
 1. 什么是有限状态机？解决什么问题？（同一时刻一状态、条件触发切换；把嵌套 if-else 拆成状态表）
+
 2. FSM 三个核心要素？（状态、转换条件、当前状态指针）
+
 3. 为什么发现玩家和丢失玩家用不同距离？（滞回防抖，避免边界状态闪烁）
+
 4. 状态机和 Unity 是什么关系？（无关，是通用编程模式；Update 换成 while 循环就是控制台版）
-5. 状态多了 FSM 会有什么问题？（状态数爆炸、转换连线复杂，这时用行为树 BT——正是后续 Demo2 的内容）
+
+5. 状态多了 FSM 会有什么问题？（状态数爆炸、转换连线复杂，这时用行为树 BT—— 正是后续 Demo2 的内容）
 
 ## 顺延与待办
 
-- LeetCode 283 移动零、121 买卖股票（穿插做）
-- EnemyFSM 默写自检（不查资料写一遍，工程 Enemy.cs 可对照）
-- 打磨期：Build 打包 exe 挂 Release；画面中间多余红横线排查；Boss 专用受击音效；public 字段重构 [SerializeField] private；ClosedBookSpawmer 命名拼写
 
-# 📅 D30: 状态机小怪升级——巡逻点系统 + 扇形视野 + 追击加速度 + 换静态低模
+
+* LeetCode 283 移动零、121 买卖股票（穿插做）
+
+* EnemyFSM 默写自检（不查资料写一遍，工程 Enemy.cs 可对照）
+
+* 打磨期：Build 打包 exe 挂 Release；画面中间多余红横线排查；Boss 专用受击音效；public 字段重构 \[SerializeField] private；ClosedBookSpawmer 命名拼写
+
+# 📅 D30: 状态机小怪升级 —— 巡逻点系统 + 扇形视野 + 追击加速度 + 换静态低模
 
 D29 已预热 FSM 概念，今天把工程里的 Enemy.cs 全面升级：巡逻从硬编码改成可配置巡逻点，感知从 360° 半径升级成有朝向的扇形视野，并换成了带明确正面的低模。
 
----
+
+
+***
 
 ## ☀️ 巡逻点系统（可配置 + 到达停留）
 
@@ -5675,14 +7748,22 @@ D29 已预热 FSM 概念，今天把工程里的 Enemy.cs 全面升级：巡逻�
 
 到达巡逻点后要停留 1-2 秒。用 **Idle 状态 + waitTimer** 表达，而不是协程：
 
-- **关键判断**：停留是**可以被打断**的——玩家随时可能出现，小怪必须立刻反应
-- 如果用协程睡死 2 秒，醒来后无脑覆盖状态，可能把"正在追玩家"覆盖回巡逻（和 Boss.cs 之前"协程醒来覆盖 Dead"是同款 bug）
-- 用 waitTimer 每帧 `waitTimer -= Time.deltaTime` 倒计时，天然可被打断，状态机一发现玩家立刻切走
+
+
+* **关键判断**：停留是**可以被打断**的 —— 玩家随时可能出现，小怪必须立刻反应
+
+* 如果用协程睡死 2 秒，醒来后无脑覆盖状态，可能把 "正在追玩家" 覆盖回巡逻（和 Boss.cs 之前 "协程醒来覆盖 Dead" 是同款 bug）
+
+* 用 waitTimer 每帧 `waitTimer -= Time.deltaTime` 倒计时，天然可被打断，状态机一发现玩家立刻切走
 
 ### 巡逻的三个 bug（首版踩的坑）
 
+
+
 1. **patrolTarget 只在 Start 赋值一次**：waypointIndex++ 后目标没更新，永远走第一个点。要在 Idle 结束时重新 `patrolTarget = waypoints[waypointIndex].position`
+
 2. **回绕条件写错**：`waypointIndex > waypoints.Length` 应为 `>=`（否则 index=N 时数组越界）
+
 3. **Update 每帧无脑覆盖 Idle**：末尾 else 写 `state=Patrol` 会把刚进入的 Idle 立刻覆盖，停留根本不执行。状态转换只在玩家相关时切换，Idle/Patrol 内部自流转，不写无脑 else 覆盖
 
 ### 预制体引用场景物体：注入模式
@@ -5691,23 +7772,29 @@ D29 已预热 FSM 概念，今天把工程里的 Enemy.cs 全面升级：巡逻�
 
 **修法**：让场景里的 **EnemySpawner** 持有 waypoints，生成敌人时注入：
 
-```csharp
+
+
+```
 e.waypoints = this.waypoints;   // 和已有的 e.spawner = this 同模式
 ```
 
-这是"依赖注入"的简单形态：预制体不写死场景引用，由场景里的生成器在运行时传入。
+这是 "依赖注入" 的简单形态：预制体不写死场景引用，由场景里的生成器在运行时传入。
 
----
+
+
+***
 
 ## 🌤 Gizmos 可视化
 
 ### 三个 Gizmos 用途
 
-| 方法 | 作用 | 参数 |
-|---|---|---|
-| `DrawWireSphere(center, radius)` | 画检测半径球 | 球心、半径 |
-| `DrawLine(from, to)` | 画巡逻路径 | 两个点 |
-| `DrawRay(start, direction)` | 画方向射线 | 起点、方向（长度=方向向量长度） |
+
+
+| 方法                               | 作用     | 参数                 |
+| -------------------------------- | ------ | ------------------ |
+| `DrawWireSphere(center, radius)` | 画检测半径球 | 球心、半径              |
+| `DrawLine(from, to)`             | 画巡逻路径  | 两个点                |
+| `DrawRay(start, direction)`      | 画方向射线  | 起点、方向（长度 = 方向向量长度） |
 
 OnDrawGizmos 是 Unity 自动调用的特殊方法，只在 Scene 视图显示辅助线，打包后玩家看不到。
 
@@ -5715,22 +7802,33 @@ OnDrawGizmos 是 Unity 自动调用的特殊方法，只在 Scene 视图显示�
 
 错误写法：
 
-```csharp
+
+
+```
 Gizmos.DrawLine(waypoints[i].position, waypoints[i++].position);
 ```
 
 `i++` 是**后置自增**：先用 i 当前值、用完再加 1。于是：
-- 第二个参数取的也是自增前的 i → 同一点画线（零长度，看不见）
-- i 在循环体被加一次、for 末尾又加一次 → 跳过下一个点
 
-结果只剩最后一条"末点→起点"的闭合线。改成 `i + 1`（只算索引、不自增）即可。
+
+
+* 第二个参数取的也是自增前的 i → 同一点画线（零长度，看不见）
+
+* i 在循环体被加一次、for 末尾又加一次 → 跳过下一个点
+
+结果只剩最后一条 "末点→起点" 的闭合线。改成 `i + 1`（只算索引、不自增）即可。
 
 ### DrawRay vs DrawLine
 
-- DrawLine：给起点和终点
-- DrawRay：给起点和方向，长度由方向决定，画"从某点朝某方向延伸"更直观
 
----
+
+* DrawLine：给起点和终点
+
+* DrawRay：给起点和方向，长度由方向决定，画 "从某点朝某方向延伸" 更直观
+
+
+
+***
 
 ## 🌙 扇形视野（Field of View）
 
@@ -5740,14 +7838,21 @@ Gizmos.DrawLine(waypoints[i].position, waypoints[i++].position);
 
 ### 新 API：Vector3.Angle
 
-`Vector3.Angle(Vector3 from, Vector3 to)` 返回两向量夹角（0~180 度）：
-- 0° = 同向（正前方），90° = 侧面，180° = 正背后
-- 只看方向、不看长度，传没归一化的向量结果一样
+`Vector3.Angle(Vector3 from, Vector3 to)` 返回两向量夹角（0\~180 度）：
+
+
+
+* 0° = 同向（正前方），90° = 侧面，180° = 正背后
+
+* 只看方向、不看长度，传没归一化的向量结果一样
 
 ### 状态转换条件
 
-- **发现**（Patrol/Idle → Chase）：`distance < detectRange 且 angle < fieldOfView`（距离够近 + 在正面扇形）
-- **丢失**（Chase → Patrol）：只看 `distance > lostRange`，**不看角度**——已经追上去了，小怪知道玩家在哪，跑远 8m 才放弃
+
+
+* **发现**（Patrol/Idle → Chase）：`distance < detectRange 且 angle < fieldOfView`（距离够近 + 在正面扇形）
+
+* **丢失**（Chase → Patrol）：只看 `distance > lostRange`，**不看角度**—— 已经追上去了，小怪知道玩家在哪，跑远 8m 才放弃
 
 ### Normalize 的坑
 
@@ -5755,12 +7860,19 @@ Gizmos.DrawLine(waypoints[i].position, waypoints[i++].position);
 
 ### 实测效果
 
-- 正面靠近 5m 内被追
-- 背后贴脸（夹角 >60°）不追，继续巡逻
-- 从背后绕到正面，进入 60° 扇形瞬间被发现
-- 跑远 8m 放弃追击
 
----
+
+* 正面靠近 5m 内被追
+
+* 背后贴脸（夹角 >60°）不追，继续巡逻
+
+* 从背后绕到正面，进入 60° 扇形瞬间被发现
+
+* 跑远 8m 放弃追击
+
+
+
+***
 
 ## ⭐ 追击加速度（Mathf.Lerp）
 
@@ -5770,7 +7882,9 @@ Gizmos.DrawLine(waypoints[i].position, waypoints[i++].position);
 
 ### 思路
 
-远慢近快：把距离换算成 0~1 进度，再插值出当前速度。
+远慢近快：把距离换算成 0\~1 进度，再插值出当前速度。
+
+
 
 ```
 p = (lostRange - distance) / (lostRange - attackRanfe)
@@ -5783,104 +7897,145 @@ chaseSpeed = Mathf.Lerp(慢, 快, p)
 
 ### 为什么要 Clamp01
 
-Mathf.Lerp 不会自动夹紧进度，t<0 或 >1 会外推。正常状态机把 distance 限制在 1.5~8，但 else-if 链命中一条就停，存在"Attack→Chase 转换那帧跳过丢失检查"的边界，可能算出负速度。用 `Mathf.Clamp01(p)` 自己夹紧输入，不依赖状态机保证——防御性编程。
+Mathf.Lerp 不会自动夹紧进度，t<0 或>1 会外推。正常状态机把 distance 限制在 1.5\~8，但 else-if 链命中一条就停，存在 "Attack→Chase 转换那帧跳过丢失检查" 的边界，可能算出负速度。用 `Mathf.Clamp01(p)` 自己夹紧输入，不依赖状态机保证 —— 防御性编程。
 
----
+
+
+***
 
 ## 🧱 换静态低模（逻辑 / 外观分离）
 
 ### 为什么要换
 
-胶囊体绕 Y 轴旋转后看不出朝向，扇形视野的"正面/背后"玩家读不出来。换成带脸的模型，机制才成立。
+胶囊体绕 Y 轴旋转后看不出朝向，扇形视野的 "正面 / 背后" 玩家读不出来。换成带脸的模型，机制才成立。
 
 ### 资源包的模块化设计
 
 这个 Cube Pig 资源是拼装的：
-- 身体（Pig.fbx，无眼睛）
-- 脸（Face 01 睁眼 / Face 02 表情，自带眼睛材质）
-- 尾巴（Pig Tail）
-- 已拼好的完整猪：`Prefabs/Full/Pig No Root.prefab`
+
+
+
+* 身体（Pig.fbx，无眼睛）
+
+* 脸（Face 01 睁眼 / Face 02 表情，自带眼睛材质）
+
+* 尾巴（Pig Tail）
+
+* 已拼好的完整猪：`Prefabs/Full/Pig No Root.prefab`
 
 直接把眼睛材质塞进身体的材质槽是错的（身体没有脸的子网格，材质会渲染成肚子底下的黑块）。
 
 ### 换模型的通用流程（以后都这么做）
 
-1. 获取资源：资源商店（团结引擎用 assetstore.u3d.cn → 包管理器"我的资产"），或外部 FBX 拖进 Project
+
+
+1. 获取资源：资源商店（团结引擎用 [assetstore.u3d.cn](https://assetstore.u3d.cn) → 包管理器 "我的资产"），或外部 FBX 拖进 Project
+
 2. 检查四样：朝向（正面 +Z，不对转子物体）、大小（Scale）、材质、碰撞体（角色用 Capsule Collider）
-3. 组装：**根物体挂脚本 + 碰撞体，模型当子物体**——以后再换外观只换子物体，逻辑一行不改
+
+3. 组装：**根物体挂脚本 + 碰撞体，模型当子物体**—— 以后再换外观只换子物体，逻辑一行不改
+
 4. 用预制体管理：改一处，所有实例同步
 
 ### 静态 vs 带动画模型
 
 静态模型（无动作）= 换个形状的胶囊；带动画模型要额外配 Animator + 动画控制器（后续阶段学）。
 
----
+
+
+***
 
 ## 🔧 Bug 修复
 
 ### BGM 重开无声
 
 根因：BGM 只在 AudioManager 诞生时 Play 一次，关了再开只改 mute 没重新 Play。
+
 修法：把 Play 逻辑并入 `SetMusicOn`，开启时若没在播就 Play。调用方只调一个方法，更可靠。
 
 ### 暂停设置滑块被挡
 
 根因：BossText 排在 SettingsPanel 上层（同级越靠下越在上），拦截了鼠标拖拽。
-修法：取消 BossText 组件的 Raycast Target（射线检测目标）。更彻底的做法是把暂停/设置面板拖到 Canvas 子物体最底部。
 
----
+修法：取消 BossText 组件的 Raycast Target（射线检测目标）。更彻底的做法是把暂停 / 设置面板拖到 Canvas 子物体最底部。
+
+
+
+***
 
 ## 🏁 里程碑验收：继承多态口头抽查
 
-- 父类方法用 `virtual`、子类重写用 `override`
-- 子类能装进 `List<父类>` 是因为继承的 is-a 关系（里氏替换）
-- 调同一个 `Attack()` 各跑各的是多态；口诀"左边（声明类型）决定能不能点出方法，右边（new 的类型）决定执行谁"
+
+
+* 父类方法用 `virtual`、子类重写用 `override`
+
+* 子类能装进 `List<父类>` 是因为继承的 is-a 关系（里氏替换）
+
+* 调同一个 `Attack()` 各跑各的是多态；口诀 "左边（声明类型）决定能不能点出方法，右边（new 的类型）决定执行谁"
 
 ## D30 关键概念速查
 
-| 概念 | 一句话 |
-|---|---|
-| 巡逻点 Transform[] | 可配置的巡逻路线点 |
-| Idle 状态 + waitTimer | 可被打断的停留，不用协程 |
-| 注入模式 | 场景生成器把场景引用传给预制体 |
-| Vector3.Angle | 两向量夹角 0~180 |
-| 扇形视野 | 发现看距离+夹角，丢失只看距离 |
-| Mathf.Lerp | 两值之间按进度插值 |
-| Mathf.Clamp01 | 把进度锁在 0~1 |
-| 逻辑/外观分离 | 根挂脚本碰撞体、模型当子物体 |
-| 后置自增 i++ | 先用旧值再加 1，别在循环参数里误用 |
+
+
+| 概念                  | 一句话                |
+| ------------------- | ------------------ |
+| 巡逻点 Transform \[]   | 可配置的巡逻路线点          |
+| Idle 状态 + waitTimer | 可被打断的停留，不用协程       |
+| 注入模式                | 场景生成器把场景引用传给预制体    |
+| Vector3.Angle       | 两向量夹角 0\~180       |
+| 扇形视野                | 发现看距离 + 夹角，丢失只看距离  |
+| Mathf.Lerp          | 两值之间按进度插值          |
+| Mathf.Clamp01       | 把进度锁在 0\~1         |
+| 逻辑 / 外观分离           | 根挂脚本碰撞体、模型当子物体     |
+| 后置自增 i++            | 先用旧值再加 1，别在循环参数里误用 |
 
 ## 待办
 
-- Mathf.Clamp01 夹紧追击进度（可选）
-- 暂停面板补音乐 Toggle + 音量滑块实时生效（OnVolumeSlider 加 AudioListener.volume）
-- D31 阶段 1 最后冲刺
-- LeetCode 283/121 穿插；打磨期 exe 打包、Boss 专用音效等
 
----
+
+* Mathf.Clamp01 夹紧追击进度（可选）
+
+* 暂停面板补音乐 Toggle + 音量滑块实时生效（OnVolumeSlider 加 AudioListener.volume）
+
+* D31 阶段 1 最后冲刺
+
+* LeetCode 283/121 穿插；打磨期 exe 打包、Boss 专用音效等
+
+
+
+***
 
 ## 🎯 D31（10/20）Demo1 核心战斗收尾 + 金币模型与掉落 + 动画联动
 
 ### 任务重设计（用户主导，比原任务卡更专业）
 
 原任务卡有 Flee（低血逃跑），实际游戏中小怪都是死战到底（MC 村民是特例）。重新设计：
-- **小怪**：取消 Flee，玩家跑出 >8m → 回巡逻点并**脱战回血**（黑魂/WOW 标准脱战重置）
-- **Boss**：血量 <30% 进入**狂暴**（伤害↑、前摇↓、速度↑、体型↑、变橙）
-- **金币**：去掉场景散落，只保留打怪掉落；金币改成立着的金色模型 + 悬空自转浮动
 
----
+
+
+* **小怪**：取消 Flee，玩家跑出 >8m → 回巡逻点并**脱战回血**（黑魂 / WOW 标准脱战重置）
+
+* **Boss**：血量 <30% 进入**狂暴**（伤害↑、前摇↓、速度↑、体型↑、变橙）
+
+* **金币**：去掉场景散落，只保留打怪掉落；金币改成立着的金色模型 + 悬空自转浮动
+
+
+
+***
 
 ## 🩹 脱战回血
 
 ### 为什么要回血
 
-玩家跑远后怪物回巡逻，如果不回血，玩家可以"打一下跑远、再打一下"无限磨死怪。脱战回满血鼓励持续输出，是动作游戏标准设计。
+玩家跑远后怪物回巡逻，如果不回血，玩家可以 "打一下跑远、再打一下" 无限磨死怪。脱战回满血鼓励持续输出，是动作游戏标准设计。
 
 ### 实现
 
 Enemy 加 `maxHp=5`，在 Chase 状态的丢失判定里先回满血再切巡逻：
 
-```csharp
+
+
+```
 else if (state == EnemyState.Chase && distance > lostRange)
 {
     hp = maxHp;          // 脱战回满
@@ -5888,7 +8043,9 @@ else if (state == EnemyState.Chase && distance > lostRange)
 }
 ```
 
----
+
+
+***
 
 ## 🔥 Boss 狂暴（模式开关，不是新状态）
 
@@ -5898,28 +8055,41 @@ else if (state == EnemyState.Chase && distance > lostRange)
 
 ### 实现要点
 
-- 字段 `bool enraged`，触发后置 true，防止重复触发
-- `TakeDamage` 里**先扣血再判狂暴**：`hp -= dmg; if (!enraged && hp <= maxHp * 0.3f) EnterEnrage();`
-- `EnterEnrage` 改已有字段：attackATK 15→25、windupTime 0.7→0.3、chaseSpeed 2→4、模型放大 1.5 倍、颜色变橙 `Color(1f, 0.4f, 0f)`
-- `HurtRoutine` 结束时按 `enraged` 恢复狂暴色（否则受伤闪红后恢复成原色，狂暴色就没了）
+
+
+* 字段 `bool enraged`，触发后置 true，防止重复触发
+
+* `TakeDamage` 里**先扣血再判狂暴**：`hp -= dmg; if (!enraged && hp <= maxHp * 0.3f) EnterEnrage();`
+
+* `EnterEnrage` 改已有字段：attackATK 15→25、windupTime 0.7→0.3、chaseSpeed 2→4、模型放大 1.5 倍、颜色变橙 `Color(1f, 0.4f, 0f)`
+
+* `HurtRoutine` 结束时按 `enraged` 恢复狂暴色（否则受伤闪红后恢复成原色，狂暴色就没了）
 
 ### 狂暴三连 bug（全踩过）
 
+
+
 1. **狂暴晚一刀**：先判狂暴再扣血，用的是扣血前的血量 → 改先扣血再判
+
 2. **无限变大**：缺 `!enraged` 守卫，每刀都触发 EnterEnrage，modelBaseScale 每刀乘 1.5 → 加守卫
-3. **打不到玩家**：缩放根物体连 BoxCollider 一起放大，玩家被物理挡在攻击范围外 → **只缩放模型子物体，根物体（碰撞体/位置/攻击距离）永远不动**
 
-### 逻辑/外观分离（反复出现的原则）
+3. **打不到玩家**：缩放根物体连 BoxCollider 一起放大，玩家被物理挡在攻击范围外 → **只缩放模型子物体，根物体（碰撞体 / 位置 / 攻击距离）永远不动**
 
-根物体挂脚本 + 碰撞体 + 管逻辑位置；模型当子物体 + 管外观（缩放/颜色/旋转）。改外观只改子物体，逻辑一行不动。
+### 逻辑 / 外观分离（反复出现的原则）
 
----
+根物体挂脚本 + 碰撞体 + 管逻辑位置；模型当子物体 + 管外观（缩放 / 颜色 / 旋转）。改外观只改子物体，逻辑一行不动。
+
+
+
+***
 
 ## 🪙 金币模型（根 + 模型子结构）
 
 ### 为什么不能一个圆柱搞定
 
 金币需要两个独立旋转：**根物体自转（Y 轴，金币绕圈转）** 和 **模型立起（X 轴 90°，圆柱从躺变立）**。如果都在一个物体上，自转会把立起的旋转也带着转，朝向乱掉。所以拆成两层：
+
+
 
 ```
 Coin（根）          ← 挂碰撞体 + Coin + CoinMotion，管自转和拾取
@@ -5928,21 +8098,25 @@ Coin（根）          ← 挂碰撞体 + Coin + CoinMotion，管自转和拾取
 
 ### 金币平躺根因
 
-CoinSpawner 用 `Instantiate(prefab, pos, Quaternion.identity)`，`identity`（无旋转）覆盖了预制体里模型 90°X 立起的旋转，生成的全平躺。改成根+子结构后，根怎么生成都不影响子物体的立起旋转。
+CoinSpawner 用 `Instantiate(prefab, pos, Quaternion.identity)`，`identity`（无旋转）覆盖了预制体里模型 90°X 立起的旋转，生成的全平躺。改成根 + 子结构后，根怎么生成都不影响子物体的立起旋转。
 
 ### 材质
 
 金色材质：Metallic（金属度）= 1、Smoothness（平滑度）≈ 0.7，颜色金黄。光感来自材质，不是套多层圆柱。
 
----
+
+
+***
 
 ## 🌊 CoinMotion 悬空（Mathf.Sin）
 
 ### 新 API：Mathf.Sin
 
-大白话：**匀速规律起伏的数字发生器**。输入一个一直增大的数（Time.time），输出 -1~1 之间正弦波动的值，正好用来做上下浮动。
+大白话：**匀速规律起伏的数字发生器**。输入一个一直增大的数（Time.time），输出 -1\~1 之间正弦波动的值，正好用来做上下浮动。
 
-```csharp
+
+
+```
 // 根自转
 transform.Rotate(0, spinSpeed * Time.deltaTime, 0);
 // 模型上下浮动
@@ -5953,7 +8127,9 @@ model.localPosition = p;
 
 ### 关键坑：不能直接改 position.y
 
-```csharp
+
+
+```
 model.position.y = ...;  // ❌ 编译报错
 ```
 
@@ -5961,13 +8137,17 @@ model.position.y = ...;  // ❌ 编译报错
 
 用 `localPosition`（相对父物体）而非 `position`（世界坐标），否则浮动围绕世界 y=0，金币会脱离根物体乱飞。
 
----
+
+
+***
 
 ## 💀 怪物掉金币
 
-Die() 里循环生成：
+Die () 里循环生成：
 
-```csharp
+
+
+```
 while (coinDropcount > 0)
 {
     Vector2 circle = Random.insideUnitCircle;  // 单位圆内随机点，散开
@@ -5981,13 +8161,17 @@ while (coinDropcount > 0)
 
 Coin.cs 用 `spawner?.RemoveCoin` 可空，掉落金币没有 spawner 也不报错。
 
----
+
+
+***
 
 ## 🚨 死循环卡死（最严重的一次）
 
 ### 根因
 
-```csharp
+
+
+```
 while (coinDropcount > 0)
 {
     Instantiate(...);
@@ -5999,9 +8183,11 @@ while (coinDropcount > 0)
 
 ### 铁律
 
-写 while 必须确认循环体里有"让条件变 false 的动作"。for 循环把初始化/条件/自增写在一行，最不容易漏。
+写 while 必须确认循环体里有 "让条件变 false 的动作"。for 循环把初始化 / 条件 / 自增写在一行，最不容易漏。
 
----
+
+
+***
 
 ## 🔧 其他 bug
 
@@ -6011,7 +8197,9 @@ Patrol/Chase 里 Debug.Log 每帧跑，多只怪叠加把 Console 刷爆拖死�
 
 ### Mathf.Clamp01 返回值没接住
 
-```csharp
+
+
+```
 Mathf.Clamp01(p);  // ❌ 返回值丢了，p 没变
 p = Mathf.Clamp01(p);  // ✅
 ```
@@ -6022,7 +8210,9 @@ Clamp01 是纯函数，不修改输入，必须接住返回值。
 
 猪的渲染器在子物体深处，`GetComponent<Renderer>()` 只搜自身返回 null，下一行 `material.color` 空引用中断 Start，导致 baseScale 和 state=Chase 没执行，Boss 永久卡 Idle。改 `GetComponentInChildren<Renderer>()`。
 
----
+
+
+***
 
 ## 🎬 Animator 动画系统（Idle/Run 联动）
 
@@ -6032,59 +8222,119 @@ Cube Pig 包实际只有 3 个片段：Idle、Run Forward In Place、Run Forward
 
 ### 控制器搭建
 
-- 新建 Animator Controller，加 float 参数 `Speed`
-- 两个状态：Idle（默认）、Run
-- 两条转换：Idle→Run（Speed > 0.1）、Run→Idle（Speed < 0.1）
-- **Has Exit Time（有退出时间）取消勾选**（即时响应，不等动画播完）
-- Transition Duration（转换时长）= 0.1（快速混合）
+
+
+* 新建 Animator Controller，加 float 参数 `Speed`
+
+* 两个状态：Idle（默认）、Run
+
+* 两条转换：Idle→Run（Speed > 0.1）、Run→Idle（Speed < 0.1）
+
+* **Has Exit Time（有退出时间）取消勾选**（即时响应，不等动画播完）
+
+* Transition Duration（转换时长）= 0.1（快速混合）
 
 ### 脚本驱动：Animator.SetFloat
 
-大白话：给控制器里的参数赋值。`anim.SetFloat("Speed", 1f)` 告诉控制器"现在在动"，控制器自己切 Run。参数名大小写敏感。
+大白话：给控制器里的参数赋值。`anim.SetFloat("Speed", 1f)` 告诉控制器 "现在在动"，控制器自己切 Run。参数名大小写敏感。
 
 Animator 在模型子物体上，用 `GetComponentInChildren<Animator>()` 缓存。
 
 ### 两个 Speed 别混
 
-| 参数 | 作用 |
-|---|---|
-| Parameters 里的 `Speed` | 开关：>0.1 切 Run，<0.1 切 Idle |
-| Run 状态 Inspector 里的 `Speed` | 固定播放倍率 |
+
+
+| 参数                           | 作用                              |
+| ---------------------------- | ------------------------------- |
+| Parameters 里的 `Speed`        | 开关：>0.1 切 Run，<0.1 切 Idle       |
+| Run 状态 Inspector 里的 `Speed`  | 固定播放倍率                          |
 | Parameters 里的 `RunSpeed`（进阶） | 动态播放倍率，勾 Speed Parameter 后由脚本驱动 |
 
 小怪 Patrol/Chase 必须设 `Speed=1`（开跑开关）+ `RunSpeed=实际速度/4`（腿速匹配）。只设 RunSpeed 不设 Speed → 永远在 Idle，腿不动。
 
 ### Boss 复用同一控制器
 
-Boss 和小怪目前都只需要 Idle/Run，直接拖同一个 EnemyAnimator，不重复造。Boss.cs 在 Update 里设 `Speed = state==Chase ? 1 : 0`，Chase 时设 `RunSpeed = chaseSpeed/4f`。以后 Boss 要专属攻击/狂暴/死亡动画时再复制一份 BossAnimator。
+Boss 和小怪目前都只需要 Idle/Run，直接拖同一个 EnemyAnimator，不重复造。Boss.cs 在 Update 里设 `Speed = state==Chase ? 1 : 0`，Chase 时设 `RunSpeed = chaseSpeed/4f`。以后 Boss 要专属攻击 / 狂暴 / 死亡动画时再复制一份 BossAnimator。
 
 ### 模型朝向
 
-`transform.LookAt(target)` 让根物体 +Z（蓝色箭头）指向玩家。如果模型脸不是朝 +Z 建的，就会"横着追"。修法：给模型子物体补 Y 轴旋转，让脸和根 +Z 同向。
+`transform.LookAt(target)` 让根物体 +Z（蓝色箭头）指向玩家。如果模型脸不是朝 +Z 建的，就会 "横着追"。修法：给模型子物体补 Y 轴旋转，让脸和根 +Z 同向。
 
----
+
+
+***
 
 ## D31 关键概念速查
 
+
+
+| 概念                      | 一句话                        |
+| ----------------------- | -------------------------- |
+| 脱战回血                    | 玩家跑远后怪回巡逻并回满，防止磨血          |
+| 狂暴模式开关                  | bool enraged，不是新状态，改参数不改逻辑 |
+| 逻辑 / 外观分离               | 根管碰撞体 / 位置，模型子物体管缩放 / 颜色   |
+| 根 + 模型子结构               | 两个独立旋转不打架（根自转 + 模型立起）      |
+| Mathf.Sin               | 匀速起伏数字发生器，-1\~1，做浮动        |
+| position.y 不能直接改        | 属性返回复印件，用临时变量接住再赋回         |
+| Random.insideUnitCircle | 单位圆内随机点，让掉落物散开             |
+| while 铁律                | 循环体必须有让条件变 false 的动作       |
+| Animator.SetFloat       | 给控制器参数赋值，驱动状态切换            |
+| Has Exit Time           | 关了才能即时切动画，不等播完             |
+| Speed vs RunSpeed       | 一个是走 / 跑开关，一个是跑动画播放倍率      |
+| GetComponentInChildren  | 组件在子物体上时用，不只搜自身            |
+
+## D32 NavMesh 寻路 + 小怪头顶世界空间 UI
+
+### 上午技术 A：NavMesh 真实寻路
+
+**目的**：以前用 MoveTowards 是"直线朝目标走"，会直直撞树；NavMesh 让 AI 自己算路、绕开障碍。
+
+**流程**：
+1. 包管理器（Unity Registry）安装 **AI Navigation** 包（com.unity.ai.navigation）。
+2. 建空物体挂 **NavMesh Surface**（导航网格表面）组件 → Bake（烘焙），地面出现蓝色可行走区域。
+3. 敌人预制体挂 **NavMeshAgent**（导航网格代理）组件，脚本里 `GetComponent` 拿到。
+4. 用 `SetDestination(目标点)` 代替 MoveTowards；`isStopped` 控制走/停；`remainingDistance` + `stoppingDistance` 判断到没到。
+
+**基准偏移（Base Offset）**：模型下沉/飞天的根因。Agent 根被放在 NavMesh 上方 Base Offset 处；模型子物体 pivot 不在根上，要用偏移把脚对到地面。**根物体缩放会把偏移按倍数放大**（Boss 根 scale 3，本地 y=-0.5 变世界 -1.5）。
+
+### 下午技术 B：每只小怪头顶世界空间 UI
+
+**目的**：每只怪独立显示血条 + 当前状态，且怪怎么转身 UI 都正对相机。
+
+**做法**：
+1. 敌人预制体下加 **Canvas**，Render Mode（渲染模式）= **World Space（世界空间）**，scale 0.01。
+2. Canvas 下挂 **Slider**（滑块）做血条、**Text**（文本）做状态。
+3. 新脚本 **EnemyUI**（挂 Canvas）：Update 同步血条 value 与状态文字；**LateUpdate 里 Billboard（公告板）**——把画布朝向设成相机朝向。
+
+### D32 关键概念速查
+
 | 概念 | 一句话 |
-|---|---|
-| 脱战回血 | 玩家跑远后怪回巡逻并回满，防止磨血 |
-| 狂暴模式开关 | bool enraged，不是新状态，改参数不改逻辑 |
-| 逻辑/外观分离 | 根管碰撞体/位置，模型子物体管缩放/颜色 |
-| 根+模型子结构 | 两个独立旋转不打架（根自转 + 模型立起） |
-| Mathf.Sin | 匀速起伏数字发生器，-1~1，做浮动 |
-| position.y 不能直接改 | 属性返回复印件，用临时变量接住再赋回 |
-| Random.insideUnitCircle | 单位圆内随机点，让掉落物散开 |
-| while 铁律 | 循环体必须有让条件变 false 的动作 |
-| Animator.SetFloat | 给控制器参数赋值，驱动状态切换 |
-| Has Exit Time | 关了才能即时切动画，不等播完 |
-| Speed vs RunSpeed | 一个是走/跑开关，一个是跑动画播放倍率 |
-| GetComponentInChildren | 组件在子物体上时用，不只搜自身 |
+| --- | --- |
+| NavMesh | 烘焙出来的"可行走地面"，AI 只在蓝色区域走 |
+| NavMesh Surface | 新版烘焙组件，替代旧 Navigation 窗口 |
+| NavMeshAgent | 挂在 AI 身上的"导航司机"，负责移动/避障/转向 |
+| SetDestination | 告诉司机"去这个世界坐标"，是 NavMeshAgent 的方法 |
+| remainingDistance | 离终点还剩多远，配合 stoppingDistance 判到点 |
+| isStopped | true 停车 false 走，是 NavMeshAgent 的 bool |
+| Base Offset | 根相对 NavMesh 的高度，修模型下沉/飞天 |
+| World Space Canvas | 放在 3D 世界里的画布（不是贴屏幕） |
+| Billboard | 每帧让 UI 朝向相机，写在 LateUpdate |
+| GetComponentInParent | 脚本在子物体上、要拿父级组件时用 |
+
+### 易错点
+
+- NavMesh 只认几何、不认材质/贴图，换草皮不影响。
+- 到点判断要用 `remainingDistance`，不能再用老的 Distance 阈值（stoppingDistance 会提前停车）。
+- Billboard 必须在 **LateUpdate**（在敌人/相机移动之后），且改的是画布不是根。
+- 缩放根物体时，Base Offset 与模型子物体偏移都要按缩放倍数重算。
+- 脚本里 `switch` 读的是 `enemy.CurrentState`，别写死字符串。
 
 ## 待办
 
-- D32：录屏验收 + 首批投递准备（投 2-3 家）
-- 动画：Boss 专属攻击/狂暴/死亡动画（等需要时拆 BossAnimator）
-- Boss 奖励：等背包系统后做（当前 Boss 死直接结束）
-- 金币掉落弹跳（推迟，以后需要再写）
-- LeetCode 283/121；打磨期 exe 打包、Boss 专用音效、暂停面板音乐 Toggle
+* 动画：Boss 专属攻击 / 狂暴 / 死亡动画（等需要时拆 BossAnimator）
+
+* Boss 奖励：等背包系统后做（当前 Boss 死直接结束）
+
+* 金币掉落弹跳（推迟，以后需要再写）
+
+* LeetCode 283/121；打磨期 exe 打包、Boss 专用音效、暂停面板音乐 Toggle

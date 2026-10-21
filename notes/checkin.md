@@ -375,3 +375,15 @@
 - Boss 掉金币：暂不做（Boss 死亡直接结束游戏无操作空间；应做成奖励形式但当前无背包系统，等以后有背包再做）。
 - 旧脚本去向：RotateCube 通用旋转脚本文件保留（别处可复用），从金币移除、旋转逻辑并进 CoinMotion；CoinSpawner 场景物体已删（去散落金币），.cs 文件保留；Coin 拾取脚本保留。
 - 待办：D32 录屏验收 + 首批投递准备；动画 Idle/Run 控制器（D34/D35）；Boss 奖励等背包系统；LeetCode 283/121；打磨期 exe 打包。
+
+## D32 完成（10/21）NavMesh 真实寻路 + 小怪头顶世界空间 UI + Demo1 录屏
+
+- 上午技术 A：安装 AI Navigation 包（com.unity.ai.navigation），用 NavMesh Surface 组件 Bake 出蓝色可行走区域（新版无 Navigation 窗口）；Enemy 接入 NavMeshAgent，SetDestination 替代 MoveTowards，isStopped 控走停、remainingDistance+stoppingDistance 判到点，小怪能绕树/石头追击。
+- 场景美化：导入低多边形简约自然套装（SimpleNaturePack，树/石/草/灌木），地面换成草皮；NavMesh 只认几何不认材质，换皮不影响。
+- 巡逻卡第一个点：NavMeshAgent stoppingDistance 0.3 提前停车，老 Distance<0.2 阈值不成立，改 remainingDistance 修好。
+- 模型下沉/飞天：Base Offset 基准偏移修复（Enemy 模型子物体本地 y=-1→Base Offset=1；Boss 根 scale 3、模型子物体本地 y=-0.5 世界偏移 1.5→Base Offset=0.5）。
+- 下午技术 B：每只小怪头顶 World Space Canvas（scale 0.01），下挂 Slider 血条 + Text 状态；新脚本 EnemyUI（挂 Canvas）Update 同步血条与中文状态（巡逻/待机/追击/攻击），LateUpdate Billboard 让 UI 始终正对相机。
+- 新机制修 bug：①剩余敌人数 quantity 改跟 enemies.Count 走（私有 List + 只读属性 Enemies + UpdateCountUI，在 Start/Add/Remove 三处刷新）；②BossDirector 逼退玩家抬高 Y，改保留玩家自身 Y；③狂暴文案不打印，isTrigger 中途 return 导致后续检查不执行，改 if(!isTrigger) 包裹。
+- 重拍 7 张截图（主菜单/游戏中/Boss 登场/Boss 狂暴/暂停/小怪状态 UI/胜利），README 全面更新（四态 FSM、NavMesh、技术亮点、W5 进度）。
+- Demo1 演示视频录制完成（Movie_020，1 分 49 秒），发布到 GitHub Release v0.2。
+- 待办：简历加 FSM/NavMesh 一句 + 列 3 家投递目标；动画/背包/LeetCode 等后续任务。

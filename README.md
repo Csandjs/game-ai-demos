@@ -2,9 +2,9 @@
 
 从零开始学习 Unity 游戏开发与游戏 AI，记录所有练习 Demo 和学习笔记。
 
-## 当前作品：MiniLevel 小游戏（W4 整合版）
+## 当前作品：MiniLevel 小游戏（NavMesh 寻路版）
 
-第三人称 3D 动作小游戏：在场景中收集金币、击杀巡逻敌人，最终迎战 Boss。包含完整的主菜单、暂停、设置（音量+音乐开关）、胜负结算和本地存档。
+第三人称 3D 动作小游戏：在森林场景中击杀巡逻小怪、迎战 Boss。小怪与 Boss 基于有限状态机（FSM）+ NavMesh 真实寻路，会自动绕开树石、用扇形视野侦测玩家；每只小怪头顶独立血条与实时状态文字。包含完整的主菜单、暂停、设置（音量+音乐开关）、胜负结算和本地存档。
 
 ### 游戏截图
 
@@ -12,32 +12,40 @@
 
 ![主菜单](docs/screenshots/01_mainmenu.png)
 
-**游戏中**（金币、巡逻小怪、Boss 登场倒计时）
+**游戏中**（草地场景、小怪头顶血条与状态、树石障碍）
 
 ![游戏中](docs/screenshots/02_gameplay.png)
 
-**Boss 战**（五态 AI + 头顶血条）
+**Boss 登场**（清完小怪后登场，头顶血条）
 
-![Boss战](docs/screenshots/03_boss.png)
+![Boss登场](docs/screenshots/03_boss.png)
+
+**Boss 狂暴**（血量低于 30% 变红变大，攻速提升）
+
+![Boss狂暴](docs/screenshots/04_bossagent.png)
 
 **暂停菜单**（Esc 暂停、设置、返回主菜单）
 
-![暂停菜单](docs/screenshots/04_pause.png)
+![暂停菜单](docs/screenshots/05_pause.png)
+
+**小怪状态 UI**（每只小怪头顶血条 + 实时状态：巡逻/待机/追击/攻击）
+
+![小怪状态UI](docs/screenshots/06_healthbar_status.png)
 
 **胜利结算**（本局得分 / 最高分 / 最近得分）
 
-![胜利结算](docs/screenshots/05_victory.png)
+![胜利结算](docs/screenshots/07_victory.png)
 
 ### 完整通关录屏
 
-🎬 [点击在 Release 页在线观看完整通关视频（18.8MB，含主菜单/设置/通关全流程）](https://github.com/Csandjs/game-ai-demos/releases/tag/v0.1)
+🎬 [点击在 Release 页在线观看 Demo1 演示视频（约 1 分 49 秒，含巡逻/扇形视野发现/NavMesh 绕障/攻击/脱战回血/Boss 登场导演/狂暴/胜利）](https://github.com/Csandjs/game-ai-demos/releases/tag/v0.2)
 
 ### 玩法
 
-- **目标**：收集金币、击杀小怪，最终击败 Boss
-- **胜利条件**：击杀 Boss（6 点血量）
+- **目标**：击杀全部小怪，最终击败 Boss
+- **胜利条件**：击杀 Boss（10 点血量，血量低于 30% 进入狂暴）
 - **失败条件**：玩家血量归零
-- **Boss 机制**：游戏开始 5 秒后倒计时 3 秒登场，五态有限状态机（巡逻 / 追击 / 攻击前摇 / 受击 / 死亡），攻击前摇 0.7 秒可躲避
+- **登场机制**：小怪全部清空后，BossDirector 触发倒计时登场（自动把玩家逼退到安全距离）；五态有限状态机（待机/追击/攻击前摇/受击/死亡），攻击前摇 0.7 秒可躲避；30% 血进入狂暴，攻击提升、前摇缩短、变红变大
 
 ### 操作
 
@@ -45,35 +53,40 @@
 |------|------|
 | W A S D | 移动 |
 | 空格 | 跳跃 |
-| K / 鼠标左键 | 攻击（触发前扑动画，3 米范围内造成伤害） |
+| K / 鼠标左键 | 攻击（触发前扑动画，4 米范围内造成伤害） |
 | Esc | 暂停 / 关闭设置面板 |
 
-### 敌人 AI（有限状态机 FSM）
+### 敌人 AI（有限状态机 FSM + NavMesh 寻路）
 
-**小怪（Enemy）三态**：按与玩家的距离自动切换
+**小怪（Enemy）四态**：
 
-- **Patrol 巡逻**：在出生点附近两个巡逻点之间来回走
-- **Chase 追击**：玩家进入侦测范围（5 米）后转身追击，8 米外丢失目标回巡逻
-- **Attack 攻击**：贴脸（1.5 米）后站住，每隔 1 秒造成 10 点伤害
+- **Patrol 巡逻**：在 3 个可配置巡逻点之间移动，NavMesh 自动绕开树和石头
+- **Idle 待机**：到达巡逻点后停留 2 秒，再前往下一个点
+- **Chase 追击**：扇形视野（前方 60°、5 米）发现玩家后追击，速度随距离变化（远慢近快，1~4m/s）；8 米外丢失目标，返回巡逻并回满血
+- **Attack 攻击**：贴脸（1.5 米）后站住，每 1 秒造成 10 点伤害
 
 **Boss（Boss）五态**：
 
-- **Patrol 巡逻**：在场内来回移动
-- **Chase 追击**：发现玩家后以 2m/s 追击
-- **Attack 攻击**：进入 3.5 米后前摇 0.7 秒，造成 15 点伤害，后摇 0.9 秒
-- **Hurt 受击**：被击中后硬直 0.4 秒，播放受击音效
-- **Die 死亡**：血量归零后播放胜利音效、显示结算面板
+- **Idle 待机**：登场前待机
+- **Chase 追击**：以 2m/s 追击（狂暴后 4m/s）
+- **Attack 攻击**：3.5 米内前摇 0.7 秒（模型放大蓄力），造成 15 点伤害（狂暴 25），后摇 0.9 秒
+- **Hurt 受击**：被击中硬直 0.4 秒（狂暴后攻击不会被打断）
+- **Dead 死亡**：缩小消失，弹出胜利结算
 
-每帧流程：计算与玩家距离 → 互斥切换状态 → switch 分发到对应行为。
+**寻路方式**：NavMesh 真实寻路——NavMesh Surface 烘焙可行走区域，NavMeshAgent 接管移动，SetDestination 自动计算路径、绕开障碍物、自动转向；用 remainingDistance + stoppingDistance 判断是否到达。
 
 ### 技术亮点
 
-- **双 AudioSource 音频系统**：一个喇叭 PlayOneShot 播一次性音效（6 种），一个喇叭 loop 播 BGM，独立开关互不干扰
-- **音乐开关存档**：Toggle 组件 + PlayerPrefs（int 存 1/0），跨局保留设置
-- **攻击动画**：Animator 状态机 Idle / Move / Jump / Attack，Trigger 参数瞬间触发，AnyState 过渡实现移动中攻击
-- **空气墙边界**：4 个无渲染 BoxCollider 围住场地，防止玩家和 Boss 掉出地图
-- **Boss 出生点保护**：激活前检测玩家距离，小于 5.5 米时沿水平方向归一化推出，避免碰撞体重叠弹飞
-- **事件驱动 UI**：金币拾取、血量变化、Boss 血量均通过 C# event / Action 通知 UI 更新，逻辑与界面解耦
+- **NavMesh 真实寻路**：NavMesh Surface 烘焙可行走区域，NavMeshAgent 接管移动，SetDestination 自动绕开树/石头，替代手动 MoveTowards
+- **小怪头顶世界空间 UI**：World Space Canvas + Billboard（LateUpdate 面向相机），每只怪独立血条（Slider）+ 实时状态文字，敌人转身时 UI 不转歪
+- **扇形视野检测**：Vector3.Angle 判断玩家是否在前方 60° 锥内，可从背后偷袭
+- **追击速度随距离 Lerp**：远慢近快，手感更自然
+- **BossDirector 登场导演**：小怪清空后协程倒计时、逼退玩家、激活 Boss 与血条，控制登场节奏
+- **剩余敌人数量 UI**：随生成与击杀实时刷新
+- **双 AudioSource 音频系统**：一个喇叭 PlayOneShot 播一次性音效，一个喇叭 loop 播 BGM，独立开关互不干扰
+- **事件驱动 UI**：金币、血量、Boss 血量通过 C# event / Action 通知，逻辑与界面解耦
+- **存档系统**：PlayerPrefs + JSON 封装为 SaveManager，最高分/音量/音乐开关/关卡进度本地持久化
+- **动画系统**：Animator 状态机（Idle/Move/Attack），SetFloat 驱动移动、Trigger 触发攻击，AnyState 过渡实现移动中攻击
 
 ## 目录结构
 
@@ -162,6 +175,14 @@ game-ai-demos/
 - ✅ D26（10/18）：W4 复盘（速查表 + 闭卷自测 + 周总结 + 面试口述）
 - ✅ D27（10/18）：地基期收官整合——攻击动画补全 + 试玩修 bug（空气墙 / 出生点保护）+ BGM 音乐开关存档 + 完整录屏 + README 更新
 
+### 第 5 周（W5）：游戏 AI 专项——FSM 深化 + NavMesh 寻路
+
+- ✅ D28：地基期阶段总结 + 游戏截图入 README + git tag v0.1 + GitHub Release
+- ✅ D29：FSM 概念补课（状态转换图 + 控制台版状态机）
+- ✅ D30：可配置巡逻点数组 + 到点停留（Idle）+ Gizmos 可视化 + 扇形视野（Vector3.Angle ±60°）+ 追击速度随距离变化
+- ✅ D31：脱战回血 + Boss 狂暴（30% 血触发，变红变大）+ 金币模型掉落 + Enemy/Boss 动画 Idle/Run 联动
+- ✅ D32：NavMesh 真实寻路（NavMesh Surface 烘焙 + NavMeshAgent 绕障）+ 小怪头顶世界空间血条与状态 UI（Billboard）+ Demo1 演示录屏
+
 ## 技术栈
 
 - **语言**：C#
@@ -173,12 +194,13 @@ game-ai-demos/
   - UI：UGUI（Canvas、Button、Text、Slider、Toggle、Panel）
   - 动画：Animator 状态机（Bool / Trigger 参数、AnyState 过渡、Transition Duration）
   - 音频：AudioSource（PlayOneShot / loop / mute）、AudioListener、双喇叭 AudioManager
+  - 导航：NavMesh（NavMesh Surface 烘焙、NavMeshAgent、SetDestination、remainingDistance、Base Offset）
   - 其他：SceneManager 场景切换、PlayerPrefs 本地存档、协程、Unity Recorder 录屏
 - **版本控制**：Git / GitHub
 - **开发工具**：VS Code / Rider
 
 ## 后续计划
 
-- 游戏 AI：状态机（已入门）→ 行为树、寻路算法（A*、NavMesh）
+- 游戏 AI：状态机（已掌握）、NavMesh 寻路（已掌握）→ 行为树、A* 寻路原理、感知系统（听觉/团队警戒）
 - 继续：2D / 3D 小游戏 Demo 开发
 - 打磨期：public 字段重构为 [SerializeField] private、代码规范统一、性能优化

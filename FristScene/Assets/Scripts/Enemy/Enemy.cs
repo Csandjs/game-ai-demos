@@ -1,9 +1,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    enum EnemyState
+    public enum EnemyState
     {
         Idle,
         Patrol,
@@ -11,6 +12,7 @@ public class Enemy : MonoBehaviour
         Attack
     }
     private EnemyState state = EnemyState.Patrol;
+    public EnemyState CurrentState => state;
     public Transform[] waypoints;
     int waypointIndex = 0;
     public float waitTimer = 0;
@@ -50,9 +52,11 @@ public class Enemy : MonoBehaviour
     private Vector3 patrolTarget;//目标点
     void PatrolBehavior()
     {
-        transform.position = Vector3.MoveTowards(transform.position, patrolTarget, patrolSpeed * Time.deltaTime);
-        transform.LookAt(patrolTarget);
-        if (Vector3.Distance(transform.position, patrolTarget) < 0.2)
+        
+        agent.isStopped = false;
+        agent.speed = patrolSpeed;
+        agent.SetDestination(patrolTarget);
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             waitTimer = idleTime;
             state = EnemyState.Idle;
@@ -60,6 +64,7 @@ public class Enemy : MonoBehaviour
     }
     void IdleBehavior()
     {
+        agent.isStopped = true;
         waitTimer -= Time.deltaTime;
         if (waitTimer <= 0)
         {
@@ -76,21 +81,22 @@ public class Enemy : MonoBehaviour
     public float chaseSpeed;
     void ChaseBehavior()
     {
-        Vector3 target = player.position;
-        target.y = transform.position.y;
         float p = (lostRange - distance) / (lostRange - attackRanfe);
         p = Mathf.Clamp01(p);
         chaseSpeed = Mathf.Lerp(chaseSpeed_s, chaseSpeed_F, p);
-        transform.position = Vector3.MoveTowards(transform.position, target, chaseSpeed * Time.deltaTime);
-        transform.LookAt(player);
+        agent.isStopped = false;
+        agent.speed = chaseSpeed;
+        agent.SetDestination(player.position);
     }
     //攻击算法
     public int attackATK = 10;
     public float attackInterval = 1f;//攻击间隔
     private float attackTimer = 0f;
     private PlayerHealth playerHealth;
+    private NavMeshAgent agent;
     void AttackBehavior()
     {
+        agent.isStopped = true;
         transform.LookAt(player);
         attackTimer -= Time.deltaTime;
         if (attackTimer <= 0)
@@ -106,6 +112,8 @@ public class Enemy : MonoBehaviour
         patrolTarget = waypoints[waypointIndex].position;
         playerHealth = player.GetComponent<PlayerHealth>();
         animator = GetComponentInChildren<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+
     }
     void Update()
     {

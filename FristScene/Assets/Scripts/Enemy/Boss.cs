@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Boss : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class Boss : MonoBehaviour
     public float windupTime = 0.7f;
     public float recoverTime = 0.9f;
     private Animator animator;
+    private NavMeshAgent agent;
 
     void Start()
     {
@@ -40,19 +42,20 @@ public class Boss : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         originalColor = bossRenderer.material.color;
         modelBaseScale = model.localScale;
+        agent = GetComponent<NavMeshAgent>();
         state = BossState.Chase;
     }
 
     void ChaseBehavior()
     {
-        Vector3 target = player.position;
-        target.y = transform.position.y;
-        transform.position = Vector3.MoveTowards(transform.position, target, chaseSpeed * Time.deltaTime);
-        transform.LookAt(target);
+        agent.isStopped = false;
+        agent.speed = chaseSpeed;
+        agent.SetDestination(player.position);
     }
 
     IEnumerator AttackCoroutine()
     {
+        agent.isStopped = true;
         state = BossState.Attack;
         float t = 0;
         while (t < windupTime)              // 前摇：放大模型

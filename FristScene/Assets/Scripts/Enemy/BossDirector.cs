@@ -11,16 +11,20 @@ public class BossDirector : MonoBehaviour
     private Boss boss;
     public GameObject bossHpSlider;
     private Transform player;
+    public EnemySpawner enemySpawner;
+    bool isTrigger;
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
         boss = bossObj.GetComponent<Boss>();
-        StartCoroutine(BossAppear());
+
     }
     IEnumerator BossAppear()
     {
+        yield return new WaitForSeconds(1f);
+        bossText.text = "Boss即将降临";
         int bossIncomingTime = 3;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         while (bossIncomingTime > 0)
         {
             bossText.text = "还有" + bossIncomingTime + "S";
@@ -37,7 +41,8 @@ public class BossDirector : MonoBehaviour
         if (dir.magnitude < 5.5f)
         {
             dir.Normalize();//长度缩成1，方向不变
-            player.position = bossObj.transform.position + new Vector3(dir.x * 5.5f, 0, dir.z * 5.5f);
+            player.position = new Vector3(bossObj.transform.position.x, player.position.y, bossObj.transform.position.z)
+            + new Vector3(dir.x * 5.5f, 0, dir.z * 5.5f);
             //将玩家逼退至离Boss5.5米远处
         }
 
@@ -45,11 +50,19 @@ public class BossDirector : MonoBehaviour
         bossHpSlider.SetActive(true);
         bossText.text = "Boss降临";
         yield return new WaitForSeconds(0.5f);
-        bossText.text = "击倒boss获取游戏胜利";
+        bossText.text = "击倒Boss获取游戏胜利";
 
     }
     void Update()
     {
+        if (enemySpawner.isOver && enemySpawner.Enemies.Count == 0)
+        {
+            if (!isTrigger)
+            {
+                isTrigger = true;
+                StartCoroutine(BossAppear());
+            }
+        }
         if (boss.enraged)
         {
             bossText.text = "Boss进入狂暴状态了!小心!!!";
